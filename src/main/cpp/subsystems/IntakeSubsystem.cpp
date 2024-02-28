@@ -1,6 +1,7 @@
 #include <rev/CANSparkMax.h>
 #include <rev/CANSparkLowLevel.h>
 
+#include "Robot.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "Constants.h"
 #include "RobotContainer.h"
@@ -11,7 +12,7 @@ IntakeSubsystem::IntakeSubsystem(){};
 
 // This needs to be a Command
 void IntakeSubsystem::setIntakePosition(double position){
-  # If encoder position has not met target rotations yet, drive motor
+  // If encoder position has not met target rotations yet, drive motor
   static constexpr double k_intakeRaiseLowerMotorSpeed = 0.1;
   static constexpr double k_positionFudge = 0.05;
 
@@ -32,6 +33,7 @@ void IntakeSubsystem::setIntakePosition(double position){
 void IntakeSubsystem::Periodic(){
   // If right stick Y axis is pressed back, raise intake
   // TODO - is backward negative or positive? Adjust > | < accordingly
+  // FATAL PROBLEM: m_operatorController is NOT in scope.
   if (m_operatorController.getRightY() > 0)
   {
     IntakeSubsystem::setIntakePosition(k_intakeDeployedPosition);
@@ -49,6 +51,7 @@ void IntakeSubsystem::Periodic(){
   // REMEMBER: m_rollerMotorDirection : -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)
  
   // If we're reversing direction, we need to slow down, stop, and speed up in reverse
+  // FATAL PROBLEM: m_operatorController is NOT in scope
   if (m_operatorController.GetLeftBumperPressed())
   {
     if (m_rollerMotorDirection != -1){
