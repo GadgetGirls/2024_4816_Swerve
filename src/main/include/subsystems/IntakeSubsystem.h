@@ -52,7 +52,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   rev::spark::SparkMax m_intakeRaiseLowerMotor{IntakeSubsystemConstants::kIntakeRaiseLowerCANId,
                                              rev::spark::SparkLowLevel::MotorType::kBrushless};
   
-  rev::SparkRelativeEncoder m_intakeRaiseLowerEncoder = m_intakeRaiseLowerMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor, 42);
+  rev::spark::SparkRelativeEncoder m_intakeRaiseLowerEncoder = m_intakeRaiseLowerMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor, 42);
 
   // Intake roller motor
   rev::spark::SparkMax m_intakeRollerMotor{IntakeSubsystemConstants::kIntakeRollerCANId,
