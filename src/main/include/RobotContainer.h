@@ -79,7 +79,7 @@ private:
   frc::SendableChooser<frc2::Command*> m_chooser;
 
   // Timer
-  frc::Timer timer0;
+  frc::Timer::Timer timer0;
   
   void ConfigureButtonBindings();
 };
