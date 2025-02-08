@@ -8,6 +8,7 @@
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc/Joystick.h>
 #include <frc/smartdashboard/SendableChooser.h>
+#include <frc/Timer.h>
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/Command.h>
 #include <frc2/command/InstantCommand.h>
@@ -79,7 +80,7 @@ private:
   frc::SendableChooser<frc2::Command*> m_chooser;
 
   // Timer
-  frc::Timer::Timer timer0;
+  frc::Timer timer0;
   
   void ConfigureButtonBindings();
 };
