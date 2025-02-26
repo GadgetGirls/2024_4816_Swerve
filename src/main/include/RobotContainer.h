@@ -9,6 +9,7 @@
 #include <frc/Joystick.h>
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc/Timer.h>
+#include <frc/trajectory/TrajectoryGenerator.h>
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/Command.h>
 #include <frc2/command/InstantCommand.h>
@@ -67,7 +68,10 @@ private:
  // ShooterSubsystem m_shooter;
 
   // The chooser for the autonomous routines
-  frc::SendableChooser<frc2::Command*> m_chooser;
+  frc::SendableChooser<std::string*> m_chooser;
+  
+  // Trajectory
+  frc::Trajectory m_trajectory;
 
   // Timer
   frc::Timer timer0;

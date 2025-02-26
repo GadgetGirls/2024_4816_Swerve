@@ -100,6 +100,20 @@ RobotContainer::RobotContainer() {
             true);
       },
       {&m_drive}));
+
+      std::string default_str = std::string("Default");
+      std::string right_str = std::string("Right");
+      std::string middle_str = std::string("Middle");
+      std::string left_str = std::string("Left");
+
+      // Set up the autonomous mode chooser
+      m_chooser.SetDefaultOption("Default Auto", &default_str);
+      m_chooser.AddOption("Right Auto", &right_str);
+      m_chooser.AddOption("Middle Auto", &middle_str);
+      m_chooser.AddOption("Left Auto", &left_str);
+    
+      // Put the chooser on the dashboard
+      frc::SmartDashboard::PutData(&m_chooser);
 }
 
 void RobotContainer::ConfigureButtonBindings() {  
@@ -120,65 +134,82 @@ void RobotContainer::ConfigureButtonBindings() {
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
-  // Set up config for trajectory
-  frc::TrajectoryConfig config(AutoConstants::kMaxSpeed/2,
-                               AutoConstants::kMaxAcceleration/2);
-  // Add kinematics to ensure max speed is actually obeyed
-  config.SetKinematics(m_drive.kDriveKinematics);
 
-  // https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc_1_1_trajectory_generator.html
-  auto exampleTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
-      // Start at the origin facing the +X direction
-      frc::Pose2d{0_m, 0_m, 0_deg},
+    // Set up config for trajectory
+    frc::TrajectoryConfig config(AutoConstants::kMaxSpeed/2,
+        AutoConstants::kMaxAcceleration/2);
 
-      // waypoint 
-      //WF- Keeping this example waypoint code in case we need to use something like
-      // this in the future.  It is completely useless for now since we want to move in a 
-      // straight line
-      {frc::Translation2d{2_m, 0_m},
-      frc::Translation2d{4_m, 0_m}},
-      // {},  // No internal waypoints (empty vector)
+    // Add kinematics to ensure max speed is actually obeyed
+    config.SetKinematics(m_drive.kDriveKinematics);
+    // Do we need to regulate voltage here, too? ^^^
 
-      // Endpoint 1 meter from where we started.  This is enough distance to exit the starting zone and 
-      // earn some points
-      frc::Pose2d{5.87_m, 0_m, 0_deg}, // 3_m, 1_m, 0_deg
-      // 3_m, 0_m, -1_deg = no swerving, just forward
-      // Pass the config
-      
-      config);
+    // Choose the autonomous trajectory - left, middle, right, or default
+    std::string* trajectory_name = m_chooser.GetSelected();
 
-  frc::ProfiledPIDController<units::radians> thetaController{
-      AutoConstants::kPThetaController, 0, 0,
-      AutoConstants::kThetaControllerConstraints};
+    // Choose trajectory
+    if (*trajectory_name == "Left"){
+        // No op
+    } else if (*trajectory_name == "Middle"){
+        // No op
+    } else if (*trajectory_name == "Right"){
+        // no op
+    } else {
+        // "Default"
+        // https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc_1_1_trajectory_generator.html
+        m_trajectory = frc::TrajectoryGenerator::GenerateTrajectory(
+            // Start at the origin facing the +X direction
+            frc::Pose2d{0_m, 0_m, 0_deg},
+        
+            // waypoint 
+            //WF- Keeping this example waypoint code in case we need to use something like
+            // this in the future.  It is completely useless for now since we want to move in a 
+            // straight line
+            {frc::Translation2d{2_m, 0_m},
+            frc::Translation2d{4_m, 0_m}},
+            // {},  // No internal waypoints (empty vector)
+        
+            // Endpoint 1 meter from where we started.  This is enough distance to exit the starting zone and 
+            // earn some points
+            frc::Pose2d{5.87_m, 0_m, 0_deg}, // 3_m, 1_m, 0_deg
+            // 3_m, 0_m, -1_deg = no swerving, just forward
+        
+            // Pass the config
+            config
+        );
+    }
 
-  thetaController.EnableContinuousInput(units::radian_t{-std::numbers::pi},
-                                        units::radian_t{std::numbers::pi});
+    frc::ProfiledPIDController<units::radians> thetaController{AutoConstants::kPThetaController, 0, 0, AutoConstants::kThetaControllerConstraints};
 
-  // https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc2_1_1_swerve_controller_command.html
-  frc2::SwerveControllerCommand<4> swerveControllerCommand(
-      exampleTrajectory, 
-      
-      [this]() { return m_drive.GetPose(); },
+    thetaController.EnableContinuousInput(units::radian_t{-std::numbers::pi},
+                    units::radian_t{std::numbers::pi});
 
-      m_drive.kDriveKinematics,
+    // https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc2_1_1_swerve_controller_command.html
+    frc2::SwerveControllerCommand<4> swerveControllerCommand(
+        m_trajectory, 
 
-      frc::PIDController{AutoConstants::kPXController, 0, 0},
-      frc::PIDController{AutoConstants::kPYController, 0, 0}, 
-      thetaController,
+        [this]() { return m_drive.GetPose(); },
 
-      [this](auto moduleStates) { m_drive.SetModuleStates(moduleStates); },
+        m_drive.kDriveKinematics,
 
-      {&m_drive});
+        frc::PIDController{AutoConstants::kPXController, 0, 0},
+        frc::PIDController{AutoConstants::kPYController, 0, 0}, 
+        thetaController,
 
-  // Reset odometry to the starting pose of the trajectory.
-  m_drive.ResetOdometry(exampleTrajectory.InitialPose());
+        [this](auto moduleStates) { m_drive.SetModuleStates(moduleStates); },
 
-  // Run swerveControllerCommand above to drive the trajectory, 
-  // then run InstantCommand to stop
-  return new frc2::SequentialCommandGroup(
-      std::move(swerveControllerCommand),
-      frc2::InstantCommand(
-          [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false); }, {}));
+        {&m_drive}
+    );
+
+    // Reset odometry to the starting pose of the trajectory.
+    m_drive.ResetOdometry(m_trajectory.InitialPose());
+
+    // Run swerveControllerCommand above to drive the trajectory, 
+    // then run InstantCommand to stop
+    return new frc2::SequentialCommandGroup(
+        std::move(swerveControllerCommand),
+        frc2::InstantCommand(
+            [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false); }, {})
+        );
 }
 
 
