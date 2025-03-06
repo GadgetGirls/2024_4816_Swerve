@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <frc/AnalogPotentiometer.h>
 #include <frc/controller/PIDController.h>
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc/Joystick.h>
@@ -22,7 +23,7 @@
 #include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LEDSubsystem.h"
-// #include "subsystems/ShooterSubsystem.h"
+#include "subsystems/UltrasoundSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -65,7 +66,7 @@ private:
   ElevatorSubsystem m_elevator;
   IntakeSubsystem m_intake;
   LEDSubsystem m_led;
- // ShooterSubsystem m_shooter;
+  UltrasoundSubsystem m_ultrasoundss;
 
   // The chooser for the autonomous routines
   frc::SendableChooser<std::string*> m_chooser;
@@ -75,6 +76,8 @@ private:
 
   // Timer
   frc::Timer timer0;
-  
+  // Ultrasound sensor
+  frc::AnalogPotentiometer ultrasonic_pot{0,180,0};
+
   void ConfigureButtonBindings();
 };

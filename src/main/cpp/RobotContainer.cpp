@@ -153,24 +153,26 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
         // No op
     } else if (*trajectory_name == "Right"){
         // no op
-    } else {
-        // "Default"
+    } else {  // "Default"
         // https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc_1_1_trajectory_generator.html
         m_trajectory = frc::TrajectoryGenerator::GenerateTrajectory(
             // Start at the origin facing the +X direction
             frc::Pose2d{0_m, 0_m, 0_deg},
         
             // waypoint 
-            //WF- Keeping this example waypoint code in case we need to use something like
+            /* WF- Keeping this example waypoint code in case we need to use something like
             // this in the future.  It is completely useless for now since we want to move in a 
             // straight line
             {frc::Translation2d{2_m, 0_m},
-            frc::Translation2d{4_m, 0_m}},
-            // {},  // No internal waypoints (empty vector)
+            frc::Translation2d{4_m, 0_m}}, */
+            {},  // No internal waypoints (empty vector)
         
             // Endpoint 1 meter from where we started.  This is enough distance to exit the starting zone and 
             // earn some points
-            frc::Pose2d{5.87_m, 0_m, 0_deg}, // 3_m, 1_m, 0_deg
+            // Starting line to reef is 224 cm = 2.24m
+            frc::Pose2d{2.24_m, 0_m, 0_deg}, 
+            // 5.87_m, 0_m, 0_deg - I think this number was inflated to achieve a real-world distance. We should determine scaling factor.
+            // 3_m, 1_m, 0_deg
             // 3_m, 0_m, -1_deg = no swerving, just forward
         
             // Pass the config
