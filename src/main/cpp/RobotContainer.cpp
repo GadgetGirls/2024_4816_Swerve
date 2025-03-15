@@ -106,18 +106,28 @@ RobotContainer::RobotContainer() {
 }
 
 void RobotContainer::ConfigureButtonBindings() {  
-  // Start / stop intake rollers in the "in" direction
-  // OnTrue args should be Command - convert m_intake.rollIn() to command created by StartEnd?
+  // Start intake rollers in the "in" direction when the button is pressed
   m_operatorController.LeftBumper().OnTrue(m_intake.RunOnce(
+    [this] {
+        m_intake.rollIn();
+    }
+  ));
+  // Toggle the intake rollers to stop when button is released
+  m_operatorController.LeftBumper().OnFalse(m_intake.RunOnce(
+    [this] {
+        m_intake.rollIn();
+    }
+  ));
+  // Start the intake rollers in the "out" direction
+  m_operatorController.RightBumper().OnTrue(m_intake.RunOnce(
     [this] {
         m_intake.rollOut();
     }
   ));
-
-  // Start / stop intake rollers in the "out" direction
-  m_operatorController.RightBumper().OnTrue(m_intake.RunOnce(
+  // Toggle the intake rollers to stop when the button is released
+  m_operatorController.RightBumper().OnFalse(m_intake.RunOnce(
     [this] {
-        m_intake.rollIn();
+        m_intake.rollOut();
     }
   ));
 }

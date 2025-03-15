@@ -8,15 +8,15 @@
 
 IntakeSubsystem::IntakeSubsystem(){};
 
-void IntakeSubsystem::rollOut(){
-  // Start / stop intake rollers in the "out" direction
+void IntakeSubsystem::rollIn(){
+  // Start / stop intake rollers in the "in" direction
   //
   // If left bumper is pressed once, activate intake "in" direction
   // If left bumper is pressed again, stop intake "in" direction
-  // REMEMBER: m_rollerMotorDirection : -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)
+  // REMEMBER: m_rollerMotorDirection : 1 = IN, -1 = OUT, 0 = STOP
   // If we're reversing direction, we need to slow down, stop, and speed up in reverse
   if (m_rollerMotorOn == false) {
-    m_rollerMotorDirection = -1;
+    m_rollerMotorDirection = 1;
     m_intakeRollerMotor.Set(m_rollerMotorDirection * k_rollerMotorSpeed);
     m_rollerMotorOn = true;
   } else {
@@ -25,14 +25,14 @@ void IntakeSubsystem::rollOut(){
 }
 
 
-// Start intake rollers in the "in" direction
-void IntakeSubsystem::rollIn(){
+// Start intake rollers in the "out" direction
+void IntakeSubsystem::rollOut(){
   // If right bumper is pressed once, activate intake "out" direction
   // If right bumper is pressed once, stop intake "out" direction
-  // REMEMBER: m_rollerMotorDirection : -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)
+  // REMEMBER: m_rollerMotorDirection : 1 = IN, -1 = OUT, 0 = STOP
   // If we're reversing direction, we need to slow down, stop, and speed up in reverse
   if (m_rollerMotorOn == false) {
-    m_rollerMotorDirection = 1;
+    m_rollerMotorDirection = -1;
     m_intakeRollerMotor.Set(m_rollerMotorDirection * k_rollerMotorSpeed);
     m_rollerMotorOn = true;
   } else {
