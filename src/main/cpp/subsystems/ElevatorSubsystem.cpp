@@ -20,8 +20,9 @@ void ElevatorSubsystem::Periodic(){
 
 // Set the Elevator motor speeds to raise or lower
 void ElevatorSubsystem::setSpeed(double speed){
-    double elevator_hold_speed = 0.2;
+    double elevator_hold_speed = 0.0;
     // Going up, speed is positive, going down speed is negative
+    speed += elevator_hold_speed;
     if (speed > 0){
         // Limit switches return false when closed/triggered.
         if (m_upperLimitSwitch.Get() == false){
