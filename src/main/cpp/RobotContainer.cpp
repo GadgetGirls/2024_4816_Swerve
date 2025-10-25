@@ -94,7 +94,7 @@ LEDPattern absolute = base.ScrollAtAbsoluteSpeed(0.125_mps, units::meter_t{1/120
 //LEDPattern sycned = base.SynchronizedBlink([]() { return RobotController::IsSysActive(); });
 LEDPattern sycned = base.SynchronizedBlink([]() { return RobotController::GetRSLState(); });
 //m_led.SetDefaultCommand(m_led.RunPattern(sycned));
-
+/*
 m_led.SetDefaultCommand(frc2::RunCommand(
     [this] {
         SmartDashboard::PutNumber("preThrottle",button3_result);
@@ -109,7 +109,7 @@ m_led.SetDefaultCommand(frc2::RunCommand(
         m_led.ApplyPattern(gradient);
     },
     {&m_led}));    
-      
+   */   
   // Set up default drive command
   // The left stick controls translation of the robot.
   // Turning is controlled by the X axis of the right stick.
