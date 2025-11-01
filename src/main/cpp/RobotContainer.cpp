@@ -39,7 +39,7 @@ RobotContainer::RobotContainer() {
   timer0.Reset();
   // A few control variables
   fieldRelative=true;
-  controllerMode='j'; // 'j' for josephine toggle bumpers, 'a' for avi hold bumpers
+  controllerMode='a'; // 'j' for josephine toggle bumpers, 'a' for avi hold bumpers
 
   // Initialize elevator and set to be controlled by Operator XBoxController Left stick
   m_elevator.SetDefaultCommand(frc2::RunCommand(

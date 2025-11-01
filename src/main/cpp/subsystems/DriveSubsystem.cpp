@@ -70,7 +70,7 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
 
   // fieldRelative is hardwired to true at the moment
   auto states = kDriveKinematics.ToSwerveModuleStates(
-      false
+      true
           ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
                 xSpeedDelivered, ySpeedDelivered, rotDelivered,
                 frc::Rotation2d(units::radian_t{
