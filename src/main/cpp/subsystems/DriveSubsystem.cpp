@@ -68,7 +68,7 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
   units::radians_per_second_t rotDelivered =
       rot.value() * DriveConstants::kMaxAngularSpeed;
 
-  // fieldRelative is hardwired to false at the moment
+  // fieldRelative is hardwired to true at the moment
   auto states = kDriveKinematics.ToSwerveModuleStates(
       false
           ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
