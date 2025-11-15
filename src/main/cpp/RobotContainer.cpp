@@ -190,13 +190,13 @@ void RobotContainer::ConfigureButtonBindings() {
   // For loading, use the Triggers at 1/2 speed
   m_operatorController.LeftTrigger().OnTrue(m_intake.RunOnce(
     [this] {
-        m_intake.rollOut(0.5);
+        m_intake.rollOut(0.25);
     }
   ));
   if(controllerMode == 'a'){
     m_operatorController.LeftTrigger().OnFalse(m_intake.RunOnce(
         [this] {
-            m_intake.rollOut(0.5);
+            m_intake.rollOut(0.25);
         }
         ));
   }
