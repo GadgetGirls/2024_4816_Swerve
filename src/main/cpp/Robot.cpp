@@ -8,7 +8,15 @@
 #include <frc2/command/CommandScheduler.h>
 
 void Robot::RobotInit() {
- 
+    // We need to run our vision program in a separate thread. If not, our robot
+    // program will not run.
+#if defined(__linux__) || defined(_WIN32)
+    std::thread visionThread(VisionThread);
+    visionThread.detach();
+#else
+    std::fputs("Vision only available on Linux or Windows.\n", stderr);
+    std::fflush(stderr);
+#endif
 }
 
 /**
