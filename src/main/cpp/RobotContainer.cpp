@@ -39,7 +39,7 @@ RobotContainer::RobotContainer() {
   timer0.Reset();
   // A few control variables
   fieldRelative=false;
-  controllerMode='j'; // 'j' for josephine toggle bumpers, 'a' for avi hold bumpers
+  controllerMode='a'; // 'j' for josephine toggle bumpers, 'a' for avi hold bumpers
 
   // Initialize elevator and set to be controlled by Operator XBoxController Left stick
   m_elevator.SetDefaultCommand(frc2::RunCommand(
@@ -189,13 +189,13 @@ void RobotContainer::ConfigureButtonBindings() {
   // For loading, use the Triggers at 1/2 speed
   m_operatorController.LeftTrigger().OnTrue(m_intake.RunOnce(
     [this] {
-        m_intake.rollOut(0.5);
+        m_intake.rollOut(0.25);
     }
   ));
   if(controllerMode == 'a'){
     m_operatorController.LeftTrigger().OnFalse(m_intake.RunOnce(
         [this] {
-            m_intake.rollOut(0.5);
+            m_intake.rollOut(0.25);
         }
         ));
   }
