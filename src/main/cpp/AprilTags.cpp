@@ -87,6 +87,7 @@ class Robot : public frc::TimedRobot {
       // have not seen any tags yet
       tags.clear();
 
+      // This is a range-based for loop that iterates over the "detections" collection
       for (const frc::AprilTagDetection* detection : detections) {
         // remember we saw this tag
         tags.push_back(detection->GetId());
