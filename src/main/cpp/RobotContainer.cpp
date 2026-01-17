@@ -45,7 +45,6 @@ RobotContainer::RobotContainer() {
   m_elevator.SetDefaultCommand(frc2::RunCommand(
     [this] {
         double opctlr_left_y = -m_operatorController.GetLeftY() * 0.25;
-        if (opctlr_left_y == 0){ opctlr_left_y = 0.2; } // elevator hold speed
         frc::SmartDashboard::PutNumber("OperatorCtlr LeftY", opctlr_left_y);
         m_elevator.setSpeed(opctlr_left_y);
     },
