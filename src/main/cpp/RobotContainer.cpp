@@ -24,6 +24,7 @@
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/LEDSubsystem.h"
+#include "LimelightHelpers.h"
 
 using namespace DriveConstants;
 
