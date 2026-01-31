@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "RobotContainer.h"
+#include <frc/DriverStation.h>
 #include <frc/LEDPattern.h>
 #include <frc/controller/PIDController.h>
 #include <frc/geometry/Translation2d.h>
@@ -29,6 +30,14 @@ using namespace DriveConstants;
 
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
+
+  // Determine alliance - used to determine which AprilTags are our hub
+  m_alliance = frc::DriverStation::GetAlliance();
+  if (m_alliance == frc::DriverStation::Alliance::kBlue){
+      frc::SmartDashboard::PutString("Our Alliance is ", "Blue");    
+  } else {
+      frc::SmartDashboard::PutString("Our Alliance is ", "Red");
+  }
 
   // Configure the button bindings
   ConfigureButtonBindings();
