@@ -39,13 +39,12 @@ RobotContainer::RobotContainer() {
   timer0.Reset();
   // A few control variables
   fieldRelative=false;
-  controllerMode='j'; // 'j' for josephine toggle bumpers, 'a' for avi hold bumpers
+  controllerMode='a'; // 'j' for josephine toggle bumpers, 'a' for avi hold bumpers
 
   // Initialize elevator and set to be controlled by Operator XBoxController Left stick
   m_elevator.SetDefaultCommand(frc2::RunCommand(
     [this] {
         double opctlr_left_y = -m_operatorController.GetLeftY() * 0.25;
-        if (opctlr_left_y == 0){ opctlr_left_y = 0.2; } // elevator hold speed
         frc::SmartDashboard::PutNumber("OperatorCtlr LeftY", opctlr_left_y);
         m_elevator.setSpeed(opctlr_left_y);
     },
@@ -94,7 +93,7 @@ LEDPattern absolute = base.ScrollAtAbsoluteSpeed(0.125_mps, units::meter_t{1/120
 //LEDPattern sycned = base.SynchronizedBlink([]() { return RobotController::IsSysActive(); });
 LEDPattern sycned = base.SynchronizedBlink([]() { return RobotController::GetRSLState(); });
 //m_led.SetDefaultCommand(m_led.RunPattern(sycned));
-
+/*
 m_led.SetDefaultCommand(frc2::RunCommand(
     [this] {
         SmartDashboard::PutNumber("preThrottle",button3_result);
@@ -109,7 +108,7 @@ m_led.SetDefaultCommand(frc2::RunCommand(
         m_led.ApplyPattern(gradient);
     },
     {&m_led}));    
-      
+   */   
   // Set up default drive command
   // The left stick controls translation of the robot.
   // Turning is controlled by the X axis of the right stick.
@@ -190,13 +189,13 @@ void RobotContainer::ConfigureButtonBindings() {
   // For loading, use the Triggers at 1/2 speed
   m_operatorController.LeftTrigger().OnTrue(m_intake.RunOnce(
     [this] {
-        m_intake.rollOut(0.5);
+        m_intake.rollOut(0.25);
     }
   ));
   if(controllerMode == 'a'){
     m_operatorController.LeftTrigger().OnFalse(m_intake.RunOnce(
         [this] {
-            m_intake.rollOut(0.5);
+            m_intake.rollOut(0.25);
         }
         ));
   }
