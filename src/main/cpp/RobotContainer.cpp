@@ -15,6 +15,7 @@
 #include <frc2/command/StartEndCommand.h>
 #include <frc2/command/SwerveControllerCommand.h>
 #include <frc2/command/button/JoystickButton.h>
+#include <networktables/NetworkTable.h>
 #include <units/angle.h>
 #include <units/velocity.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -22,6 +23,7 @@
 #include <utility>
 
 #include "Constants.h"
+#include "LimelightHelpers.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/LEDSubsystem.h"
@@ -140,6 +142,15 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
                                AutoConstants::kMaxAcceleration/2);
   // Add kinematics to ensure max speed is actually obeyed
   config.SetKinematics(m_drive.kDriveKinematics);
+
+  // Here is where we will want to query networkTables for the tag location pose difference
+  // and update our trajectory accordingly
+  std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+  double tx = table->GetNumber("tx", 0.0);  // Horizontal offset from crosshair to target in degrees
+  double ty = table->GetNumber("ty", 0.0);  // Vertical offset from crosshair to target in degrees
+  double ty = table->GetNumber("ta", 0.0);  // Target area (0% to 100% of image)
+  double hasTarget = table->GetNumber("tv", 0.0); // Do you have a valid target (0=false, 1=true)?
+  // Convert this to a pose
 
   // https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc_1_1_trajectory_generator.html
   auto exampleTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
