@@ -7,7 +7,17 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
 
-void Robot::RobotInit() {}
+void Robot::RobotInit() {
+    // We need to run our vision program in a separate thread. If not, our robot
+    // program will not run.
+#if defined(__linux__) || defined(_WIN32)
+    std::thread visionThread(VisionThread);
+    visionThread.detach();
+#else
+    std::fputs("Vision only available on Linux or Windows.\n", stderr);
+    std::fflush(stderr);
+#endif
+}
 
 /**
  * This function is called every 20 ms, no matter the mode. Use
@@ -28,6 +38,7 @@ void Robot::DisabledInit() {}
 
 void Robot::DisabledPeriodic() {}
 
+
 /**
  * This autonomous runs the autonomous command selected by your {@link
  * RobotContainer} class.
@@ -39,9 +50,10 @@ void Robot::AutonomousInit() {
   m_autonomousCommand = m_container.GetAutonomousCommand();
 
   if (m_autonomousCommand != nullptr) {
-    m_autonomousCommand->Schedule();
+    frc2::CommandScheduler::GetInstance().Schedule(m_autonomousCommand);
   }
 }
+
 
 void Robot::AutonomousPeriodic() {}
 

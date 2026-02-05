@@ -3,6 +3,7 @@
 #pragma once
 
 #include <frc/DigitalInput.h>
+#include <frc/Timer.h>
 #include <frc2/command/SubsystemBase.h>
 #include <rev/SparkLowLevel.h>
 #include <rev/SparkMax.h>
@@ -24,7 +25,9 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
          ***/
         // Need method to raise/lower (move!) elevator (positive == up, negative == down)
         void setSpeed(double speed);
-        
+        void runForTime(units::second_t seconds, double speed);
+        void autoRaise();
+
         /***
          * Methods that return a CommandPtr to a thing that does the thing
          ***/
@@ -32,12 +35,15 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
 
         // Possible future methods to move to preset positions: trough, first coral, 2nd coral, receive-from-human-player
 
+        // Need a Timer to tell us how long to run the Elevator
+        frc::Timer m_elevatorTimer{};
+
     private:
         /***
          * Internal data to the subsystem
          */
-        const int kElevatorLeftMotorCANId {9};
-        const int kElevatorRightMotorCANId {12};
+        const int kElevatorLeftMotorCANId {10};
+        const int kElevatorRightMotorCANId {11};
         const int kUpperLimitSwitchChannel {9};
         const int kLowerLimitSwitchChannel {8};
         
@@ -51,5 +57,6 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         // Need one or two Limit switches to tell us when the elevator needs to stop at the top/bottom
         frc::DigitalInput m_upperLimitSwitch {kUpperLimitSwitchChannel};
         frc::DigitalInput m_lowerLimitSwitch {kLowerLimitSwitchChannel};
-
+        
+        units::second_t m_raiseTime{1};
 };

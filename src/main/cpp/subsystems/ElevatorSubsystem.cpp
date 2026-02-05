@@ -20,7 +20,9 @@ void ElevatorSubsystem::Periodic(){
 
 // Set the Elevator motor speeds to raise or lower
 void ElevatorSubsystem::setSpeed(double speed){
+    double elevator_hold_speed = 0.0;
     // Going up, speed is positive, going down speed is negative
+    speed += elevator_hold_speed;
     if (speed > 0){
         // Limit switches return false when closed/triggered.
         if (m_upperLimitSwitch.Get() == false){
@@ -36,6 +38,26 @@ void ElevatorSubsystem::setSpeed(double speed){
         }   
     }
 };
+
+
+void ElevatorSubsystem::runForTime(units::second_t seconds, double speed){
+    frc::Timer timer = frc::Timer();
+    timer.Start();
+    while (!timer.HasElapsed(seconds)){
+        setSpeed(speed);
+    }
+    setSpeed(0);
+}
+
+void ElevatorSubsystem::autoRaise(){
+    // Raise the elevator for configured seconds
+    m_elevatorTimer.Start();
+    while(!m_elevatorTimer.HasElapsed(m_raiseTime)){
+      setSpeed(0.75);
+    }
+    setSpeed(0);
+}
+
 
 // Package the setSpeed method for use as a Command
 frc2::CommandPtr ElevatorSubsystem::runSetSpeed(double speed) {
