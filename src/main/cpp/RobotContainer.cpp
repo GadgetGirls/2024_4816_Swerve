@@ -4,7 +4,7 @@
 
 
 #include "RobotContainer.h"
-
+#include <frc/DriverStation.h>
 #include <frc/LEDPattern.h>
 #include <frc/controller/PIDController.h>
 #include <frc/geometry/Translation2d.h>
@@ -34,6 +34,16 @@ using namespace frc;
 
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
+
+  // Determine alliance - used to determine which AprilTags are our hub
+  m_alliance = frc::DriverStation::GetAlliance();
+  if (m_alliance == frc::DriverStation::Alliance::kBlue){
+      frc::SmartDashboard::PutString("Our Alliance is ", "Blue");    
+  } else {
+      frc::SmartDashboard::PutString("Our Alliance is ", "Red");
+  }
+  // AprilTagFieldLayout.loadField(AprilTagFields.FRC_2026)
+
   // Configure the button bindings
   ConfigureButtonBindings();
   timer0.Reset();
@@ -114,6 +124,10 @@ m_led.SetDefaultCommand(frc2::RunCommand(
   // Turning is controlled by the X axis of the right stick.
   m_drive.SetDefaultCommand(frc2::RunCommand(
       [this] {
+        // Can put call to get limelight position and target position data here
+        // std::shared_ptr<NetworkTable> table = NetworkTable::GetTable("limelight");
+        // float tx = table->GetNumber("tx");
+
         // GetThrottle returns an analog value from -1 to 1. We need to transform that to a percentage
         button3_result = m_driverController.GetThrottle();
         // frc::SmartDashboard::PutNumber("Throttle", button3_result);

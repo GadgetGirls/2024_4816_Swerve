@@ -5,6 +5,7 @@
 #pragma once
 #include <frc/controller/PIDController.h>
 #include <frc/controller/ProfiledPIDController.h>
+#include <frc/DriverStation.h>
 #include <frc/Joystick.h>
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc/Timer.h>
@@ -34,6 +35,9 @@ class RobotContainer {
   frc2::Command* GetAutonomousCommand();
 private:
  
+  // Which alliance are we on?
+  std::optional<frc::DriverStation::Alliance> m_alliance;
+
   // The driver's controller
   frc::Joystick m_driverController{OIConstants::kDriverControllerPort};
 
