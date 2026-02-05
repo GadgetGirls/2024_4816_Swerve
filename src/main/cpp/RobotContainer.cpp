@@ -89,38 +89,51 @@ RobotContainer::RobotContainer() {
   //m_scrollingRainbow = m_rainbow.Mask();
 
   // Create an LED pattern that displays a red-to-blue gradient.
-// The LED strip will be red at both ends and blue in the center,
-// with smooth gradients between
-std::array<Color, 2> colors{ColorFlip(Color::kRed), ColorFlip(Color::kBlue)};
-LEDPattern gradient = LEDPattern::Gradient(LEDPattern::GradientType::kDiscontinuous, colors);
-std::array<std::pair<double, Color>, 2> colorSteps{std::pair{0.0, ColorFlip(Color::kRed)},
-                                                   std::pair{0.5, Color::kBlue}};
-LEDPattern steps = LEDPattern::Steps(colorSteps);
+    // The LED strip will be red at both ends and blue in the center,
+    // with smooth gradients between
+    std::array<Color, 2> colors{ColorFlip(Color::kRed), ColorFlip(Color::kBlue)};
+    LEDPattern gradient = LEDPattern::Gradient(LEDPattern::GradientType::kDiscontinuous, colors);
+    std::array<std::pair<double, Color>, 2> colorSteps{std::pair{0.0, ColorFlip(Color::kRed)},
+                                                    std::pair{0.5, Color::kBlue}};
+    LEDPattern steps = LEDPattern::Steps(colorSteps);
 
-//std::array<Color, 2> colors{ColorFlip(Color::kRed), Color::kBlue};
-//LEDPattern base = LEDPattern::LEDPattern::Gradient(LEDPattern::GradientType::kDiscontinuous, colors);
-LEDPattern base = LEDPattern::Steps(colorSteps);
-LEDPattern pattern = base.ScrollAtRelativeSpeed(units::hertz_t{0.25});
-LEDPattern absolute = base.ScrollAtAbsoluteSpeed(0.125_mps, units::meter_t{1/120.0});
-//LEDPattern sycned = base.SynchronizedBlink([]() { return RobotController::IsSysActive(); });
-LEDPattern sycned = base.SynchronizedBlink([]() { return RobotController::GetRSLState(); });
-//m_led.SetDefaultCommand(m_led.RunPattern(sycned));
-/*
-m_led.SetDefaultCommand(frc2::RunCommand(
-    [this] {
-        SmartDashboard::PutNumber("preThrottle",button3_result);
-        button3_result = m_driverController.GetThrottle();
-        button3_result--;
-        button3_result = button3_result * -1;
-        SmartDashboard::PutNumber("Throttle",button3_result);
+    //std::array<Color, 2> colors{ColorFlip(Color::kRed), Color::kBlue};
+    //LEDPattern base = LEDPattern::LEDPattern::Gradient(LEDPattern::GradientType::kDiscontinuous, colors);
+    LEDPattern base = LEDPattern::Steps(colorSteps);
+    LEDPattern pattern = base.ScrollAtRelativeSpeed(units::hertz_t{0.25});
+    LEDPattern absolute = base.ScrollAtAbsoluteSpeed(0.125_mps, units::meter_t{1/120.0});
+    //LEDPattern sycned = base.SynchronizedBlink([]() { return RobotController::IsSysActive(); });
+    LEDPattern sycned = base.SynchronizedBlink([]() { return RobotController::GetRSLState(); });
+    //m_led.SetDefaultCommand(m_led.RunPattern(sycned));
+    /*
+    m_led.SetDefaultCommand(frc2::RunCommand(
+        [this] {
+            SmartDashboard::PutNumber("preThrottle",button3_result);
+            button3_result = m_driverController.GetThrottle();
+            button3_result--;
+            button3_result = button3_result * -1;
+            SmartDashboard::PutNumber("Throttle",button3_result);
 
-        std::array<Color, 2> colors{ColorFlip(Color::kRed), ColorFlip(Color::kBlue)};
-        LEDPattern gradient = LEDPattern::Gradient(LEDPattern::GradientType::kDiscontinuous, colors);
-        gradient = gradient.AtBrightness(button3_result);
-        m_led.ApplyPattern(gradient);
-    },
-    {&m_led}));    
-   */   
+            std::array<Color, 2> colors{ColorFlip(Color::kRed), ColorFlip(Color::kBlue)};
+            LEDPattern gradient = LEDPattern::Gradient(LEDPattern::GradientType::kDiscontinuous, colors);
+            gradient = gradient.AtBrightness(button3_result);
+            m_led.ApplyPattern(gradient);
+        },
+        {&m_led}));    
+    */   
+
+  // Sample - display limelight stats to SmartDashboard
+  std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+  tx = table->GetNumber("tx", 0.0);  // Horizontal offset from crosshair to target in degrees
+  ty = table->GetNumber("ty", 0.0);  // Vertical offset from crosshair to target in degrees
+  ta = table->GetNumber("ta", 0.0);  // Target area (0% to 100% of image)
+  hasTarget = table->GetNumber("tv", 0.0); // Do you have a valid target (0=false, 1=true)?
+  if (hasTarget == 1.0) {
+    frc::SmartDashboard::PutNumber("Limelight/tx", tx);
+    frc::SmartDashboard::PutNumber("Limelight/ty", ty);
+    frc::SmartDashboard::PutNumber("Limelight/ta", ta);
+  }
+
   // Set up default drive command
   // The left stick controls translation of the robot.
   // Turning is controlled by the X axis of the right stick.
@@ -248,11 +261,13 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   // Here is where we will want to query networkTables for the tag location pose difference
   // and update our trajectory accordingly
   std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-  double tx = table->GetNumber("tx", 0.0);  // Horizontal offset from crosshair to target in degrees
-  double ty = table->GetNumber("ty", 0.0);  // Vertical offset from crosshair to target in degrees
-  double ty = table->GetNumber("ta", 0.0);  // Target area (0% to 100% of image)
-  double hasTarget = table->GetNumber("tv", 0.0); // Do you have a valid target (0=false, 1=true)?
+  table->PutNumber("priorityid", 1);  // Pay attention to AprilTag ID 1
+  tx = table->GetNumber("tx", 0.0);  // Horizontal offset from crosshair to target in degrees
+  ty = table->GetNumber("ty", 0.0);  // Vertical offset from crosshair to target in degrees
+  ta = table->GetNumber("ta", 0.0);  // Target area (0% to 100% of image)
+  hasTarget = table->GetNumber("tv", 0.0); // Do you have a valid target (0=false, 1=true)?
   // Convert this to a pose
+
   // https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc_1_1_trajectory_generator.html
   auto exampleTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
       // Start at the origin facing the +X direction
@@ -272,11 +287,14 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       // Phil's numbers based on Game Manual = 5.87_m, 0_m, 0_deg
       
       config);
+
   frc::ProfiledPIDController<units::radians> thetaController{
       AutoConstants::kPThetaController, 0, 0,
       AutoConstants::kThetaControllerConstraints};
+  
   thetaController.EnableContinuousInput(units::radian_t{-std::numbers::pi},
                                         units::radian_t{std::numbers::pi});
+  
   // https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc2_1_1_swerve_controller_command.html
   frc2::SwerveControllerCommand<4> swerveControllerCommand(
       exampleTrajectory, 

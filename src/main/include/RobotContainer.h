@@ -68,5 +68,11 @@ private:
   // Timer
   frc::Timer timer0;
   
+  // Sample limelight 
+  double tx;
+  double ty;
+  double ta;
+  double hasTarget;
+
   void ConfigureButtonBindings();
 };
