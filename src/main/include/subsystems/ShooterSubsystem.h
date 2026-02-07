@@ -1,6 +1,7 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
+#include <frc2/command/CommandPtr.h>
 #include <rev/SparkMax.h>
 #include "Constants.h"
 
@@ -8,17 +9,17 @@ class ShooterSubsystem : public frc2::SubsystemBase {
  public:
   ShooterSubsystem();
 
-  void ShooterSubsystem::SetSpeed(double speed);
+  void SetSpeed(double speed);
 
-  void ShooterSubsystem::Stop();
+  void Stop();
 
-  double ShooterSubsystem::GetSpeed();
+  double GetSpeed();
 
-  void ShooterSubsystem::SetSpeedForDistance(double distanceMeters);
+  void SetSpeedForDistance(double distanceMeters);
 
-  frc2::CommandPtr ShooterSubsystem::ShootCommand(double speed);
+  frc2::CommandPtr ShootCommand(double speed);
 
-  frc2::CommandPtr ShooterSubsystem::StopCommand();
+  frc2::CommandPtr StopCommand();
 
   // This method is called periodically by the CommandScheduler
   void Periodic() override;

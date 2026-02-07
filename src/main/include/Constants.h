@@ -139,3 +139,12 @@ namespace OIConstants {
     constexpr double kDriveDeadband = 0.09; //og = 0.07
     constexpr int kTurboThrottlePercentage = 0.5; // Not an interface constant, probably belongs in different namespace
 }  // namespace OIConstants
+
+namespace ShooterSubsystemConstants {
+    constexpr int kShooterCANId = 99; // CHANGEME
+}
+
+// VisionSubsystem constants
+const double kTargetHeightMeters = 2; // CHANGEME
+const double kLimelightHeightMeters = 1; // CHANGEME
+const double kLimelightMountAngleDegrees = 0;  // CHANGEME
