@@ -1,6 +1,7 @@
 #include "subsystems/VisionSubsystem.h"
 #include <cmath>
 #include <numbers>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 VisionSubsystem::VisionSubsystem() {
   // If you have multiple Limelights, set the name here:

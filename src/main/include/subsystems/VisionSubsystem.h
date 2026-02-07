@@ -25,7 +25,7 @@ class VisionSubsystem : public frc2::SubsystemBase {
 
   double GetLatencyMs();
 
-  void VisionSubsystem::Periodic();
+  void Periodic();
 
   void SetPipeline(int pipelineIndex);
     
