@@ -8,12 +8,17 @@ class ShooterSubsystem : public frc2::SubsystemBase {
  public:
   ShooterSubsystem();
 
-  // Subsystem methods go here.
+  void ShooterSubsystem::SetSpeed(double speed);
 
-  /**
-   * Example: Do the thing
-   */
-  // void DoTheThing();
+  void ShooterSubsystem::Stop();
+
+  double ShooterSubsystem::GetSpeed();
+
+  void ShooterSubsystem::SetSpeedForDistance(double distanceMeters);
+
+  frc2::CommandPtr ShooterSubsystem::ShootCommand(double speed);
+
+  frc2::CommandPtr ShooterSubsystem::StopCommand();
 
   // This method is called periodically by the CommandScheduler
   void Periodic() override;
