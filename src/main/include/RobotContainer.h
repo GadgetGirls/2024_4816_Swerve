@@ -20,6 +20,7 @@
 #include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LEDSubsystem.h"
+#include "subsystems/VisionSubsystem.h"
 // #include "subsystems/ShooterSubsystem.h"
 
 /**
@@ -62,6 +63,7 @@ private:
   ElevatorSubsystem m_elevator;
   IntakeSubsystem m_intake;
   LEDSubsystem m_led;
+  VisionSubsystem m_vision;
 
   // The chooser for the autonomous routines
   frc::SendableChooser<frc2::Command*> m_chooser;

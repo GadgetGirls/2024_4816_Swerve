@@ -122,18 +122,13 @@ RobotContainer::RobotContainer() {
         {&m_led}));    
     */   
 
-  // Sample - display limelight stats to SmartDashboard
-  std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-  hasTarget = table->GetNumber("tv", 0.0); // Do you have a valid target (0=false, 1=true)?
-  if (hasTarget == 1.0) {
-    tx = table->GetNumber("tx", 0.0);  // Horizontal offset from crosshair to target in degrees
-    ty = table->GetNumber("ty", 0.0);  // Vertical offset from crosshair to target in degrees
-    ta = table->GetNumber("ta", 0.0);  // Target area (0% to 100% of image)
-
-    frc::SmartDashboard::PutNumber("Limelight/tx", tx);
-    frc::SmartDashboard::PutNumber("Limelight/ty", ty);
-    frc::SmartDashboard::PutNumber("Limelight/ta", ta);
-  }
+  // Set Vision subsystem default command
+  m_vision.SetDefaultCommand(frc2::RunCommand(
+    [this] {
+      m_vision.Periodic();
+    },
+    {&m_vision}
+  ));
 
   // Set up default drive command
   // The left stick controls translation of the robot.

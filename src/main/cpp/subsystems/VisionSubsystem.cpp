@@ -14,21 +14,21 @@ void VisionSubsystem::Periodic() {
   // Publish key values to SmartDashboard for debugging
   bool hasTarget = HasTarget();
   
-  frc::SmartDashboard::PutBoolean("Vision/HasTarget", hasTarget);
+  frc::SmartDashboard::PutBoolean("Vision-HasTarget", hasTarget);
   
   if (hasTarget) {
-    frc::SmartDashboard::PutNumber("Vision/TX", GetTX());
-    frc::SmartDashboard::PutNumber("Vision/TY", GetTY());
-    frc::SmartDashboard::PutNumber("Vision/TagID", GetTargetID());
-    frc::SmartDashboard::PutNumber("Vision/Distance_m", GetDistanceToTargetMeters());
-    frc::SmartDashboard::PutNumber("Vision/Latency_ms", GetLatencyMs());
+    frc::SmartDashboard::PutNumber("Vision-TX", GetTX());
+    frc::SmartDashboard::PutNumber("Vision-TY", GetTY());
+    frc::SmartDashboard::PutNumber("Vision-TagID", GetTargetID());
+    frc::SmartDashboard::PutNumber("Vision-Distance_m", GetDistanceToTargetMeters());
+    frc::SmartDashboard::PutNumber("Vision-Latency_ms", GetLatencyMs());
     
     // Also publish bot pose if available
     auto pose = GetBotPose();
     if (pose.has_value()) {
-      frc::SmartDashboard::PutNumber("Vision/BotPose_X", pose->X().value());
-      frc::SmartDashboard::PutNumber("Vision/BotPose_Y", pose->Y().value());
-      frc::SmartDashboard::PutNumber("Vision/BotPose_Rotation", pose->Rotation().Degrees().value());
+      frc::SmartDashboard::PutNumber("Vision-BotPose_X", pose->X().value());
+      frc::SmartDashboard::PutNumber("Vision-BotPose_Y", pose->Y().value());
+      frc::SmartDashboard::PutNumber("Vision-BotPose_Rotation", pose->Rotation().Degrees().value());
     }
   }
 }
