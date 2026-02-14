@@ -1,6 +1,7 @@
 #include "subsystems/VisionSubsystem.h"
 #include <cmath>
 #include <numbers>
+#include <networktables/NetworkTable.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
 VisionSubsystem::VisionSubsystem() {
@@ -13,9 +14,11 @@ VisionSubsystem::VisionSubsystem() {
 void VisionSubsystem::Periodic() {
   // Publish key values to SmartDashboard for debugging
   bool hasTarget = HasTarget();
-  
   frc::SmartDashboard::PutBoolean("Vision-HasTarget", hasTarget);
   
+  double hasTarget_nt = nt::NetworkTableInstance::GetDefault().GetTable("limelight")->GetNumber("tv",0.0);
+  frc::SmartDashboard::PutNumber("NetTables-HasTarget", hasTarget_nt);
+
   if (hasTarget) {
     frc::SmartDashboard::PutNumber("Vision-TX", GetTX());
     frc::SmartDashboard::PutNumber("Vision-TY", GetTY());

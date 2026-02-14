@@ -102,9 +102,9 @@ RobotContainer::RobotContainer() {
     LEDPattern base = LEDPattern::Steps(colorSteps);
     LEDPattern pattern = base.ScrollAtRelativeSpeed(units::hertz_t{0.25});
     LEDPattern absolute = base.ScrollAtAbsoluteSpeed(0.125_mps, units::meter_t{1/120.0});
-    //LEDPattern sycned = base.SynchronizedBlink([]() { return RobotController::IsSysActive(); });
-    LEDPattern sycned = base.SynchronizedBlink([]() { return RobotController::GetRSLState(); });
-    //m_led.SetDefaultCommand(m_led.RunPattern(sycned));
+    //LEDPattern synced = base.SynchronizedBlink([]() { return RobotController::IsSysActive(); });
+    LEDPattern synced = base.SynchronizedBlink([]() { return RobotController::GetRSLState(); });
+    //m_led.SetDefaultCommand(m_led.RunPattern(synced));
     /*
     m_led.SetDefaultCommand(frc2::RunCommand(
         [this] {
