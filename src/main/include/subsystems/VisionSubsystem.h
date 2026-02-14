@@ -2,6 +2,7 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <frc2/command/CommandPtr.h>
+#include <frc/geometry/Pose2d.h>
 #include "Constants.h"
 #include "LimelightHelpers.h"
 
@@ -30,6 +31,8 @@ class VisionSubsystem : public frc2::SubsystemBase {
   void SetPipeline(int pipelineIndex);
     
   void SetPriorityTagID(int tagID);
+
+  frc::Pose2d GetTargetPose2d();
 
  private:
   std::string m_limelightName;

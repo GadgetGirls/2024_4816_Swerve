@@ -1,8 +1,12 @@
 #include "subsystems/VisionSubsystem.h"
 #include <cmath>
 #include <numbers>
-#include <networktables/NetworkTable.h>
+#include <frc/geometry/Pose2d.h>
+#include <frc/geometry/Rotation2d.h>
+#include <frc/geometry/Translation2d.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <networktables/NetworkTable.h>
+#include <units/angle.h>
 
 VisionSubsystem::VisionSubsystem() {
   // If you have multiple Limelights, set the name here:
@@ -127,4 +131,14 @@ void VisionSubsystem::SetPipeline(int pipelineIndex) {
 
 void VisionSubsystem::SetPriorityTagID(int tagID) {
   LimelightHelpers::setPriorityTagID(m_limelightName, tagID);
+}
+
+frc::Pose2d VisionSubsystem::GetTargetPose2d(){
+  // Pose2d is a translation2d and a rotation2d
+  static const double targetDistance = GetDistanceToTargetMeters();
+  units::degree_t x_angle{GetTX()};
+  frc::Rotation2d targetRotation{x_angle};
+  frc::Translation2d	targetTranslation{(units::meter_t)targetDistance, targetRotation};
+  frc::Pose2d targetPose2d{targetTranslation, targetRotation};
+  return(targetPose2d);
 }

@@ -254,15 +254,10 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   // Add kinematics to ensure max speed is actually obeyed
   config.SetKinematics(m_drive.kDriveKinematics);
 
-  // Here is where we will want to query networkTables for the tag location pose difference
-  // and update our trajectory accordingly
-  std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-  table->PutNumber("priorityid", 1);  // Pay attention to AprilTag ID 1
-  tx = table->GetNumber("tx", 0.0);  // Horizontal offset from crosshair to target in degrees
-  ty = table->GetNumber("ty", 0.0);  // Vertical offset from crosshair to target in degrees
-  ta = table->GetNumber("ta", 0.0);  // Target area (0% to 100% of image)
-  hasTarget = table->GetNumber("tv", 0.0); // Do you have a valid target (0=false, 1=true)?
-  // Convert this to a pose
+  // Get target pose
+  frc::Pose2d targetPose2d = m_vision.GetTargetPose2d();
+  // NOTE: We'll want to offset this from the AprilTag position for shooting
+  // Create a translation with the position difference and subtract one translation from the other
 
   // https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc_1_1_trajectory_generator.html
   auto exampleTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
@@ -272,16 +267,14 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       //WF- Keeping this example waypoint code in case we need to use something like
       // this in the future.  It is completely useless for now since we want to move in a 
       // straight line
-      {frc::Translation2d{1_m, 0_m},
-      frc::Translation2d{2_m, 0_m}},
-      // {},  // No internal waypoints (empty vector)
-      // Endpoint 1 meter from where we started.  This is enough distance to exit the starting zone and 
-      // earn some points
-      frc::Pose2d{3_m, 0_m, 0_deg}, 
+      //{frc::Translation2d{1_m, 0_m},
+      //frc::Translation2d{2_m, 0_m}},
+      {},  // No internal waypoints (empty vector)
+      // frc::Pose2d{3_m, 0_m, 0_deg}, 
       // Testing pose (short distance) = 1_m, 0_m, 0_deg
       // Josephine & Will's numbers = 3_m, 0_m, 0_deg
       // Phil's numbers based on Game Manual = 5.87_m, 0_m, 0_deg
-      
+      targetPose2d,
       config);
 
   frc::ProfiledPIDController<units::radians> thetaController{
