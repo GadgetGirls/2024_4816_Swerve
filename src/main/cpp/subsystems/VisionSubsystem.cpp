@@ -6,7 +6,7 @@
 
 VisionSubsystem::VisionSubsystem() {
   // If you have multiple Limelights, set the name here:
-  // m_limelightName = "limelight-front";
+  m_limelightName = "";
   
   SetName("Vision");
 }
