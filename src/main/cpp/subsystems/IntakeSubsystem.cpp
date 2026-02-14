@@ -8,6 +8,14 @@
 
 IntakeSubsystem::IntakeSubsystem(){};
 
+/*
+2026 Intake subsystem includes:
+- Intake arm to deploy and retract the intake (1 motor)
+- Winch to bring hopper wall back during climbing (1 motor)
+- Intake Augers (1 motor)
+- Intake rollers (1 motor)
+*/
+
 void IntakeSubsystem::rollOut(double motorSpeed){
   // Start / stop intake rollers in the "out" direction
   //
