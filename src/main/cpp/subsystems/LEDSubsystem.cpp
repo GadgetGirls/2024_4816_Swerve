@@ -4,7 +4,7 @@ LEDSubsystem::LEDSubsystem() {
     m_led.SetLength(kLength);
     m_led.Start();
 
-    SetDefaultCommand(RunPattern(frc::LEDPattern::Solid(frc::Color::kBlack)).WithName("Off"));
+    SetDefaultCommand(RunPattern(frc::LEDPattern::Solid(frc::Color::kWhite)).WithName("On"));
 }
 
 void LEDSubsystem::Periodic() {

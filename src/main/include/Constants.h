@@ -40,7 +40,7 @@ constexpr units::meter_t kTrackWidth =
 constexpr units::meter_t kWheelBase =
     0.629_m;  // Distance between centers of front and back wheels on robot
 
-// Angular offsets of the modules relative to the chassis in radians
+// Angular offsets of the modules relative to the chassis in pi
 constexpr double kFrontLeftChassisAngularOffset = -std::numbers::pi / 2;
 constexpr double kFrontRightChassisAngularOffset = 0;
 constexpr double kRearLeftChassisAngularOffset = std::numbers::pi;
@@ -140,14 +140,11 @@ namespace OIConstants {
     constexpr int kTurboThrottlePercentage = 0.5; // Not an interface constant, probably belongs in different namespace
 }  // namespace OIConstants
 
-namespace IntakeSubsystemConstants {
-    // TODO - set actual CAN IDs
-    constexpr int kIntakeRaiseLowerCANId = 97; // 10;
-    constexpr int kIntakeRollerCANId = 98;
-    // Also look in IntakeSubsystem.h
+namespace ShooterSubsystemConstants {
+    constexpr int kShooterCANId = 99; // CHANGEME
 }
 
-namespace ShooterSubsystemConstants {
-    // TODO - Set actual CAN ID
-    constexpr int kShooterCANId = 97;
-}
+// VisionSubsystem constants
+const double kTargetHeightMeters = 2; // CHANGEME
+const double kLimelightHeightMeters = 1; // CHANGEME
+const double kLimelightMountAngleDegrees = 0;  // CHANGEME
