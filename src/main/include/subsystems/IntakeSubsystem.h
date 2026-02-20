@@ -25,15 +25,25 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   // Stop intake rollers
   void stopRollers();
   
+  // Deploy intake assembly
+  void deployIntake();
+
+  // Retract intake assembly
+  void retractIntake();
+
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  const int kIntakeRollerCANId = 9; // TODO - set real CANId
+  const int kIntakeRollerCANId = 9;
+  const int kIntakeDeployCANId = 99; // TODO - set correct CANId
 
   // Intake roller motor
   rev::spark::SparkMax m_intakeRollerMotor{kIntakeRollerCANId,
                                              rev::spark::SparkLowLevel::MotorType::kBrushless};
-                          
+  // Intake deploy/retract motor
+  rev::spark::SparkMax m_intakeDeployMotor{kIntakeDeployCANId,
+                                             rev::spark::SparkLowLevel::MotorType::kBrushless};
+  
   static constexpr double k_rollerMotorSpeed = 1.0;
 
   bool m_rollerMotorOn = false;

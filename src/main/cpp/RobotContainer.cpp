@@ -187,13 +187,13 @@ void RobotContainer::ConfigureButtonBindings() {
   // OnTrue args should be Command - convert m_intake.rollIn() to command created by StartEnd?
   m_operatorController.LeftBumper().OnTrue(m_intake.RunOnce(
     [this] {
-        m_intake.rollOut(1.0);
+        m_intake.rollIn(1.0);
     }
   ));
   if(controllerMode == 'a'){
     m_operatorController.LeftBumper().OnFalse(m_intake.RunOnce(
       [this] {
-        m_intake.rollOut(1.0);
+        m_intake.rollIn(1.0);
       }
     ));
   }
@@ -201,41 +201,48 @@ void RobotContainer::ConfigureButtonBindings() {
   // Start / stop intake rollers in the "out" direction
   m_operatorController.RightBumper().OnTrue(m_intake.RunOnce(
     [this] {
-        m_intake.rollIn(1.0);
+        m_intake.rollOut(1.0);
     }
   ));
   if(controllerMode == 'a'){
     m_operatorController.RightBumper().OnFalse(m_intake.RunOnce(
         [this] {
-            m_intake.rollIn(1.0);
+            m_intake.rollOut(1.0);
         }
     ));
   }
-  // For loading, use the Triggers at 1/2 speed
+  // For loading, use the Triggers at reduced speed
   m_operatorController.LeftTrigger().OnTrue(m_intake.RunOnce(
     [this] {
-        m_intake.rollOut(0.25);
+        m_intake.rollIn(0.25);
     }
   ));
   if(controllerMode == 'a'){
     m_operatorController.LeftTrigger().OnFalse(m_intake.RunOnce(
         [this] {
-            m_intake.rollOut(0.25);
+            m_intake.rollIn(0.25);
         }
         ));
   }
+  // 
   m_operatorController.RightTrigger().OnTrue(m_intake.RunOnce(
     [this] {
-        m_intake.rollIn(0.5);
+        m_intake.rollOut(0.5);
     }
   ));
   if(controllerMode == 'a'){
     m_operatorController.RightTrigger().OnFalse(m_intake.RunOnce(
         [this] {
-            m_intake.rollIn(0.5);
+            m_intake.rollOut(0.5);
         }
     ));
   }  
+  // Trigger should run shooter in manual mode
+  // frc2::Trigger m_driverTrigger = m_driverController.GetTrigger();
+
+  // Joystick Button 10 should deploy the intake
+  // frc2::Trigger m_driverButton10 = m_driverController.GetRawButton(10);
+
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {

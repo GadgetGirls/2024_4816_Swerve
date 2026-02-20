@@ -13,11 +13,13 @@ IntakeSubsystem::IntakeSubsystem(){};
 - Intake arm to deploy and retract the intake (1 motor)
 - Winch to bring hopper wall back during climbing (1 motor)
 - Intake Augers (1 motor)
-- Intake rollers (1 motor)
+    - Own button control?
+    - Or starts and ends with a lag when intake rollers run?
+- Intake rollers (1 motor) - DONE
 */
 
-void IntakeSubsystem::rollOut(double motorSpeed){
-  // Start / stop intake rollers in the "out" direction
+void IntakeSubsystem::rollIn(double motorSpeed){
+  // Start / stop intake rollers in the "in" direction
   //
   // If left bumper is pressed once, activate intake "in" direction
   // If left bumper is pressed again, stop intake "in" direction
@@ -33,8 +35,8 @@ void IntakeSubsystem::rollOut(double motorSpeed){
 }
 
 
-// Start intake rollers in the "in" direction
-void IntakeSubsystem::rollIn(double motorSpeed){
+// Start intake rollers in the "out" direction
+void IntakeSubsystem::rollOut(double motorSpeed){
   // If right bumper is pressed once, activate intake "out" direction
   // If right bumper is pressed once, stop intake "out" direction
   // REMEMBER: m_rollerMotorDirection : -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)
@@ -53,5 +55,12 @@ void IntakeSubsystem::stopRollers(){
   m_intakeRollerMotor.StopMotor();
   m_rollerMotorOn = false;
 }
+
+// Deploy intake
+void IntakeSubsystem::deployIntake(){
+  
+}
+
+// Retract intake
 
 void IntakeSubsystem::Periodic(){}

@@ -42,22 +42,46 @@ private:
   // The driver's controller
   frc::Joystick m_driverController{OIConstants::kDriverControllerPort};
 
+  // Joystick has inputs
+  // GetTrigger()
+  // GetRawButton(7, 8, 9, 10,11,12)
+
+  // Trigger should run shooter in manual mode
+  // frc2::Trigger m_driverTrigger = m_driverController.GetTrigger();
+
+  // Button 10 should deploy the intake
+  // frc2::Trigger m_driverButton10 = m_driverController.GetRawButton(10);
+
+
   // The operator's controller:
-  // - Left stick up/down controls elevator
+  // Available XboxController buttons
+  // A button
+  // B button
+  // X button
+  // Y button
+  // LeftBumper
+  // RightBumper
+  // LeftTrigger
+  // RightTrigger
+
   frc2::CommandXboxController m_operatorController{OIConstants::kOperatorControllerPort};
-  
-  // Left bumper controls intake "out" - in while pressed
+
+  // - Left stick up/down controls elevator
+
+  // Left bumper controls intake roll "out" - 2026 hold to engage by default
   frc2::Trigger m_operatorLeftBumper = m_operatorController.LeftBumper();
 
-  // Right bumper controls intake "in" - out while pressed
+  // Right bumper controls intake roll "in" - 2026 hold to engage by default
   frc2::Trigger m_operatorRightBumper = m_operatorController.RightBumper();
+
+
   // When set the robot goes at full throttle.  When clear full throttle is scaled down by
   // Should be k constants
   double button3_result;
   double throttle_percentage;
   bool fieldRelative;
   char controllerMode; // control whether bumpers toggle intake or are held to run intake
-  // The robot's subsystems and commands are defined here...
+
   // The robot's subsystems
   DriveSubsystem m_drive;
   ElevatorSubsystem m_elevator;
@@ -70,7 +94,7 @@ private:
   // Timer
   frc::Timer timer0;
   
-  // Sample limelight 
+  // Sample limelight return values
   double tx;
   double ty;
   double ta;
