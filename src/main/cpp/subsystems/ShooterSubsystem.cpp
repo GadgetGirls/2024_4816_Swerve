@@ -75,6 +75,15 @@ void ShooterSubsystem::SetSpeedForDistance(double distanceMeters) {
   SetSpeed(speed);
 }
 
+void ShooterSubsystem::SetFeederSpeed(double speed){
+  // TODO
+}
+
+void ShooterSubsystem::StopFeeder(){
+  // TODO
+}
+
+
 frc2::CommandPtr ShooterSubsystem::ShootCommand(double speed) {
   // Returns a command that sets the shooter to a specific speed
   return this->RunOnce([this, speed] { SetSpeed(speed); });

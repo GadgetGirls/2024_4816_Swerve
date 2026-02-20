@@ -58,9 +58,24 @@ void IntakeSubsystem::stopRollers(){
 
 // Deploy intake
 void IntakeSubsystem::deployIntake(){
-  
+  // How do we know when to stop? Is there a limit switch or sensor?
+  // And is this a motor or more like a solenoid that releases
 }
 
 // Retract intake
+void IntakeSubsystem::retractIntake(){
+  // How do we know when to stop? Is there a limit switch or sensor?
+  // Or do we need to read current draw from the motor to know it's working harder?
+}
+
+// Run augers to feed balls from hopper to first stage of shooter
+void runAugers(){
+  
+}
+
+// Stop augers from spinning
+void stopAugers(){
+
+}
 
 void IntakeSubsystem::Periodic(){}

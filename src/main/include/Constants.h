@@ -140,8 +140,13 @@ namespace OIConstants {
     constexpr int kTurboThrottlePercentage = 0.5; // Not an interface constant, probably belongs in different namespace
 }  // namespace OIConstants
 
+namespace IntakeSubsystemConstants {
+    
+}
+
 namespace ShooterSubsystemConstants {
-    constexpr int kShooterCANId = 99; // CHANGEME
+    constexpr int kShooterCANId = 97; // CHANGEME
+    constexpr int kFeederCANId = 96; // CHANGEME
 }
 
 // VisionSubsystem constants

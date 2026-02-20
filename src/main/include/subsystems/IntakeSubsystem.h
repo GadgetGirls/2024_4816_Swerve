@@ -31,11 +31,19 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   // Retract intake assembly
   void retractIntake();
 
+  // Run augers to feed balls from hopper to first stage of shooter
+  void runAugers();
+
+  // Stop augers from spinning
+  void stopAugers();
+
+
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
   const int kIntakeRollerCANId = 9;
-  const int kIntakeDeployCANId = 99; // TODO - set correct CANId
+  const int kIntakeDeployCANId = 99; // CHANGEME
+  const int kIntakeAugerCANId = 98; // CHANGEME
 
   // Intake roller motor
   rev::spark::SparkMax m_intakeRollerMotor{kIntakeRollerCANId,
@@ -43,7 +51,10 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   // Intake deploy/retract motor
   rev::spark::SparkMax m_intakeDeployMotor{kIntakeDeployCANId,
                                              rev::spark::SparkLowLevel::MotorType::kBrushless};
-  
+  // Hopper auger motor
+  rev::spark::SparkMax m_intakeAugerMotor{kIntakeAugerCANId,
+                                             rev::spark::SparkLowLevel::MotorType::kBrushless};
+
   static constexpr double k_rollerMotorSpeed = 1.0;
 
   bool m_rollerMotorOn = false;

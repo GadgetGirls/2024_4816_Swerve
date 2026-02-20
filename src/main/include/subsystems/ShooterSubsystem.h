@@ -17,9 +17,15 @@ class ShooterSubsystem : public frc2::SubsystemBase {
 
   void SetSpeedForDistance(double distanceMeters);
 
+  void SetFeederSpeed(double speed);
+
+  void StopFeeder();
+
+
   frc2::CommandPtr ShootCommand(double speed);
 
   frc2::CommandPtr StopCommand();
+
 
   // This method is called periodically by the CommandScheduler
   void Periodic() override;
@@ -32,7 +38,9 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   // double m_operatorController.GetLeftY(	)
 
   // Shooter motor
-    // TODO: Change kBrushless to kBrushed if needed when motors are hooked up
   rev::spark::SparkMax m_shooterMotor{ShooterSubsystemConstants::kShooterCANId, 
+                                    rev::spark::SparkLowLevel::MotorType::kBrushless};
+  // Feeder motor
+  rev::spark::SparkMax m_feederMotor{ShooterSubsystemConstants::kFeederCANId, 
                                     rev::spark::SparkLowLevel::MotorType::kBrushless};
 };
