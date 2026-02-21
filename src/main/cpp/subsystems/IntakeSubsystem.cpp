@@ -58,24 +58,48 @@ void IntakeSubsystem::stopRollers(){
 
 // Deploy intake
 void IntakeSubsystem::deployIntake(){
-  // How do we know when to stop? Is there a limit switch or sensor?
-  // And is this a motor or more like a solenoid that releases
+  // Limit switches return false when closed/triggered.
+  if (m_intakeDeployLimitSwitch.Get() == false){
+      m_intakeDeployMotor.Set(0.0);
+  } else {
+      m_intakeDeployMotor.Set(kIntakeDeploySpeed);
+  }
 }
 
 // Retract intake
 void IntakeSubsystem::retractIntake(){
-  // How do we know when to stop? Is there a limit switch or sensor?
-  // Or do we need to read current draw from the motor to know it's working harder?
+  // Limit switches return false when closed/triggered.
+  if (m_intakeRetractLimitSwitch.Get() == false){
+      m_intakeDeployMotor.Set(0.0);
+  } else {
+      m_intakeDeployMotor.Set(kIntakeRetractSpeed);
+  }
+
 }
 
 // Run augers to feed balls from hopper to first stage of shooter
-void runAugers(){
-  
+void IntakeSubsystem::runAugers(){
+  m_intakeAugerMotor.Set(kIntakeAugerSpeed);
 }
 
 // Stop augers from spinning
-void stopAugers(){
+void IntakeSubsystem::stopAugers(){
+  m_intakeAugerMotor.Set(0.0);
+}
 
+// Run hopper side winch until limit switch hits
+void IntakeSubsystem::runHopperWinch(){
+  // Limit switches return false when closed/triggered.
+  if (m_intakeHopperLimitSwitch.Get() == false){
+      m_intakeHopperMotor.Set(0.0);
+  } else {
+      m_intakeHopperMotor.Set(kIntakeHopperSpeed);
+  }
+}
+
+// Stop hopper side winch
+void IntakeSubsystem::stopHopperWinch(){
+  m_intakeHopperMotor.Set(0.0);
 }
 
 void IntakeSubsystem::Periodic(){}

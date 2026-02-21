@@ -76,11 +76,11 @@ void ShooterSubsystem::SetSpeedForDistance(double distanceMeters) {
 }
 
 void ShooterSubsystem::SetFeederSpeed(double speed){
-  // TODO
+  m_feederMotor.Set(speed);
 }
 
 void ShooterSubsystem::StopFeeder(){
-  // TODO
+  m_feederMotor.Set(0.0);
 }
 
 
