@@ -47,8 +47,8 @@ class IntakeSubsystem : public frc2::SubsystemBase {
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  const int kIntakeRollerCANId = 9;
-  const int kIntakeDeployCANId = 99; // CHANGEME
+  const int kIntakeRollerCANId = 14;
+  const int kIntakeDeployCANId = 15;
   const int kIntakeAugerCANId = 98; // CHANGEME
   const int kIntakeHopperCANId = 95; // CHANGEME
 
