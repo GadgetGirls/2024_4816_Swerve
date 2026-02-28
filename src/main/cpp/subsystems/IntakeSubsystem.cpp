@@ -119,4 +119,5 @@ void IntakeSubsystem::Periodic(){
   runAugers();
   std::this_thread::sleep_for(std::chrono::seconds(5));
   stopAugers();
+  std::this_thread::sleep_for(std::chrono::seconds(5));
 }
