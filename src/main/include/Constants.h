@@ -140,8 +140,16 @@ namespace OIConstants {
     constexpr int kTurboThrottlePercentage = 0.5; // Not an interface constant, probably belongs in different namespace
 }  // namespace OIConstants
 
+namespace ElevatorSubsystemConstants {
+    const int kElevatorLeftMotorCANId {10};
+    const int kElevatorRightMotorCANId {11};
+}
+
 namespace IntakeSubsystemConstants {
-    
+    constexpr int kIntakeRollerCANId = 14;
+    // Follower motor?
+
+    constexpr int kIntakeDeployCANId = 15;
 }
 
 namespace ShooterSubsystemConstants {

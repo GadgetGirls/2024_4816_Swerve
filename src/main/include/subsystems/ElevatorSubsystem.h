@@ -42,16 +42,14 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         /***
          * Internal data to the subsystem
          */
-        const int kElevatorLeftMotorCANId {10};
-        const int kElevatorRightMotorCANId {11};
         const int kUpperLimitSwitchChannel {9};
         const int kLowerLimitSwitchChannel {8};
         
         /* Need 2 rev::Spark::SparkMax motors.
           These will need to be set so that one follows the other in reverse */
-        rev::spark::SparkMax m_elevatorRaiseLowerMotor {kElevatorLeftMotorCANId, 
+        rev::spark::SparkMax m_elevatorRaiseLowerMotor {IntakeSubsystemConstants::kElevatorLeftMotorCANId, 
                                                     rev::spark::SparkLowLevel::MotorType::kBrushless};
-        /* rev::spark::SparkMax m_elevatorRaiseLowerFollowerMotor{kElevatorRightMotorCANId, 
+        /* rev::spark::SparkMax m_elevatorRaiseLowerFollowerMotor{IntakeSubsystemConstants::kElevatorRightMotorCANId, 
                                                     rev::spark::SparkLowLevel::MotorType::kBrushless};
         */
         // Need one or two Limit switches to tell us when the elevator needs to stop at the top/bottom
