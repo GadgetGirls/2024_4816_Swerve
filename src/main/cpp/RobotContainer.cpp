@@ -65,7 +65,7 @@ RobotContainer::RobotContainer() {
     {&m_elevator}
   ));
   
-  // Initialize intake subsystem - nothing to do here right now
+  // Initialize intake subsystem - could put auger duty cycle here instead of periodic
    /* m_intake.SetDefaultCommand(frc2::RunCommand(
     [this] {
         // Do stuff
@@ -187,7 +187,7 @@ RobotContainer::RobotContainer() {
 
 frc2::Command* RobotContainer::AimDriveAndShoot(){
     // Get our current location
-
+    frc::Pose2d currentPose2D = m_drive.GetPose();
     // Get the target location
     frc::Pose2d targetPose2D = m_vision.GetTargetPose2d();
     // Set up config for trajectory
@@ -200,7 +200,7 @@ frc2::Command* RobotContainer::AimDriveAndShoot(){
     auto ourTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
       // Start at current position
       // frc::Pose2d{0_m, 0_m, 0_deg},
-      m_drive.GetPose(),
+      currentPose2D,
       {},  // No internal waypoints (empty vector)
       targetPose2D,
       config);
@@ -270,7 +270,6 @@ void RobotContainer::ConfigureButtonBindings() {
 
   // Operator controller right stick moves elevator in manual mode
 
-
   // Joystick Trigger should run shooter in manual mode
   m_joystickTrigger.OnTrue(m_shooter.RunOnce(
     [this] {
@@ -312,21 +311,16 @@ frc::Pose2d RobotContainer::ApplyBackoff(frc::Pose2d targetPose, double distance
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
-    /*
-    // Raise the elevator for 2 seconds
-    m_elevator.m_elevatorTimer.Start();
-    while(m_elevator.m_elevatorTimer.Get() <  two_seconds){
-      m_elevator.setSpeed(1);
-    }
-    m_elevator.setSpeed(0);
-    */
-
+    
   // Set up config for trajectory
   frc::TrajectoryConfig config(AutoConstants::kMaxSpeed/2,
                                AutoConstants::kMaxAcceleration/2);
   // Add kinematics to ensure max speed is actually obeyed
   config.SetKinematics(m_drive.kDriveKinematics);
 
+  // Check m_vision.HasTarget();
+  // If it's FALSE, go on a search for AprilTags
+  
   // Get target pose
   frc::Pose2d targetPose2d = m_vision.GetTargetPose2d();
   // Offset this from the AprilTag position for shooting
