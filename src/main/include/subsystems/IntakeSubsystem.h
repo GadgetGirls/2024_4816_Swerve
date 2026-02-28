@@ -2,6 +2,7 @@
 
 #include <frc/DigitalInput.h>
 #include <frc2/command/SubsystemBase.h>
+#include <rev/SparkFlex.h>
 #include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
 
@@ -69,7 +70,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   rev::spark::SparkMax m_intakeRollerMotor{kIntakeRollerCANId,
                                              rev::spark::SparkLowLevel::MotorType::kBrushless};
   // Intake deploy/retract motor
-  rev::spark::SparkMax m_intakeDeployMotor{kIntakeDeployCANId,
+  rev::spark::SparkFlex m_intakeDeployMotor{kIntakeDeployCANId,
                                              rev::spark::SparkLowLevel::MotorType::kBrushless};
   // Hopper auger motor
   rev::spark::SparkMax m_intakeAugerMotor{kIntakeAugerCANId,

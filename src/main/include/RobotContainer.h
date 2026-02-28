@@ -9,6 +9,7 @@
 #include <frc/Joystick.h>
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc/Timer.h>
+#include <frc/geometry/Pose2d.h>
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/Command.h>
 #include <frc2/command/InstantCommand.h>
@@ -34,6 +35,7 @@
 class RobotContainer {
  public:
   RobotContainer();
+  frc::Pose2d ApplyBackoff(frc::Pose2d targetPose, double distance);
   frc2::Command* GetAutonomousCommand();
   frc2::Command* AimDriveAndShoot();
 

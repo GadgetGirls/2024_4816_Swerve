@@ -19,6 +19,7 @@
 #include <frc2/command/Subsystem.h>
 #include <networktables/NetworkTable.h>
 #include <units/angle.h>
+#include <units/length.h>
 #include <units/time.h>
 #include <units/velocity.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -54,12 +55,12 @@ RobotContainer::RobotContainer() {
   fieldRelative=false;
   controllerMode='a'; // 'j' for josephine toggle bumpers, 'a' for avi hold bumpers
 
-  // Initialize elevator and set to be controlled by Operator XBoxController Left stick
+  // Initialize elevator and set to be controlled by Operator XBoxController Right stick
   m_elevator.SetDefaultCommand(frc2::RunCommand(
     [this] {
-        double opctlr_left_y = -m_operatorController.GetLeftY() * 0.25;
-        frc::SmartDashboard::PutNumber("OperatorCtlr LeftY", opctlr_left_y);
-        m_elevator.setSpeed(opctlr_left_y);
+        double opctlr_right_y = -m_operatorController.GetRightY() * 0.25;
+        frc::SmartDashboard::PutNumber("OperatorCtlr RightY", opctlr_right_y);
+        m_elevator.setSpeed(opctlr_right_y);
     },
     {&m_elevator}
   ));
@@ -160,14 +161,15 @@ RobotContainer::RobotContainer() {
         else if (throttle_percentage > 0.9) {throttle_percentage = 0.9;}
         frc::SmartDashboard::PutNumber("Throttle percentage", throttle_percentage);
         
-        // Pushing buttons 11 and 12 resets the Z axis heading.  This could
+        // Pushing buttons 7 and 8 resets the Z axis heading.  This could
         // be useful if the gyro drifts a lot
-        //swapped 7 & 8 with 11 & 12
+        // Pushing buttons 11 & 12 turns fieldRelative on or off <<< DISABLED ELSEWHERE
         if (m_driverController.GetRawButtonPressed(7) && m_driverController.GetRawButtonPressed(8))
             { m_drive.ZeroHeading();}
-        
+        /*
         if (m_driverController.GetRawButtonPressed(11) && m_driverController.GetRawButtonPressed(12))
             { fieldRelative=!fieldRelative;}
+        */
 
         // NOTE: getY() reversed to deal with directional issue
         frc::SmartDashboard::PutNumber("Field Relative", fieldRelative);
@@ -184,6 +186,8 @@ RobotContainer::RobotContainer() {
 }
 
 frc2::Command* RobotContainer::AimDriveAndShoot(){
+    // Get our current location
+
     // Get the target location
     frc::Pose2d targetPose2D = m_vision.GetTargetPose2d();
     // Set up config for trajectory
@@ -195,7 +199,8 @@ frc2::Command* RobotContainer::AimDriveAndShoot(){
     // https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc_1_1_trajectory_generator.html
     auto ourTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
       // Start at current position
-      frc::Pose2d{0_m, 0_m, 0_deg}, // CHANGEME
+      // frc::Pose2d{0_m, 0_m, 0_deg},
+      m_drive.GetPose(),
       {},  // No internal waypoints (empty vector)
       targetPose2D,
       config);
@@ -262,34 +267,11 @@ void RobotContainer::ConfigureButtonBindings() {
         }
     ));
   }
-  // For loading, use the Triggers at reduced speed
-  m_operatorController.LeftTrigger().OnTrue(m_intake.RunOnce(
-    [this] {
-        m_intake.rollIn(0.25);
-    }
-  ));
-  if(controllerMode == 'a'){
-    m_operatorController.LeftTrigger().OnFalse(m_intake.RunOnce(
-        [this] {
-            m_intake.rollIn(0.25);
-        }
-        ));
-  }
-  // 
-  m_operatorController.RightTrigger().OnTrue(m_intake.RunOnce(
-    [this] {
-        m_intake.rollOut(0.5);
-    }
-  ));
-  if(controllerMode == 'a'){
-    m_operatorController.RightTrigger().OnFalse(m_intake.RunOnce(
-        [this] {
-            m_intake.rollOut(0.5);
-        }
-    ));
-  }  
 
-  // Trigger should run shooter in manual mode
+  // Operator controller right stick moves elevator in manual mode
+
+
+  // Joystick Trigger should run shooter in manual mode
   m_joystickTrigger.OnTrue(m_shooter.RunOnce(
     [this] {
       // Start augers and feeder
@@ -315,8 +297,18 @@ void RobotContainer::ConfigureButtonBindings() {
   ));
   // frc2::Trigger m_driverButton10 = m_driverController.GetRawButton(10);
 
-  // Joystick button 2? is auto-aim
+  // Joystick button 2 is auto-aim and shoot
   m_driverButton2.OnTrue(AimDriveAndShoot());
+
+}
+
+// Calculate a new target pose with backoff distance
+frc::Pose2d RobotContainer::ApplyBackoff(frc::Pose2d targetPose, double distance){
+  const Rotation2d& rotation = targetPose.Rotation();
+  double x = rotation.Cos() * distance;
+  double y = rotation.Sin() * distance;
+  frc::Transform2d backoff = Transform2d(units::meter_t{x}, units::meter_t{y}, rotation);
+  return targetPose + backoff;
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
@@ -337,8 +329,8 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
 
   // Get target pose
   frc::Pose2d targetPose2d = m_vision.GetTargetPose2d();
-  // NOTE: We'll want to offset this from the AprilTag position for shooting
-  // Create a translation with the position difference and subtract one translation from the other
+  // Offset this from the AprilTag position for shooting
+  targetPose2d = ApplyBackoff(targetPose2d, 1);
 
   // https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc_1_1_trajectory_generator.html
   auto exampleTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
@@ -354,7 +346,6 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       // frc::Pose2d{3_m, 0_m, 0_deg}, 
       // Testing pose (short distance) = 1_m, 0_m, 0_deg
       // Josephine & Will's numbers = 3_m, 0_m, 0_deg
-      // Phil's numbers based on Game Manual = 5.87_m, 0_m, 0_deg
       targetPose2d,
       config);
 
