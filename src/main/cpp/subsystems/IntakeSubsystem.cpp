@@ -1,3 +1,6 @@
+#include <thread>
+#include <chrono>
+
 #include <rev/SparkFlex.h>
 #include <rev/SparkMax.h>
 #include <rev/SparkLowLevel.h>
@@ -111,4 +114,9 @@ void IntakeSubsystem::stopHopperWinch(){
   m_intakeHopperMotor.Set(0.0);
 }
 
-void IntakeSubsystem::Periodic(){}
+void IntakeSubsystem::Periodic(){
+  // Run augers for x seconds
+  runAugers();
+  std::this_thread::sleep_for(std::chrono::seconds(5));
+  stopAugers();
+}

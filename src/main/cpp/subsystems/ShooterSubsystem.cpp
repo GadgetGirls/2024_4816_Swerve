@@ -9,6 +9,9 @@ ShooterSubsystem::ShooterSubsystem() {
   
   // You might want to set current limits for safety:
   // m_shooterMotor.SetSmartCurrentLimit(40);  // 40 amp limit
+
+  // Start shooter motor
+  SetSpeed(1.0); // CHANGEME
 }
 
 void ShooterSubsystem::Periodic() {
@@ -87,7 +90,7 @@ void ShooterSubsystem::Shoot(double speed) {
   // Set auger speed, too!
   // Check ball count/presence
   SetFeederSpeed(1.0);
-  SetSpeed(speed);
+  // SetSpeed(speed);  // Always running
 }
 
 frc2::CommandPtr ShooterSubsystem::ShootCommand(double speed) {
