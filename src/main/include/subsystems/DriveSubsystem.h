@@ -119,7 +119,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
   // To revert back simply uncomment all references to m_gyro here and in DriveSubsystem.cpp
  //frc::ADIS16470_IMU m_gyro;
   
-  // NavX gyro
+  // NavX gyro & orientation
+  const int kGyroOriented = 1;  // Flip this negative for upright navx operation
   studica::AHRS navx{studica::AHRS::NavXComType::kMXP_SPI};
 
   // Slew rate filter variables for controlling lateral acceleration
