@@ -117,7 +117,7 @@ void IntakeSubsystem::stopHopperWinch(){
 void IntakeSubsystem::Periodic(){
   // Run augers for x seconds
   runAugers();
-  std::this_thread::sleep_for(std::chrono::seconds(5));
+  std::this_thread::sleep_for(std::chrono::seconds(2));
   stopAugers();
-  std::this_thread::sleep_for(std::chrono::seconds(5));
+  std::this_thread::sleep_for(std::chrono::seconds(2));
 }
