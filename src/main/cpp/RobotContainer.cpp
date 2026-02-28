@@ -183,9 +183,59 @@ RobotContainer::RobotContainer() {
       {&m_drive}));
 }
 
+frc2::Command* RobotContainer::AimDriveAndShoot(){
+    // Get the target location
+    frc::Pose2d targetPose2D = m_vision.GetTargetPose2d();
+    // Set up config for trajectory
+    frc::TrajectoryConfig config(AutoConstants::kMaxSpeed/2,
+                                  AutoConstants::kMaxAcceleration/2);
+    // Add kinematics to ensure max speed is actually obeyed
+    config.SetKinematics(m_drive.kDriveKinematics);
+    // Create the trajectory
+    // https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc_1_1_trajectory_generator.html
+    auto ourTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
+      // Start at current position
+      frc::Pose2d{0_m, 0_m, 0_deg}, // CHANGEME
+      {},  // No internal waypoints (empty vector)
+      targetPose2D,
+      config);
+
+    // Call drive subsystem to get there
+    frc::ProfiledPIDController<units::radians> thetaController{
+      AutoConstants::kPThetaController, 0, 0,
+      AutoConstants::kThetaControllerConstraints};
+
+    thetaController.EnableContinuousInput(units::radian_t{-std::numbers::pi},
+                                          units::radian_t{std::numbers::pi});
+
+    // https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc2_1_1_swerve_controller_command.html
+    frc2::SwerveControllerCommand<4> swerveControllerCommand(
+      ourTrajectory, 
+      [this]() { return m_drive.GetPose(); },
+      m_drive.kDriveKinematics,
+      frc::PIDController{AutoConstants::kPXController, 0, 0},
+      frc::PIDController{AutoConstants::kPYController, 0, 0}, 
+      thetaController,
+      [this](auto moduleStates) { m_drive.SetModuleStates(moduleStates); },
+      {&m_drive});
+
+    // Reset odometry to the starting pose of the trajectory.
+    m_drive.ResetOdometry(ourTrajectory.InitialPose());
+    // Run swerveControllerCommand above to drive the trajectory, 
+    // then run InstantCommand to stop
+    return new frc2::SequentialCommandGroup(
+      std::move(swerveControllerCommand),
+      frc2::InstantCommand(
+          [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false); }),
+      frc2::InstantCommand(
+        [this](){ m_shooter.Shoot(0.75); }
+      )
+    );
+}
+
 void RobotContainer::ConfigureButtonBindings() {  
   // Start / stop intake rollers in the "in" direction
-  // OnTrue args should be Command - convert m_intake.rollIn() to command created by StartEnd?
+  // OnTrue args should be Command - convert m_intake.rollIn() to command created by RunOnce()
   m_operatorController.LeftBumper().OnTrue(m_intake.RunOnce(
     [this] {
         m_intake.rollIn(1.0);
@@ -238,12 +288,35 @@ void RobotContainer::ConfigureButtonBindings() {
         }
     ));
   }  
-  // Trigger should run shooter in manual mode
-  // frc2::Trigger m_driverTrigger = m_driverController.GetTrigger();
 
-  // Joystick Button 10 should deploy the intake
+  // Trigger should run shooter in manual mode
+  m_joystickTrigger.OnTrue(m_shooter.RunOnce(
+    [this] {
+      // Start augers and feeder
+      m_intake.runAugers();
+      m_shooter.SetFeederSpeed(1.0); // CHANGEME
+      m_shooter.SetSpeed(1.0); // CHANGEME
+    }
+  ));
+    m_joystickTrigger.OnFalse(m_shooter.RunOnce(
+    [this] {
+      // Start augers and feeder
+      m_shooter.SetSpeed(0.0);
+      m_shooter.SetFeederSpeed(0.0);
+      m_intake.stopAugers();
+    }
+  ));
+
+  // Joystick Button 10 should deploy/retract the intake
+  m_driverButton10.OnTrue(m_intake.RunOnce(
+    [this]{
+      m_intake.toggleDeploy();
+    }
+  ));
   // frc2::Trigger m_driverButton10 = m_driverController.GetRawButton(10);
 
+  // Joystick button 2? is auto-aim
+  m_driverButton2.OnTrue(AimDriveAndShoot());
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {

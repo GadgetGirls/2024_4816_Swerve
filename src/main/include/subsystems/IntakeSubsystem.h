@@ -32,6 +32,9 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   // Retract intake assembly
   void retractIntake();
 
+  // Deploy if retracted, retract if deployed
+  void toggleDeploy();
+
   // Run augers to feed balls from hopper to first stage of shooter
   void runAugers();
 
@@ -83,7 +86,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   // Hopper side limit switch
   frc::DigitalInput m_intakeHopperLimitSwitch{kIntakeHopperLimitSwitchChannel};
 
-
+  bool m_isDeployed = false;  // Is the intake deployed? CHANGEME
 
   bool m_rollerMotorOn = false;
   int m_rollerMotorDirection = -1; // -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)

@@ -15,13 +15,14 @@
 #include <frc2/command/PIDCommand.h>
 #include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/RunCommand.h>
+#include <frc2/command/button/JoystickButton.h>
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LEDSubsystem.h"
+#include "subsystems/ShooterSubsystem.h"
 #include "subsystems/VisionSubsystem.h"
-// #include "subsystems/ShooterSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -34,6 +35,8 @@ class RobotContainer {
  public:
   RobotContainer();
   frc2::Command* GetAutonomousCommand();
+  frc2::Command* AimDriveAndShoot();
+
 private:
  
   // Which alliance are we on?
@@ -48,9 +51,13 @@ private:
 
   // Trigger should run shooter in manual mode
   // frc2::Trigger m_driverTrigger = m_driverController.GetTrigger();
+  frc2::JoystickButton m_joystickTrigger{&m_driverController, frc::Joystick::ButtonType::kTriggerButton};
 
-  // Button 10 should deploy the intake
-  // frc2::Trigger m_driverButton10 = m_driverController.GetRawButton(10);
+  // Button 2 should aim, position, and fire automatically
+  frc2::JoystickButton m_driverButton2{&m_driverController, 2};
+
+  // Button 10 should deploy/retract the intake
+  frc2::JoystickButton m_driverButton10{&m_driverController, 10};
 
 
   // The operator's controller:
@@ -87,6 +94,7 @@ private:
   ElevatorSubsystem m_elevator;
   IntakeSubsystem m_intake;
   LEDSubsystem m_led;
+  ShooterSubsystem m_shooter;
   VisionSubsystem m_vision;
 
   // The chooser for the autonomous routines

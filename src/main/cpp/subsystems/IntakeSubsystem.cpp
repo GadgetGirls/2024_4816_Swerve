@@ -77,6 +77,15 @@ void IntakeSubsystem::retractIntake(){
 
 }
 
+// Deploy if the intake is retracted, retract if the intake is deployed
+void IntakeSubsystem::toggleDeploy(){
+  if (m_isDeployed){
+    retractIntake();
+  } else {
+    deployIntake();
+  }
+}
+
 // Run augers to feed balls from hopper to first stage of shooter
 void IntakeSubsystem::runAugers(){
   m_intakeAugerMotor.Set(kIntakeAugerSpeed);

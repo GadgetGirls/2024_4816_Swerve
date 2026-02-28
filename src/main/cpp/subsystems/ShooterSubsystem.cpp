@@ -83,10 +83,16 @@ void ShooterSubsystem::StopFeeder(){
   m_feederMotor.Set(0.0);
 }
 
+void ShooterSubsystem::Shoot(double speed) {
+  // Set auger speed, too!
+  // Check ball count/presence
+  SetFeederSpeed(1.0);
+  SetSpeed(speed);
+}
 
 frc2::CommandPtr ShooterSubsystem::ShootCommand(double speed) {
   // Returns a command that sets the shooter to a specific speed
-  return this->RunOnce([this, speed] { SetSpeed(speed); });
+  return this->RunOnce([this, speed] { Shoot(speed); });
 }
 
 frc2::CommandPtr ShooterSubsystem::StopCommand() {

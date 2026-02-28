@@ -142,3 +142,4 @@ frc::Pose2d VisionSubsystem::GetTargetPose2d(){
   frc::Pose2d targetPose2d{targetTranslation, targetRotation};
   return(targetPose2d);
 }
+
