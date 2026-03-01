@@ -35,27 +35,34 @@ constexpr double kMagnitudeSlewRate = 1.8;   // percent per second (1 = 100%)
 constexpr double kRotationalSlewRate = 2.0;  // percent per second (1 = 100%)
 
 // Chassis configuration
-constexpr units::meter_t kTrackWidth =
-    0.629_m;  // Distance between centers of right and left wheels on robot
+// 2025 Robot, kTrackWidth = 0.629_m, kWheelBase = 0.629_m
+constexpr units::meter_t kTrackWidth = 
+    0.635_m;  // Distance between centers of right and left wheels on robot
 constexpr units::meter_t kWheelBase =
-    0.629_m;  // Distance between centers of front and back wheels on robot
+    0.6096_m;  // Distance between centers of front and back wheels on robot
 
 // Angular offsets of the modules relative to the chassis in pi
+/* 
 constexpr double kFrontLeftChassisAngularOffset = -std::numbers::pi / 2;
 constexpr double kFrontRightChassisAngularOffset = 0;
 constexpr double kRearLeftChassisAngularOffset = std::numbers::pi;
 constexpr double kRearRightChassisAngularOffset = std::numbers::pi / 2;
+*/
+constexpr double kFrontLeftChassisAngularOffset = -std::numbers::pi / 2;
+constexpr double kFrontRightChassisAngularOffset = 0;
+constexpr double kRearLeftChassisAngularOffset = std::numbers::pi * 0.669;  // 120.4 degrees
+constexpr double kRearRightChassisAngularOffset = std::numbers::pi / 2;
 
 // SPARK MAX CAN IDs
-constexpr int kFrontLeftDrivingCanId = 7;
-constexpr int kRearLeftDrivingCanId = 3; 
-constexpr int kFrontRightDrivingCanId = 6; 
-constexpr int kRearRightDrivingCanId = 1; 
+constexpr int kFrontLeftDrivingCanId = 1;
+constexpr int kRearLeftDrivingCanId = 6; 
+constexpr int kFrontRightDrivingCanId = 3; 
+constexpr int kRearRightDrivingCanId = 7; 
 
-constexpr int kFrontLeftTurningCanId = 8; 
-constexpr int kRearLeftTurningCanId = 4;
-constexpr int kFrontRightTurningCanId = 5;
-constexpr int kRearRightTurningCanId = 2;
+constexpr int kFrontLeftTurningCanId = 2; 
+constexpr int kRearLeftTurningCanId = 5;
+constexpr int kFrontRightTurningCanId = 4;
+constexpr int kRearRightTurningCanId = 8;
 
 }  // namespace DriveConstants
 
@@ -141,23 +148,23 @@ namespace OIConstants {
 }  // namespace OIConstants
 
 namespace ElevatorSubsystemConstants {
-    const int kElevatorLeftMotorCANId {10};
-    const int kElevatorRightMotorCANId {11};
+    const int kElevatorLeftMotorCANId {9};
+    const int kElevatorRightMotorCANId {10};
 }
 
 namespace IntakeSubsystemConstants {
-    constexpr int kIntakeRollerCANId = 14;
-    // Follower motor?
-
-    constexpr int kIntakeDeployCANId = 15;
+    constexpr int kIntakeRollerCANId {14};
+    constexpr int kIntakeDeployCANId {13};
 }
 
 namespace ShooterSubsystemConstants {
-    constexpr int kShooterCANId = 97; // CHANGEME
-    constexpr int kFeederCANId = 96; // CHANGEME
+    constexpr int kShooterCANId {12};
+    constexpr int kFeederCANId {11};
 }
 
 // VisionSubsystem constants
-const double kTargetHeightMeters = 2; // CHANGEME
-const double kLimelightHeightMeters = 1; // CHANGEME
-const double kLimelightMountAngleDegrees = 0;  // CHANGEME
+namespace VisionSubsystemConstants {
+    const double kTargetHeightMeters {2.0}; // CHANGEME
+    const double kLimelightHeightMeters {1.0}; // CHANGEME
+    const double kLimelightMountAngleDegrees {0.0};  // CHANGEME
+}
