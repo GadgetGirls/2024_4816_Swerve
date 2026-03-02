@@ -102,14 +102,14 @@ double VisionSubsystem::GetDistanceToTargetMeters() {
   //   - ty: Vertical angle to target (from Limelight)
   
   double ty = GetTY();
-  double angleToTargetRadians = (kLimelightMountAngleDegrees + ty) * (std::numbers::pi / 180.0);
+  double angleToTargetRadians = (VisionSubsystemConstants::kLimelightMountAngleDegrees + ty) * (std::numbers::pi / 180.0);
   
   // Avoid divide by zero
   if (std::abs(angleToTargetRadians) < 0.001) {
     return -1.0;
   }
   
-  double distance = (kTargetHeightMeters - kLimelightHeightMeters) / std::tan(angleToTargetRadians);
+  double distance = (VisionSubsystemConstants::kTargetHeightMeters - VisionSubsystemConstants::kLimelightHeightMeters) / std::tan(angleToTargetRadians);
   
   // Sanity check - distance should be positive
   if (distance < 0) {

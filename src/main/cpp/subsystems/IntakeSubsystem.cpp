@@ -65,7 +65,7 @@ void IntakeSubsystem::deployIntake(){
   if (m_intakeDeployLimitSwitch.Get() == false){
       m_intakeDeployMotor.Set(0.0);
   } else {
-      m_intakeDeployMotor.Set(kIntakeDeploySpeed);
+      m_intakeDeployMotor.Set(IntakeSubsystemConstants::kIntakeDeploySpeed);
   }
 }
 
@@ -75,7 +75,7 @@ void IntakeSubsystem::retractIntake(){
   if (m_intakeRetractLimitSwitch.Get() == false){
       m_intakeDeployMotor.Set(0.0);
   } else {
-      m_intakeDeployMotor.Set(kIntakeRetractSpeed);
+      m_intakeDeployMotor.Set(IntakeSubsystemConstants::kIntakeRetractSpeed);
   }
 
 }
@@ -91,7 +91,7 @@ void IntakeSubsystem::toggleDeploy(){
 
 // Run augers to feed balls from hopper to first stage of shooter
 void IntakeSubsystem::runAugers(){
-  m_intakeAugerMotor.Set(kIntakeAugerSpeed);
+  m_intakeAugerMotor.Set(IntakeSubsystemConstants::kIntakeAugerSpeed);
 }
 
 // Stop augers from spinning
@@ -105,7 +105,7 @@ void IntakeSubsystem::runHopperWinch(){
   if (m_intakeHopperLimitSwitch.Get() == false){
       m_intakeHopperMotor.Set(0.0);
   } else {
-      m_intakeHopperMotor.Set(kIntakeHopperSpeed);
+      m_intakeHopperMotor.Set(IntakeSubsystemConstants::kIntakeHopperSpeed);
   }
 }
 

@@ -4,6 +4,8 @@
 
 
 #include "RobotContainer.h"
+#include <chrono>
+#include <thread>
 #include <frc/DriverStation.h>
 #include <frc/LEDPattern.h>
 #include <frc/controller/PIDController.h>
@@ -238,6 +240,23 @@ frc2::Command* RobotContainer::AimDriveAndShoot(){
     );
 }
 
+void RobotContainer::ScanForAprilTag(int tagNumber){ // CODING HERE
+  // Swivel in a 270 degree arc looking for the AprilTag
+  // Stop when you get a tag
+  for(int i = 0; i < 270; i += 15){
+    if (m_vision.HasTarget()){
+      return;
+    };
+    // Turn i degrees
+    m_drive.Drive(units::meters_per_second_t{0},
+             units::meters_per_second_t{0}, 
+             units::radians_per_second_t{2.365}, // 270 degrees in 2 seconds
+             this->fieldRelative);
+   // 15 degrees at 270 degrees/2 seconds is .111 seconds
+   std::this_thread::sleep_for(std::chrono::milliseconds(111)); 
+  };
+}
+
 void RobotContainer::ConfigureButtonBindings() {  
   // Start / stop intake rollers in the "in" direction
   // OnTrue args should be Command - convert m_intake.rollIn() to command created by RunOnce()
@@ -301,6 +320,7 @@ void RobotContainer::ConfigureButtonBindings() {
 
 }
 
+
 // Calculate a new target pose with backoff distance
 frc::Pose2d RobotContainer::ApplyBackoff(frc::Pose2d targetPose, double distance){
   const Rotation2d& rotation = targetPose.Rotation();
@@ -309,6 +329,7 @@ frc::Pose2d RobotContainer::ApplyBackoff(frc::Pose2d targetPose, double distance
   frc::Transform2d backoff = Transform2d(units::meter_t{x}, units::meter_t{y}, rotation);
   return targetPose + backoff;
 }
+
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
     
@@ -331,12 +352,9 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       // Start at the origin facing the +X direction
       frc::Pose2d{0_m, 0_m, 0_deg},
       // waypoint 
-      //WF- Keeping this example waypoint code in case we need to use something like
-      // this in the future.  It is completely useless for now since we want to move in a 
-      // straight line
-      //{frc::Translation2d{1_m, 0_m},
-      //frc::Translation2d{2_m, 0_m}},
-      {},  // No internal waypoints (empty vector)
+      {frc::Translation2d{2_m, 0_m},
+        frc::Translation2d{0_m, 180_deg}},
+      // {},  // No internal waypoints (empty vector)
       // frc::Pose2d{3_m, 0_m, 0_deg}, 
       // Testing pose (short distance) = 1_m, 0_m, 0_deg
       // Josephine & Will's numbers = 3_m, 0_m, 0_deg

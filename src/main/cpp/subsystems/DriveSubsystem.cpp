@@ -131,9 +131,6 @@ units::degree_t DriveSubsystem::GetHeading() {
           
 }
       
-       
-      
-
 // void DriveSubsystem::ZeroHeading() { m_gyro.Reset(); }
 void DriveSubsystem::ZeroHeading() { navx.Reset(); }
 

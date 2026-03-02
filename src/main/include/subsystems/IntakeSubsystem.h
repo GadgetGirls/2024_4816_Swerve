@@ -51,41 +51,28 @@ class IntakeSubsystem : public frc2::SubsystemBase {
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  const int kIntakeRollerCANId = 14;
-  const int kIntakeDeployCANId = 15;
-  const int kIntakeAugerCANId = 98; // CHANGEME
-  const int kIntakeHopperCANId = 95; // CHANGEME
-
-  const int kIntakeDeployLimitSwitchChannel {98}; // CHANGEME
-  const int kIntakeRetractLimitSwitchChannel {97}; // CHANGEME
-  const int kIntakeHopperLimitSwitchChannel {99}; // CHANGEME
   
-  const double kIntakeAugerSpeed = 0.5; // CHANGEME
-  const double kIntakeDeploySpeed = 0.25; // CHANGEME
-  const double kIntakeRetractSpeed = -0.25; // CHANGEME
-  const double kIntakeHopperSpeed = 0.5; // CHANGEME
-  const double k_rollerMotorSpeed = 1.0;
   
   // Intake roller motor
-  rev::spark::SparkMax m_intakeRollerMotor{kIntakeRollerCANId,
+  rev::spark::SparkMax m_intakeRollerMotor{IntakeSubsystemConstants::kIntakeRollerCANId,
                                              rev::spark::SparkLowLevel::MotorType::kBrushless};
   // Intake deploy/retract motor
-  rev::spark::SparkFlex m_intakeDeployMotor{kIntakeDeployCANId,
+  rev::spark::SparkFlex m_intakeDeployMotor{IntakeSubsystemConstants::kIntakeDeployCANId,
                                              rev::spark::SparkLowLevel::MotorType::kBrushless};
   // Hopper auger motor
-  rev::spark::SparkMax m_intakeAugerMotor{kIntakeAugerCANId,
+  rev::spark::SparkMax m_intakeAugerMotor{IntakeSubsystemConstants::kIntakeAugerCANId,
                                              rev::spark::SparkLowLevel::MotorType::kBrushless};
   // Hopper side winch
-  rev::spark::SparkMax m_intakeHopperMotor{kIntakeHopperCANId,
+  rev::spark::SparkMax m_intakeHopperMotor{IntakeSubsystemConstants::kIntakeHopperCANId,
                                               rev::spark::SparkLowLevel::MotorType::kBrushless};
 
   // Intake deployment limit switch - detect when intake is all the way down
-  frc::DigitalInput m_intakeDeployLimitSwitch{kIntakeDeployLimitSwitchChannel};
+  frc::DigitalInput m_intakeDeployLimitSwitch{IntakeSubsystemConstants::kIntakeDeployLimitSwitchChannel};
   // Intake retract limit switch - detect when intake is all the way up
-  frc::DigitalInput m_intakeRetractLimitSwitch{kIntakeRetractLimitSwitchChannel};
+  frc::DigitalInput m_intakeRetractLimitSwitch{IntakeSubsystemConstants::kIntakeRetractLimitSwitchChannel};
 
   // Hopper side limit switch
-  frc::DigitalInput m_intakeHopperLimitSwitch{kIntakeHopperLimitSwitchChannel};
+  frc::DigitalInput m_intakeHopperLimitSwitch{IntakeSubsystemConstants::kIntakeHopperLimitSwitchChannel};
 
   bool m_isDeployed = false;  // Is the intake deployed? CHANGEME
 

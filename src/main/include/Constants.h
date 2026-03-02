@@ -50,7 +50,7 @@ constexpr double kRearRightChassisAngularOffset = std::numbers::pi / 2;
 */
 constexpr double kFrontLeftChassisAngularOffset = -std::numbers::pi / 2;
 constexpr double kFrontRightChassisAngularOffset = 0;
-constexpr double kRearLeftChassisAngularOffset = std::numbers::pi * 0.669;  // 120.4 degrees
+constexpr double kRearLeftChassisAngularOffset = std::numbers::pi * 0.756;  // 136.1 degrees, og value pi
 constexpr double kRearRightChassisAngularOffset = std::numbers::pi / 2;
 
 // SPARK MAX CAN IDs
@@ -141,7 +141,6 @@ extern const frc::TrapezoidProfile<units::radians>::Constraints
 
 namespace OIConstants {
     constexpr int kDriverControllerPort = 0;
-    // Was named kShooterControllerPort, but this controller also controls intake
     constexpr int kOperatorControllerPort = 1;
     constexpr double kDriveDeadband = 0.09; //og = 0.07
     constexpr int kTurboThrottlePercentage = 0.5; // Not an interface constant, probably belongs in different namespace
@@ -155,6 +154,18 @@ namespace ElevatorSubsystemConstants {
 namespace IntakeSubsystemConstants {
     constexpr int kIntakeRollerCANId {14};
     constexpr int kIntakeDeployCANId {13};
+    const int kIntakeAugerCANId {98}; // CHANGEME
+    const int kIntakeHopperCANId {95}; // CHANGEME
+
+    const int kIntakeDeployLimitSwitchChannel {98}; // CHANGEME
+    const int kIntakeRetractLimitSwitchChannel {97}; // CHANGEME
+    const int kIntakeHopperLimitSwitchChannel {99}; // CHANGEME
+  
+    const double kIntakeAugerSpeed = 0.5; // CHANGEME
+    const double kIntakeDeploySpeed = 0.25; // CHANGEME
+    const double kIntakeRetractSpeed = -0.25; // CHANGEME
+    const double kIntakeHopperSpeed = 0.5; // CHANGEME
+    const double k_rollerMotorSpeed = 1.0;
 }
 
 namespace ShooterSubsystemConstants {
@@ -164,7 +175,7 @@ namespace ShooterSubsystemConstants {
 
 // VisionSubsystem constants
 namespace VisionSubsystemConstants {
-    const double kTargetHeightMeters {2.0}; // CHANGEME
-    const double kLimelightHeightMeters {1.0}; // CHANGEME
-    const double kLimelightMountAngleDegrees {0.0};  // CHANGEME
+    const double kTargetHeightMeters {1.12};
+    const double kLimelightHeightMeters {0.463}; 
+    const double kLimelightMountAngleDegrees {5.0};
 }
