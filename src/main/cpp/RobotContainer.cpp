@@ -351,7 +351,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   // If it's FALSE, go on a search for AprilTags
   
   // Get target pose
-  frc::Pose2d targetPose2d = m_vision.GetTargetPose2d();  // Needs tag ID
+  frc::Pose2d targetPose2d = m_vision.GetTargetPose2d();  // How can we get this if we can't see the tag?
   // Offset this from the AprilTag position for shooting
   targetPose2d = ApplyBackoff(targetPose2d, kTargetBackoffDistance);
 
@@ -360,14 +360,12 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       // Start at the origin facing the +X direction
       frc::Pose2d{0_m, 0_m, 0_deg},
       // waypoint 
-      {frc::Translation2d{2_m, 0_m},
-        frc::Translation2d{0_m, 180_deg}},
-      // {},  // No internal waypoints (empty vector)
-      // frc::Pose2d{3_m, 0_m, 0_deg}, 
-      // Testing pose (short distance) = 1_m, 0_m, 0_deg
-      // Josephine & Will's numbers = 3_m, 0_m, 0_deg
-      targetPose2d,
+      // {frc::Translation2d{0_m, 2_m},
+      //   frc::Translation2d{0_m, 180_deg}},
+      {},  // No internal waypoints (empty vector)
+      frc::Pose2d{0_m, 2_m, 180_deg},
       config);
+      // Might be able to go to frc::Pose2d{0_m, 2_m, 180_deg} and use {} waypoints
 
   frc::ProfiledPIDController<units::radians> thetaController{
       AutoConstants::kPThetaController, 0, 0,
@@ -401,6 +399,6 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       frc2::InstantCommand(
           [this]() { ScanForAprilTag(m_hubAprilTagID); }),  // Sweep scan for april tag
       frc2::InstantCommand(
-          [this]() { m_intake.rollOut(); })
+          [this]() { AimDriveAndShoot(); })
   );
 }
