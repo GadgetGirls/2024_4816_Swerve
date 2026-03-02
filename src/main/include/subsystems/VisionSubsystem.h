@@ -18,6 +18,8 @@ class VisionSubsystem : public frc2::SubsystemBase {
   
   int GetTargetID();
 
+  void SetTargetID(int targetTagID);
+
   std::optional<frc::Pose2d> GetBotPose();
 
   std::optional<frc::Pose3d> GetBotPose3d();

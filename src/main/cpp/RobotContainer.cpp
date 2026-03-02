@@ -45,10 +45,15 @@ RobotContainer::RobotContainer() {
   m_alliance = frc::DriverStation::GetAlliance();
   if (m_alliance == frc::DriverStation::Alliance::kBlue){
       frc::SmartDashboard::PutString("Our Alliance is ", "Blue");    
+      m_hubAprilTagID = 26;  // or 25
+      m_towerAprilTagID = 31;  // or 32
   } else {
       frc::SmartDashboard::PutString("Our Alliance is ", "Red");
-  }
+      m_hubAprilTagID = 10;  // or 9
+      m_towerAprilTagID = 15;  // or 16
+    }
   // AprilTagFieldLayout.loadField(AprilTagFields.FRC_2026)
+  m_vision.SetTargetID(m_hubAprilTagID);  // Start by looking for the hub
 
   // Configure the button bindings
   ConfigureButtonBindings();
@@ -188,10 +193,14 @@ RobotContainer::RobotContainer() {
 }
 
 frc2::Command* RobotContainer::AimDriveAndShoot(){
+    // Set target AprilTag to hub tag
+    m_vision.SetTargetID(m_hubAprilTagID);
     // Get our current location
     frc::Pose2d currentPose2D = m_drive.GetPose();
     // Get the target location
     frc::Pose2d targetPose2D = m_vision.GetTargetPose2d();
+    // Backoff the target location far enough to shoot
+    targetPose2D = ApplyBackoff(targetPose2D, kTargetBackoffDistance);
     // Set up config for trajectory
     frc::TrajectoryConfig config(AutoConstants::kMaxSpeed/2,
                                   AutoConstants::kMaxAcceleration/2);
@@ -293,17 +302,17 @@ void RobotContainer::ConfigureButtonBindings() {
   m_joystickTrigger.OnTrue(m_shooter.RunOnce(
     [this] {
       // Start augers and feeder
-      m_intake.runAugers();
+      // m_intake.runAugers();  // Augers on duty cycle
       m_shooter.SetFeederSpeed(1.0); // CHANGEME
-      m_shooter.SetSpeed(1.0); // CHANGEME
+      // m_shooter.SetSpeed(1.0);  // Shooter motor runs constantly
     }
   ));
     m_joystickTrigger.OnFalse(m_shooter.RunOnce(
     [this] {
       // Start augers and feeder
-      m_shooter.SetSpeed(0.0);
+      // m_shooter.SetSpeed(0.0);  // Shooter motor runs constantly
       m_shooter.SetFeederSpeed(0.0);
-      m_intake.stopAugers();
+      // m_intake.stopAugers();  // Augers run on duty cycle
     }
   ));
 
@@ -313,7 +322,6 @@ void RobotContainer::ConfigureButtonBindings() {
       m_intake.toggleDeploy();
     }
   ));
-  // frc2::Trigger m_driverButton10 = m_driverController.GetRawButton(10);
 
   // Joystick button 2 is auto-aim and shoot
   m_driverButton2.OnTrue(AimDriveAndShoot());
@@ -343,9 +351,9 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   // If it's FALSE, go on a search for AprilTags
   
   // Get target pose
-  frc::Pose2d targetPose2d = m_vision.GetTargetPose2d();
+  frc::Pose2d targetPose2d = m_vision.GetTargetPose2d();  // Needs tag ID
   // Offset this from the AprilTag position for shooting
-  targetPose2d = ApplyBackoff(targetPose2d, 1);
+  targetPose2d = ApplyBackoff(targetPose2d, kTargetBackoffDistance);
 
   // https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc_1_1_trajectory_generator.html
   auto exampleTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
@@ -381,14 +389,17 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       {&m_drive});
   // Reset odometry to the starting pose of the trajectory.
   m_drive.ResetOdometry(exampleTrajectory.InitialPose());
-  // Run swerveControllerCommand above to drive the trajectory, 
-  // then run InstantCommand to stop
+  /* Run swerveControllerCommand above to drive the trajectory, 
+     then run InstantCommand to stop
+
+     Old default autonomous drive command:
+     frc2::InstantCommand(
+          [this]() { m_drive.Drive(3_mps, 3_mps, 0_rad_per_s, false); }),
+  */
   return new frc2::SequentialCommandGroup(
       std::move(swerveControllerCommand),
       frc2::InstantCommand(
-          [this]() { m_drive.Drive(3_mps, 3_mps, 0_rad_per_s, false); }), 
-      frc2::InstantCommand(
-        [this]() { m_elevator.autoRaise();}),
+          [this]() { ScanForAprilTag(m_hubAprilTagID); }),  // Sweep scan for april tag
       frc2::InstantCommand(
           [this]() { m_intake.rollOut(); })
   );

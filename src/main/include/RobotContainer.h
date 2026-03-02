@@ -85,12 +85,14 @@ private:
   frc2::Trigger m_operatorRightBumper = m_operatorController.RightBumper();
 
 
-  // When set the robot goes at full throttle.  When clear full throttle is scaled down by
-  // Should be k constants
+  // When set the robot goes at full throttle.  When clear full throttle is scaled down by ??? - Will
+  //
   double button3_result;
   double throttle_percentage;
   bool fieldRelative;
   char controllerMode; // control whether bumpers toggle intake or are held to run intake
+  int m_hubAprilTagID;
+  int m_towerAprilTagID;
 
   // The robot's subsystems
   DriveSubsystem m_drive;
@@ -110,6 +112,9 @@ private:
   double ty;
   double ta;
   double hasTarget;
+
+  // Test constants
+  double kTargetBackoffDistance{1};  // CHANGEME
 
   void ConfigureButtonBindings();
 };

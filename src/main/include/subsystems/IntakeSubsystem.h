@@ -60,7 +60,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   rev::spark::SparkFlex m_intakeDeployMotor{IntakeSubsystemConstants::kIntakeDeployCANId,
                                              rev::spark::SparkLowLevel::MotorType::kBrushless};
   // Hopper auger motor
-  rev::spark::SparkMax m_intakeAugerMotor{IntakeSubsystemConstants::kIntakeAugerCANId,
+  rev::spark::SparkFlex m_intakeAugerMotor{IntakeSubsystemConstants::kIntakeAugerCANId,
                                              rev::spark::SparkLowLevel::MotorType::kBrushless};
   // Hopper side winch
   rev::spark::SparkMax m_intakeHopperMotor{IntakeSubsystemConstants::kIntakeHopperCANId,

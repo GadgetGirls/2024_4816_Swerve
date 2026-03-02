@@ -56,6 +56,10 @@ int VisionSubsystem::GetTargetID() {
   return static_cast<int>(LimelightHelpers::getFiducialID(m_limelightName));
 }
 
+void VisionSubsystem::SetTargetID(int targetTagID) {
+  return LimelightHelpers::SetFiducialIDFiltersOverride(m_limelightName, std::vector<int>{targetTagID});
+}
+
 std::optional<frc::Pose2d> VisionSubsystem::GetBotPose() {
   if (!HasTarget()) {
     return std::nullopt;
