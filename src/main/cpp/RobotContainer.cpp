@@ -346,15 +346,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
                                AutoConstants::kMaxAcceleration/2);
   // Add kinematics to ensure max speed is actually obeyed
   config.SetKinematics(m_drive.kDriveKinematics);
-
-  // Check m_vision.HasTarget();
-  // If it's FALSE, go on a search for AprilTags
   
-  // Get target pose
-  frc::Pose2d targetPose2d = m_vision.GetTargetPose2d();  // How can we get this if we can't see the tag?
-  // Offset this from the AprilTag position for shooting
-  targetPose2d = ApplyBackoff(targetPose2d, kTargetBackoffDistance);
-
   // https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc_1_1_trajectory_generator.html
   auto exampleTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
       // Start at the origin facing the +X direction

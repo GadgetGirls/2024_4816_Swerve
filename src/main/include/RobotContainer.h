@@ -59,8 +59,13 @@ private:
   // Button 2 should aim, position, and fire automatically
   frc2::JoystickButton m_driverButton2{&m_driverController, 2};
 
+  // Pushing buttons 7 and 8 resets the Z axis heading.  This could
+  // be useful if the gyro drifts a lot
+
   // Button 10 should deploy/retract the intake
   frc2::JoystickButton m_driverButton10{&m_driverController, 10};
+
+  // Pushing buttons 11 & 12 turns fieldRelative on or off <<< DISABLED ELSEWHERE
 
 
   // The operator's controller:
@@ -76,7 +81,7 @@ private:
 
   frc2::CommandXboxController m_operatorController{OIConstants::kOperatorControllerPort};
 
-  // - Left stick up/down controls elevator
+  // - Right stick up/down controls elevator
 
   // Left bumper controls intake roll "out" - 2026 hold to engage by default
   frc2::Trigger m_operatorLeftBumper = m_operatorController.LeftBumper();
@@ -89,6 +94,7 @@ private:
   //
   double button3_result;
   double throttle_percentage;
+
   bool fieldRelative;
   char controllerMode; // control whether bumpers toggle intake or are held to run intake
   int m_hubAprilTagID;

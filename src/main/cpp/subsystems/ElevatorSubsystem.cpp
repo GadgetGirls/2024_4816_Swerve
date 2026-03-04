@@ -15,7 +15,7 @@ ElevatorSubsystem::~ElevatorSubsystem(){
 
 // Do periodic subsystem things here. 
 void ElevatorSubsystem::Periodic(){
-    // Perhaps update speed based on controller?
+    // Perhaps update speed based on controller? Nope, that's in RobotContainer.cpp getDefaultCommand
 };
 
 // Set the Elevator motor speeds to raise or lower
