@@ -12,4 +12,4 @@
  * @param pose The pose whose dimensions to log
  *  @return Success/Failure.
  */
-bool DisplayPose(std::string poseName, frc::Pose2d pose);
+void DisplayPose(std::string poseName, frc::Pose2d pose);

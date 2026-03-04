@@ -157,9 +157,9 @@ namespace IntakeSubsystemConstants {
     const int kIntakeAugerCANId {98}; // CHANGEME
     const int kIntakeHopperCANId {95}; // CHANGEME
 
-    const int kIntakeDeployLimitSwitchChannel {98}; // CHANGEME
-    const int kIntakeRetractLimitSwitchChannel {97}; // CHANGEME
-    const int kIntakeHopperLimitSwitchChannel {99}; // CHANGEME
+    const int kIntakeDeployLimitSwitchChannel {1}; // CHANGEME
+    const int kIntakeRetractLimitSwitchChannel {2}; // CHANGEME
+    const int kIntakeHopperLimitSwitchChannel {3}; // CHANGEME
   
     const double kIntakeAugerSpeed = 0.5; // CHANGEME
     const double kIntakeDeploySpeed = 0.25; // CHANGEME
