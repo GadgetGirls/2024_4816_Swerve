@@ -43,15 +43,15 @@ RobotContainer::RobotContainer() {
 
   // Determine alliance - used to determine which AprilTags are our hub
   m_alliance = frc::DriverStation::GetAlliance();
-  if (m_alliance == frc::DriverStation::Alliance::kBlue){
-      frc::SmartDashboard::PutString("Our Alliance is ", "Blue");    
-      m_hubAprilTagID = 26;  // or 25
-      m_towerAprilTagID = 31;  // or 32
+  if (m_alliance.has_value() && m_alliance.value() == frc::DriverStation::Alliance::kRed) {
+        frc::SmartDashboard::PutString("Our Alliance is ", "Red");
+        m_hubAprilTagID = 10;  // or 9
+        m_towerAprilTagID = 15;  // or 16
   } else {
-      frc::SmartDashboard::PutString("Our Alliance is ", "Red");
-      m_hubAprilTagID = 10;  // or 9
-      m_towerAprilTagID = 15;  // or 16
-    }
+        frc::SmartDashboard::PutString("Our Alliance is ", "Blue");    
+        m_hubAprilTagID = 26;  // or 25
+        m_towerAprilTagID = 31;  // or 32
+  }
   // AprilTagFieldLayout.loadField(AprilTagFields.FRC_2026)
   m_vision.SetTargetID(m_hubAprilTagID);  // Start by looking for the hub
 
