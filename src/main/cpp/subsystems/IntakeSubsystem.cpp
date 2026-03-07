@@ -59,6 +59,11 @@ void IntakeSubsystem::stopRollers(){
   m_rollerMotorOn = false;
 }
 
+// Manually drive intake deploy/retract
+void IntakeSubsystem::driveIntake(double speed){
+  m_intakeDeployMotor.Set(speed);
+}
+
 // Deploy intake
 void IntakeSubsystem::deployIntake(){
   // Limit switches return false when closed/triggered.

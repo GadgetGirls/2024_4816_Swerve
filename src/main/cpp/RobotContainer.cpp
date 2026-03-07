@@ -44,14 +44,14 @@ RobotContainer::RobotContainer() {
   // Determine alliance - used to determine which AprilTags are our hub
   m_alliance = frc::DriverStation::GetAlliance();
   if (m_alliance.has_value() && m_alliance.value() == frc::DriverStation::Alliance::kRed) {
-        frc::SmartDashboard::PutString("Our Alliance is ", "Red");
-        m_hubAprilTagID = 10;  // or 9
-        m_towerAprilTagID = 15;  // or 16
+      frc::SmartDashboard::PutString("Our Alliance is ", "Red");
+      m_hubAprilTagID = 10;  // or 9
+      m_towerAprilTagID = 15;  // or 16
   } else {
         frc::SmartDashboard::PutString("Our Alliance is ", "Blue");    
         m_hubAprilTagID = 26;  // or 25
         m_towerAprilTagID = 31;  // or 32
-  }
+    }
   // AprilTagFieldLayout.loadField(AprilTagFields.FRC_2026)
   m_vision.SetTargetID(m_hubAprilTagID);  // Start by looking for the hub
 
@@ -73,13 +73,12 @@ RobotContainer::RobotContainer() {
   ));
   
   // Initialize intake subsystem - could put auger duty cycle here instead of periodic
-   /* m_intake.SetDefaultCommand(frc2::RunCommand(
+  m_intake.SetDefaultCommand(frc2::RunCommand(
     [this] {
-        // Do stuff
+        m_intake.driveIntake(m_operatorController.GetLeftY());
     },
     {&m_intake}
   ));
-  */
 
   // Set the LEDs to run Green
   m_led.SetDefaultCommand(m_led.RunPattern(frc::LEDPattern::Solid(ColorFlip(frc::Color::kGreen))));
@@ -295,6 +294,8 @@ void RobotContainer::ConfigureButtonBindings() {
         }
     ));
   }
+
+  // Operator controller left stick moves intake deploy/retract
 
   // Operator controller right stick moves elevator in manual mode
 

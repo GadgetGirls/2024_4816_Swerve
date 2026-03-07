@@ -153,13 +153,13 @@ namespace ElevatorSubsystemConstants {
 
 namespace IntakeSubsystemConstants {
     constexpr int kIntakeRollerCANId {14};
-    constexpr int kIntakeDeployCANId {13}; // change to vortex
-    const int kIntakeAugerCANId {}; // CHANGEME also vortex
+    constexpr int kIntakeDeployCANId {13};
+    const int kIntakeAugerCANId {98}; // CHANGEME
     const int kIntakeHopperCANId {95}; // CHANGEME
 
     const int kIntakeDeployLimitSwitchChannel {1}; // CHANGEME
     const int kIntakeRetractLimitSwitchChannel {2}; // CHANGEME
-    const int kIntakeHopperLimitSwitchChannel {3}; // CHANGEME
+    // const int kIntakeHopperLimitSwitchChannel {3}; // No sensor here
   
     const double kIntakeAugerSpeed = 0.5; // CHANGEME
     const double kIntakeDeploySpeed = 0.25; // CHANGEME
