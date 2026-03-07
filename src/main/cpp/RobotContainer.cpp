@@ -311,15 +311,15 @@ void RobotContainer::ConfigureButtonBindings() {
       // Start augers and feeder
       // m_intake.runAugers();  // Augers on duty cycle
       m_shooter.SetFeederSpeed(0.5); // CHANGEME
-      // m_shooter.SetSpeed(1.0);  // Shooter motor runs constantly
+      // m_shooter.SetSpeed(0.5);  // Shooter motor runs constantly
     }
   ));
     m_joystickTrigger.OnFalse(m_shooter.RunOnce(
     [this] {
-      // Start augers and feeder
-      // m_shooter.SetSpeed(0.0);  // Shooter motor runs constantly
+      // Stop augers and feeder
+      m_intake.stopAugers();  // Augers run on duty cycle
       m_shooter.SetFeederSpeed(0.0);
-      // m_intake.stopAugers();  // Augers run on duty cycle
+      // m_shooter.SetSpeed(0.0);  // Shooter motor runs constantly
     }
   ));
 
