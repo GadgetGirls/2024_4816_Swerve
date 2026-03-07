@@ -31,12 +31,13 @@ void VisionSubsystem::Periodic() {
     frc::SmartDashboard::PutNumber("Vision-Latency_ms", GetLatencyMs());
     
     // Also publish bot pose if available
-    auto pose = GetBotPose();
+    /* auto pose = GetBotPose();
     if (pose.has_value()) {
       frc::SmartDashboard::PutNumber("Vision-BotPose_X", pose->X().value());
       frc::SmartDashboard::PutNumber("Vision-BotPose_Y", pose->Y().value());
       frc::SmartDashboard::PutNumber("Vision-BotPose_Rotation", pose->Rotation().Degrees().value());
     }
+    */
   }
 }
 
@@ -77,6 +78,7 @@ std::optional<frc::Pose2d> VisionSubsystem::GetBotPose() {
 }
 
 std::optional<frc::Pose3d> VisionSubsystem::GetBotPose3d() {
+  
   if (!HasTarget()) {
     return std::nullopt;
   }

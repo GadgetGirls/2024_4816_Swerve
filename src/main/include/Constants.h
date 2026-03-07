@@ -142,13 +142,13 @@ extern const frc::TrapezoidProfile<units::radians>::Constraints
 namespace OIConstants {
     constexpr int kDriverControllerPort = 0;
     constexpr int kOperatorControllerPort = 1;
-    constexpr double kDriveDeadband = 0.09; //og = 0.07
+    constexpr double kDriveDeadband = 0.10; //og = 0.07
     constexpr int kTurboThrottlePercentage = 0.5; // Not an interface constant, probably belongs in different namespace
 }  // namespace OIConstants
 
 namespace ElevatorSubsystemConstants {
     const int kElevatorLeftMotorCANId {9};
-    const int kElevatorRightMotorCANId {10};
+    const int kElevatorRightMotorCANId {10}; // Can't see in REV
 }
 
 namespace IntakeSubsystemConstants {
@@ -161,16 +161,17 @@ namespace IntakeSubsystemConstants {
     // const int kIntakeRetractLimitSwitchChannel {2}; // CHANGEME
     // const int kIntakeHopperLimitSwitchChannel {3}; // No sensor here
   
-    const double kIntakeAugerSpeed = 0.5; // CHANGEME
+    const double kIntakeAugerSpeed = 0.1; // CHANGEME
     const double kIntakeDeploySpeed = 0.25; // CHANGEME
     const double kIntakeRetractSpeed = -0.25; // CHANGEME
     const double kIntakeHopperSpeed = 0.5; // CHANGEME
-    const double k_rollerMotorSpeed = 1.0;
+    const double k_rollerMotorSpeed = 0.5;
 }
 
 namespace ShooterSubsystemConstants {
     constexpr int kShooterCANId {14};
     constexpr int kFeederCANId {11};
+    constexpr double kShooterSpeed {0.1};
 }
 
 // VisionSubsystem constants

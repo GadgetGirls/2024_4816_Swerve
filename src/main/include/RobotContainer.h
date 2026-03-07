@@ -37,9 +37,10 @@ class RobotContainer {
   RobotContainer();
   frc::Pose2d ApplyBackoff(frc::Pose2d targetPose, double distance);
   frc2::Command* GetAutonomousCommand();
-  frc2::Command* AimDriveAndShoot();
+  // frc2::Command* AimDriveAndShoot();
   void ScanForAprilTag(int tagNumber);
-
+  double ApplyDeadband(double value);
+  
 private:
  
   // Which alliance are we on?
@@ -109,7 +110,7 @@ private:
   IntakeSubsystem m_intake;
   LEDSubsystem m_led;
   ShooterSubsystem m_shooter;
-  VisionSubsystem m_vision;
+  // VisionSubsystem m_vision;
 
   // The chooser for the autonomous routines
   frc::SendableChooser<frc2::Command*> m_chooser;

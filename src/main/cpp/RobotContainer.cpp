@@ -42,7 +42,7 @@ RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
 
   // Determine alliance - used to determine which AprilTags are our hub
-  m_alliance = frc::DriverStation::GetAlliance();
+  // m_alliance = frc::DriverStation::GetAlliance();
   if (m_alliance.has_value() && m_alliance.value() == frc::DriverStation::Alliance::kRed) {
       frc::SmartDashboard::PutString("Our Alliance is ", "Red");
       m_hubAprilTagID = 10;  // or 9
@@ -53,7 +53,7 @@ RobotContainer::RobotContainer() {
         m_towerAprilTagID = 31;  // or 32
     }
   // AprilTagFieldLayout.loadField(AprilTagFields.FRC_2026)
-  m_vision.SetTargetID(m_hubAprilTagID);  // Start by looking for the hub
+  // m_vision.SetTargetID(m_hubAprilTagID);  // Start by looking for the hub
 
   // Configure the button bindings
   ConfigureButtonBindings();
@@ -131,12 +131,14 @@ RobotContainer::RobotContainer() {
     */   
 
   // Set Vision subsystem default command
+  /*
   m_vision.SetDefaultCommand(frc2::RunCommand(
     [this] {
       m_vision.Periodic();
     },
     {&m_vision}
   ));
+  */
 
   // Set up default drive command
   // The left stick controls translation of the robot.
@@ -191,6 +193,7 @@ RobotContainer::RobotContainer() {
       {&m_drive}));
 }
 
+/*
 frc2::Command* RobotContainer::AimDriveAndShoot(){
     // Set target AprilTag to hub tag
     m_vision.SetTargetID(m_hubAprilTagID);
@@ -247,8 +250,10 @@ frc2::Command* RobotContainer::AimDriveAndShoot(){
       )
     );
 }
+*/
 
-void RobotContainer::ScanForAprilTag(int tagNumber){ // CODING HERE
+/*
+RobotContainer::ScanForAprilTag(int tagNumber){ // CODING HERE
   // Swivel in a 270 degree arc looking for the AprilTag
   // Stop when you get a tag
   for(int i = 0; i < 270; i += 15){
@@ -264,6 +269,7 @@ void RobotContainer::ScanForAprilTag(int tagNumber){ // CODING HERE
    std::this_thread::sleep_for(std::chrono::milliseconds(111)); 
   };
 }
+  */
 
 void RobotContainer::ConfigureButtonBindings() {  
   // Start / stop intake rollers in the "in" direction
@@ -290,7 +296,7 @@ void RobotContainer::ConfigureButtonBindings() {
   if(controllerMode == 'a'){
     m_operatorController.RightBumper().OnFalse(m_intake.RunOnce(
         [this] {
-            m_intake.rollOut(1.0);
+            m_intake.rollOut(0);
         }
     ));
   }
@@ -325,7 +331,7 @@ void RobotContainer::ConfigureButtonBindings() {
   ));
 
   // Joystick button 2 is auto-aim and shoot
-  m_driverButton2.OnTrue(AimDriveAndShoot());
+  // m_driverButton2.OnTrue(AimDriveAndShoot());
 
 }
 
@@ -388,10 +394,10 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
           [this]() { m_drive.Drive(3_mps, 3_mps, 0_rad_per_s, false); }),
   */
   return new frc2::SequentialCommandGroup(
-      std::move(swerveControllerCommand),
-      frc2::InstantCommand(
-          [this]() { ScanForAprilTag(m_hubAprilTagID); }),  // Sweep scan for april tag
-      frc2::InstantCommand(
-          [this]() { AimDriveAndShoot(); })
+      std::move(swerveControllerCommand)
+      // frc2::InstantCommand(
+      //    [this]() { ScanForAprilTag(m_hubAprilTagID); }),  // Sweep scan for april tag
+      // frc2::InstantCommand(
+      //    [this]() { AimDriveAndShoot(); })
   );
 }

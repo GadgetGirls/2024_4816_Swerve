@@ -11,7 +11,7 @@ ShooterSubsystem::ShooterSubsystem() {
   // m_shooterMotor.SetSmartCurrentLimit(40);  // 40 amp limit
 
   // Start shooter motor
-  SetSpeed(1.0); // CHANGEME
+  SetSpeed(ShooterSubsystemConstants::kShooterSpeed); 
 }
 
 void ShooterSubsystem::Periodic() {
