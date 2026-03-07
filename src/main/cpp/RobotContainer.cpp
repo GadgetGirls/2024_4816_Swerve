@@ -157,7 +157,7 @@ RobotContainer::RobotContainer() {
         // 0 and -2.  Then multiply by -1 to get rid of the negative and divide 
         // by 2 to get a value between 0 and 1.  This is our percentage.
         button3_result--;
-        button3_result = button3_result * -1;
+        button3_result *= -1;
         // frc::SmartDashboard::PutNumber("Adjusted Throttle", button3_result);
         throttle_percentage = button3_result * 0.5;
         SmartDashboard::PutNumber("Throttle2",throttle_percentage);
@@ -310,7 +310,7 @@ void RobotContainer::ConfigureButtonBindings() {
     [this] {
       // Start augers and feeder
       // m_intake.runAugers();  // Augers on duty cycle
-      m_shooter.SetFeederSpeed(1.0); // CHANGEME
+      m_shooter.SetFeederSpeed(0.5); // CHANGEME
       // m_shooter.SetSpeed(1.0);  // Shooter motor runs constantly
     }
   ));
@@ -323,7 +323,7 @@ void RobotContainer::ConfigureButtonBindings() {
     }
   ));
 
-  // Joystick Button 10 should deploy/retract the intake
+  // Joystick Button 10 should deploy/retract the intake - should deploy/stop and retract/stop
   m_driverButton10.OnTrue(m_intake.RunOnce(
     [this]{
       m_intake.toggleDeploy();
@@ -359,8 +359,6 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       // Start at the origin facing the +X direction
       frc::Pose2d{0_m, 0_m, 0_deg},
       // waypoint 
-      // {frc::Translation2d{0_m, 2_m},
-      //   frc::Translation2d{0_m, 180_deg}},
       {},  // No internal waypoints (empty vector)
       frc::Pose2d{0_m, 2_m, 180_deg},
       config);

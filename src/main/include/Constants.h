@@ -50,7 +50,7 @@ constexpr double kRearRightChassisAngularOffset = std::numbers::pi / 2;
 */
 constexpr double kFrontLeftChassisAngularOffset = -std::numbers::pi / 2;
 constexpr double kFrontRightChassisAngularOffset = 0;
-constexpr double kRearLeftChassisAngularOffset = std::numbers::pi * 0.756;  // 136.1 degrees, og value pi
+constexpr double kRearLeftChassisAngularOffset = std::numbers::pi;  // 136.1 degrees, was pi * 0.756
 constexpr double kRearRightChassisAngularOffset = std::numbers::pi / 2;
 
 // SPARK MAX CAN IDs
@@ -171,7 +171,7 @@ namespace IntakeSubsystemConstants {
 namespace ShooterSubsystemConstants {
     constexpr int kShooterCANId {14};
     constexpr int kFeederCANId {11};
-    constexpr double kShooterSpeed {0.1};
+    constexpr double kShooterSpeed {0.5};
 }
 
 // VisionSubsystem constants

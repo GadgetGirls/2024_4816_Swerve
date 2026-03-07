@@ -62,6 +62,11 @@ void IntakeSubsystem::stopRollers(){
 // Manually drive intake deploy/retract
 void IntakeSubsystem::driveIntake(double speed){
   m_intakeDeployMotor.Set(speed);
+  if(speed > 0){ 
+    m_safeToRunAugers = true; 
+  } else { 
+    m_safeToRunAugers = false; 
+  }
 }
 
 // Deploy intake
@@ -71,6 +76,7 @@ void IntakeSubsystem::deployIntake(){
   //    m_intakeDeployMotor.Set(0.0);
   // } else {
       m_intakeDeployMotor.Set(IntakeSubsystemConstants::kIntakeDeploySpeed);
+      m_safeToRunAugers = true;
   // }
 }
 
@@ -81,9 +87,8 @@ void IntakeSubsystem::retractIntake(){
   //    m_intakeDeployMotor.Set(0.0);
   // } else {
       m_intakeDeployMotor.Set(IntakeSubsystemConstants::kIntakeRetractSpeed);
-  //}
-
-}
+      m_safeToRunAugers = false;
+  }
 
 // Deploy if the intake is retracted, retract if the intake is deployed
 void IntakeSubsystem::toggleDeploy(){
@@ -96,7 +101,9 @@ void IntakeSubsystem::toggleDeploy(){
 
 // Run augers to feed balls from hopper to first stage of shooter
 void IntakeSubsystem::runAugers(){
-  m_intakeAugerMotor.Set(IntakeSubsystemConstants::kIntakeAugerSpeed);
+  if (m_safeToRunAugers){
+    m_intakeAugerMotor.Set(IntakeSubsystemConstants::kIntakeAugerSpeed);
+  }
 }
 
 // Stop augers from spinning
@@ -124,7 +131,9 @@ void IntakeSubsystem::runHopperWinch(){
 void IntakeSubsystem::Periodic(){
   // Run augers for x seconds
   runAugers();
+  /* // TODO - replace sleep_for with Timer
   std::this_thread::sleep_for(std::chrono::seconds(2));
   stopAugers();
   std::this_thread::sleep_for(std::chrono::seconds(2));
+  */
 }

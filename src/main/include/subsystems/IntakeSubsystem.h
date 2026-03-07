@@ -77,9 +77,10 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   // Hopper side limit switch
   // frc::DigitalInput m_intakeHopperLimitSwitch{IntakeSubsystemConstants::kIntakeHopperLimitSwitchChannel};
 
-  bool m_isDeployed = false;  // Is the intake deployed? CHANGEME
+  bool m_isDeployed = false;  // Is the intake deployed? 
 
   bool m_rollerMotorOn = false;
   int m_rollerMotorDirection = -1; // -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)
+  bool m_safeToRunAugers = false;
 
 };
