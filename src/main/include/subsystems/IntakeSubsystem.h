@@ -1,6 +1,7 @@
 #pragma once
 
 #include <frc/DigitalInput.h>
+#include <frc/Timer.h>
 #include <frc2/command/SubsystemBase.h>
 #include <rev/SparkFlex.h>
 #include <rev/SparkMax.h>
@@ -83,4 +84,5 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   int m_rollerMotorDirection = -1; // -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)
   bool m_safeToRunAugers = false;
 
+  frc::Timer m_augerTimer;
 };

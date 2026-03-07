@@ -131,9 +131,10 @@ void IntakeSubsystem::runHopperWinch(){
 void IntakeSubsystem::Periodic(){
   // Run augers for x seconds
   runAugers();
-  /* // TODO - replace sleep_for with Timer
-  std::this_thread::sleep_for(std::chrono::seconds(2));
-  stopAugers();
-  std::this_thread::sleep_for(std::chrono::seconds(2));
-  */
+  m_augerTimer.Start();
+  if (m_augerTimer.HasElapsed(units::time::second_t{3})){
+    stopAugers();
+  } else if (m_augerTimer.HasElapsed(units::time::second_t{6})){
+    m_augerTimer.Restart();
+  }
 }
