@@ -66,13 +66,13 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   rev::spark::SparkFlex m_intakeAugerMotor{IntakeSubsystemConstants::kIntakeAugerCANId,
                                              rev::spark::SparkLowLevel::MotorType::kBrushless};
   // Hopper side winch
-  rev::spark::SparkMax m_intakeHopperMotor{IntakeSubsystemConstants::kIntakeHopperCANId,
-                                              rev::spark::SparkLowLevel::MotorType::kBrushless};
+  /*rev::spark::SparkMax m_intakeHopperMotor{IntakeSubsystemConstants::kIntakeHopperCANId,
+                                              rev::spark::SparkLowLevel::MotorType::kBrushless};*/
 
   // Intake deployment limit switch - detect when intake is all the way down
-  frc::DigitalInput m_intakeDeployLimitSwitch{IntakeSubsystemConstants::kIntakeDeployLimitSwitchChannel};
+  // frc::DigitalInput m_intakeDeployLimitSwitch{IntakeSubsystemConstants::kIntakeDeployLimitSwitchChannel};
   // Intake retract limit switch - detect when intake is all the way up
-  frc::DigitalInput m_intakeRetractLimitSwitch{IntakeSubsystemConstants::kIntakeRetractLimitSwitchChannel};
+  //frc::DigitalInput m_intakeRetractLimitSwitch{IntakeSubsystemConstants::kIntakeRetractLimitSwitchChannel};
 
   // Hopper side limit switch
   // frc::DigitalInput m_intakeHopperLimitSwitch{IntakeSubsystemConstants::kIntakeHopperLimitSwitchChannel};

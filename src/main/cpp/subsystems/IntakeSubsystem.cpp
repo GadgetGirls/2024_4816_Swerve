@@ -55,7 +55,7 @@ void IntakeSubsystem::rollOut(double motorSpeed){
 
 // Stop intake rollers
 void IntakeSubsystem::stopRollers(){
-  m_intakeRollerMotor.StopMotor();
+ m_intakeRollerMotor.StopMotor();
   m_rollerMotorOn = false;
 }
 
@@ -67,21 +67,21 @@ void IntakeSubsystem::driveIntake(double speed){
 // Deploy intake
 void IntakeSubsystem::deployIntake(){
   // Limit switches return false when closed/triggered.
-  if (m_intakeDeployLimitSwitch.Get() == false){
-      m_intakeDeployMotor.Set(0.0);
-  } else {
+  // if (m_intakeDeployLimitSwitch.Get() == false){
+  //    m_intakeDeployMotor.Set(0.0);
+  // } else {
       m_intakeDeployMotor.Set(IntakeSubsystemConstants::kIntakeDeploySpeed);
-  }
+  // }
 }
 
 // Retract intake
 void IntakeSubsystem::retractIntake(){
   // Limit switches return false when closed/triggered.
-  if (m_intakeRetractLimitSwitch.Get() == false){
-      m_intakeDeployMotor.Set(0.0);
-  } else {
+  // if (m_intakeRetractLimitSwitch.Get() == false){
+  //    m_intakeDeployMotor.Set(0.0);
+  // } else {
       m_intakeDeployMotor.Set(IntakeSubsystemConstants::kIntakeRetractSpeed);
-  }
+  //}
 
 }
 
@@ -117,9 +117,9 @@ void IntakeSubsystem::runHopperWinch(){
 */
 
 // Stop hopper side winch
-void IntakeSubsystem::stopHopperWinch(){
+/*void IntakeSubsystem::stopHopperWinch(){
   m_intakeHopperMotor.Set(0.0);
-}
+}*/
 
 void IntakeSubsystem::Periodic(){
   // Run augers for x seconds
