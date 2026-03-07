@@ -104,6 +104,7 @@ void IntakeSubsystem::stopAugers(){
   m_intakeAugerMotor.Set(0.0);
 }
 
+/*
 // Run hopper side winch until limit switch hits
 void IntakeSubsystem::runHopperWinch(){
   // Limit switches return false when closed/triggered.
@@ -113,6 +114,7 @@ void IntakeSubsystem::runHopperWinch(){
       m_intakeHopperMotor.Set(IntakeSubsystemConstants::kIntakeHopperSpeed);
   }
 }
+*/
 
 // Stop hopper side winch
 void IntakeSubsystem::stopHopperWinch(){

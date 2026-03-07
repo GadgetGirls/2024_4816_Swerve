@@ -82,6 +82,8 @@ private:
 
   frc2::CommandXboxController m_operatorController{OIConstants::kOperatorControllerPort};
 
+  // Left stick controls intake deploy/retract
+
   // - Right stick up/down controls elevator
 
   // Left bumper controls intake roll "out" - 2026 hold to engage by default

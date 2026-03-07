@@ -27,6 +27,9 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   // Stop intake rollers
   void stopRollers();
   
+  // Manually drive intake deploy/retract
+  void driveIntake(double speed);
+
   // Deploy intake assembly
   void deployIntake();
 
@@ -43,7 +46,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   void stopAugers();
 
   // Run hopper side winch until limit switch hits
-  void runHopperWinch();
+  // void runHopperWinch();
 
   // Stop hopper side winch
   void stopHopperWinch();
@@ -72,7 +75,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   frc::DigitalInput m_intakeRetractLimitSwitch{IntakeSubsystemConstants::kIntakeRetractLimitSwitchChannel};
 
   // Hopper side limit switch
-  frc::DigitalInput m_intakeHopperLimitSwitch{IntakeSubsystemConstants::kIntakeHopperLimitSwitchChannel};
+  // frc::DigitalInput m_intakeHopperLimitSwitch{IntakeSubsystemConstants::kIntakeHopperLimitSwitchChannel};
 
   bool m_isDeployed = false;  // Is the intake deployed? CHANGEME
 
