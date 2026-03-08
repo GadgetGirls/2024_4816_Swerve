@@ -7,6 +7,8 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <networktables/NetworkTable.h>
 #include <units/angle.h>
+#include "LimelightHelpers.h"
+
 
 VisionSubsystem::VisionSubsystem() {
   // If you have multiple Limelights, set the name here:
@@ -68,13 +70,16 @@ std::optional<frc::Pose2d> VisionSubsystem::GetBotPose() {
   
   // botpose_wpiblue gives pose relative to blue alliance origin
   // This is consistent regardless of which alliance you're on
-  std::vector<double> poseData = LimelightHelpers::getBotpose_wpiBlue(m_limelightName);
-  
+  /* std::vector<double> poseData = LimelightHelpers::getBotpose_wpiBlue(m_limelightName);
   if (poseData.size() < 6) {
     return std::nullopt;
   }
-  
-  return LimelightHelpers::toPose2D(poseData);
+  */
+
+  LimelightHelpers::PoseEstimate poseData = LimelightHelpers::getBotPoseEstimate_wpiBlue(m_limelightName);	
+
+  // return LimelightHelpers::toPose2D(poseData);
+  return poseData.pose;
 }
 
 std::optional<frc::Pose3d> VisionSubsystem::GetBotPose3d() {
@@ -83,13 +88,16 @@ std::optional<frc::Pose3d> VisionSubsystem::GetBotPose3d() {
     return std::nullopt;
   }
   
+  /*
   std::vector<double> poseData = LimelightHelpers::getBotpose_wpiBlue(m_limelightName);
-  
-  if (poseData.size() < 6) {
+  if (poseData.has_value() and poseData.val.size() < 6) {
     return std::nullopt;
   }
-  
-  return LimelightHelpers::toPose3D(poseData);
+  */
+  frc::Pose3d poseData = LimelightHelpers::getBotPose3d_wpiBlue(m_limelightName);
+
+  // return LimelightHelpers::toPose3D(poseData);
+  return poseData;
 }
 
 double VisionSubsystem::GetDistanceToTargetMeters() {
@@ -144,7 +152,7 @@ frc::Pose2d VisionSubsystem::GetTargetPose2d(){
   static const double targetDistance = GetDistanceToTargetMeters();
   units::degree_t x_angle{GetTX()};
   frc::Rotation2d targetRotation{x_angle};
-  frc::Translation2d	targetTranslation{(units::meter_t)targetDistance, targetRotation};
+  frc::Translation2d	targetTranslation{units::meter_t{targetDistance}, targetRotation};
   frc::Pose2d targetPose2d{targetTranslation, targetRotation};
   return(targetPose2d);
 }
