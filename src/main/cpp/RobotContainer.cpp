@@ -130,6 +130,20 @@ RobotContainer::RobotContainer() {
         {&m_led}));    
     */   
 
+  // Set Shooter subsystem default command
+  m_shooter.SetDefaultCommand(frc2::RunCommand(
+    [this] {
+      if (m_driverController.GetTrigger()){
+        m_intake.runAugers();
+        m_shooter.Shoot();
+      } else {
+        m_intake.stopAugers();
+        m_shooter.Stop();
+      }
+    },
+    {&m_shooter, &m_intake}
+  ));
+
   // Set Vision subsystem default command
   /*
   m_vision.SetDefaultCommand(frc2::RunCommand(
@@ -305,11 +319,11 @@ void RobotContainer::ConfigureButtonBindings() {
 
   // Operator controller right stick moves elevator in manual mode
 
-  // Joystick Trigger should run shooter in manual mode
-  m_joystickTrigger.OnTrue(m_shooter.RunOnce(
+  // Joystick Trigger should run shooter in manual mode -- replaced by GetTrigger() in default command
+  /* m_joystickTrigger.OnTrue(m_shooter.RunOnce(
     [this] {
       // Start augers and feeder
-      // m_intake.runAugers();  // Augers on duty cycle
+      m_intake.runAugers();
       m_shooter.SetFeederSpeed(0.5); // CHANGEME
       // m_shooter.SetSpeed(0.5);  // Shooter motor runs constantly
     }
@@ -317,12 +331,13 @@ void RobotContainer::ConfigureButtonBindings() {
     m_joystickTrigger.OnFalse(m_shooter.RunOnce(
     [this] {
       // Stop augers and feeder
-      m_intake.stopAugers();  // Augers run on duty cycle
+      m_intake.stopAugers();
       m_shooter.SetFeederSpeed(0.0);
       // m_shooter.SetSpeed(0.0);  // Shooter motor runs constantly
     }
   ));
-
+  */
+  
   // Joystick Button 10 should deploy/retract the intake - should deploy/stop and retract/stop
   m_driverButton10.OnTrue(m_intake.RunOnce(
     [this]{

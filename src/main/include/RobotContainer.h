@@ -54,9 +54,8 @@ private:
   // GetRawButton(7, 8, 9, 10,11,12)
 
   // Trigger should run shooter in manual mode
-  // frc2::Trigger m_driverTrigger = m_driverController.GetTrigger();
   // frc2::JoystickButton m_joystickTrigger{&m_driverController, frc::Joystick::ButtonType::kTriggerButton};
-  frc2::JoystickButton m_joystickTrigger{&m_driverController, 1};
+  //frc2::JoystickButton m_joystickTrigger{&m_driverController, 1}; // Former attempt
 
   // Button 2 should aim, position, and fire automatically
   frc2::JoystickButton m_driverButton2{&m_driverController, 2};

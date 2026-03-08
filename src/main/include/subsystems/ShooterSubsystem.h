@@ -22,9 +22,9 @@ class ShooterSubsystem : public frc2::SubsystemBase {
 
   void StopFeeder();
 
-  void Shoot(double speed);
+  void Shoot();
   
-  frc2::CommandPtr ShootCommand(double speed);
+  frc2::CommandPtr ShootCommand();
 
   frc2::CommandPtr StopCommand();
 
