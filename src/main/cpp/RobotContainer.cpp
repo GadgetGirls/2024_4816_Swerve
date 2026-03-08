@@ -59,7 +59,7 @@ RobotContainer::RobotContainer() {
   ConfigureButtonBindings();
   timer0.Reset();
   // A few control variables
-  fieldRelative=false;
+  fieldRelative=true;
   controllerMode='a'; // 'j' for josephine toggle bumpers, 'a' for avi hold bumpers
 
   // Initialize elevator and set to be controlled by Operator XBoxController Right stick

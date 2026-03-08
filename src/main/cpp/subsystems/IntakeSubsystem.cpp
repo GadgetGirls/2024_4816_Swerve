@@ -101,9 +101,9 @@ void IntakeSubsystem::toggleDeploy(){
 
 // Run augers to feed balls from hopper to first stage of shooter
 void IntakeSubsystem::runAugers(){
-  if (m_safeToRunAugers){
+  // if (m_safeToRunAugers){
     m_intakeAugerMotor.Set(IntakeSubsystemConstants::kIntakeAugerSpeed);
-  }
+  // }
 }
 
 // Stop augers from spinning
@@ -130,11 +130,12 @@ void IntakeSubsystem::runHopperWinch(){
 
 void IntakeSubsystem::Periodic(){
   // Run augers for x seconds
-  runAugers();
+  /* runAugers();
   m_augerTimer.Start();
   if (m_augerTimer.HasElapsed(units::time::second_t{3})){
     stopAugers();
   } else if (m_augerTimer.HasElapsed(units::time::second_t{6})){
     m_augerTimer.Restart();
   }
+    */
 }
