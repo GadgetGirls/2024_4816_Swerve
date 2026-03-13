@@ -165,13 +165,14 @@ namespace IntakeSubsystemConstants {
     const double kIntakeDeploySpeed = 0.25; // CHANGEME
     const double kIntakeRetractSpeed = -0.25; // CHANGEME
     const double kIntakeHopperSpeed = 0.5; // CHANGEME
-    const double k_rollerMotorSpeed = 0.5;
+    const double kRollerMotorSpeed = 0.5;
 }
 
 namespace ShooterSubsystemConstants {
     constexpr int kShooterCANId {14};
     constexpr int kFeederCANId {11};
-    constexpr double kShooterSpeed {0.5};
+    constexpr double kFeederSpeed {0.5};
+    constexpr double kShooterSpeed {1.0};
 }
 
 // VisionSubsystem constants

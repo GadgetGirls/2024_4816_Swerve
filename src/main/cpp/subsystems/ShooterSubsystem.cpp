@@ -88,10 +88,8 @@ void ShooterSubsystem::StopFeeder(){
 }
 
 void ShooterSubsystem::Shoot() {
-  // Set auger speed, too!
-  // Check ball count/presence
-  SetFeederSpeed(0.5);
-  // SetSpeed(speed);  // Always running
+  SetFeederSpeed(ShooterSubsystemConstants::kFeederSpeed);
+  SetSpeed(ShooterSubsystemConstants::kShooterSpeed);
 }
 
 frc2::CommandPtr ShooterSubsystem::ShootCommand() {
