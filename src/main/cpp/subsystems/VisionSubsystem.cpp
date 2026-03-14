@@ -75,7 +75,6 @@ std::optional<frc::Pose2d> VisionSubsystem::GetBotPose() {
     return std::nullopt;
   }
   */
-
   LimelightHelpers::PoseEstimate poseData = LimelightHelpers::getBotPoseEstimate_wpiBlue(m_limelightName);	
 
   // return LimelightHelpers::toPose2D(poseData);

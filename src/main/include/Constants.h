@@ -143,7 +143,7 @@ namespace OIConstants {
     constexpr int kDriverControllerPort = 0;
     constexpr int kOperatorControllerPort = 1;
     constexpr double kDriveDeadband = 0.10; //og = 0.07
-    constexpr int kTurboThrottlePercentage = 0.5; // Not an interface constant, probably belongs in different namespace
+    constexpr double kTurboThrottlePercentage = 0.5; // Not an interface constant, probably belongs in different namespace
 }  // namespace OIConstants
 
 namespace ElevatorSubsystemConstants {
