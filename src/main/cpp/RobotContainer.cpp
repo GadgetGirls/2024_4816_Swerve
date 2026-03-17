@@ -13,14 +13,15 @@
 #include <frc/shuffleboard/Shuffleboard.h>
 #include <frc/trajectory/Trajectory.h>
 #include <frc/trajectory/TrajectoryGenerator.h>
+#include <frc2/command/button/JoystickButton.h>
 #include <frc2/command/Command.h>
 #include <frc2/command/Commands.h>
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/StartEndCommand.h>
-#include <frc2/command/SwerveControllerCommand.h>
-#include <frc2/command/button/JoystickButton.h>
 #include <frc2/command/Subsystem.h>
+#include <frc2/command/SwerveControllerCommand.h>
+#include <frc2/command/WaitCommand.h>
 #include <networktables/NetworkTable.h>
 #include <units/angle.h>
 #include <units/length.h>
@@ -266,10 +267,10 @@ frc2::Command* RobotContainer::AimDriveAndShoot(){
 }
 
 
-frc2::CommandPtr RobotContainer::ScanForAprilTagCommand(int tagNumber){ // CODING HERE
+frc2::CommandPtr RobotContainer::ScanForAprilTagCommand(){ // CODING HERE - no matching constructor
   // Swivel in a 270 degree arc looking for the AprilTag
   // Stop when you get a tag
-  return frc2::cmd::Sequence(
+  return frc2::SequentialCommandGroup(
     frc2::cmd::Run(
       [this] {     
         // Turn 45 degrees
@@ -279,7 +280,7 @@ frc2::CommandPtr RobotContainer::ScanForAprilTagCommand(int tagNumber){ // CODIN
              this->fieldRelative);
       },
       {&m_drive}),
-    frc2::cmd::Wait(.25_s),  // Non-blocking wait for .25 seconds
+    frc2::WaitCommand(.25_s),  // Non-blocking wait for .25 seconds
     frc2::cmd::Run(
       [this] {     
         // Turn 45 degrees
@@ -289,7 +290,7 @@ frc2::CommandPtr RobotContainer::ScanForAprilTagCommand(int tagNumber){ // CODIN
              this->fieldRelative);
       },
       {&m_drive}),
-    frc2::cmd::Wait(.25_s),  // Non-blocking wait for .25 secondsfrc2::cmd::Run(
+    frc2::WaitCommand(.25_s),  // Non-blocking wait for .25 secondsfrc2::cmd::Run(
     frc2::cmd::Run(
       [this] {     
         // Turn 45 degrees
@@ -299,7 +300,7 @@ frc2::CommandPtr RobotContainer::ScanForAprilTagCommand(int tagNumber){ // CODIN
              this->fieldRelative);
       },
       {&m_drive}),
-    frc2::cmd::Wait(.25_s),  // Non-blocking wait for .25 secondsfrc2::cmd::Run(
+    frc2::WaitCommand(.25_s),  // Non-blocking wait for .25 secondsfrc2::cmd::Run(
     frc2::cmd::Run(
       [this] {     
         // Turn 45 degrees
@@ -309,7 +310,7 @@ frc2::CommandPtr RobotContainer::ScanForAprilTagCommand(int tagNumber){ // CODIN
              this->fieldRelative);
       },
       {&m_drive}),
-    frc2::cmd::Wait(.25_s),  // Non-blocking wait for .25 secondsfrc2::cmd::Run(
+    frc2::WaitCommand(.25_s),  // Non-blocking wait for .25 secondsfrc2::cmd::Run(
     frc2::cmd::Run(
       [this] {     
         // Turn 45 degrees
@@ -319,7 +320,7 @@ frc2::CommandPtr RobotContainer::ScanForAprilTagCommand(int tagNumber){ // CODIN
              this->fieldRelative);
       },
       {&m_drive}),
-    frc2::cmd::Wait(.25_s),  // Non-blocking wait for .25 secondsfrc2::cmd::Run(
+    frc2::WaitCommand(.25_s),  // Non-blocking wait for .25 secondsfrc2::cmd::Run(
     frc2::cmd::Run(
       [this] {     
         // Turn 45 degrees
@@ -453,11 +454,18 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
      frc2::InstantCommand(
           [this]() { m_drive.Drive(3_mps, 3_mps, 0_rad_per_s, false); }),
   */
-  return new frc2::SequentialCommandGroup(
+  frc2::CommandPtr ScanForAprilTagCmd = ScanForAprilTagCommand();
+
+  // SequentialCommandGroup takes a vector of std::uniqueptr<Command> objects
+  // swerveControllerCommand is a frc2::SwerveControllerCommand<4>
+  // frc2::InstantCommand returns a InstantCommand
+  // We need ScanForAprilTag to return 
+  frc2::SequentialCommandGroup theGroup = frc2::SequentialCommandGroup(
       std::move(swerveControllerCommand),
-    //  frc2::InstantCommand(
-    //      [this]() { ScanForAprilTag(m_hubAprilTagID); }),  // Sweep scan for april tag
-     frc2::InstantCommand(
+      std::move(ScanForAprilTagCmd),  // Sweep scan for april tag
+      frc2::InstantCommand(
          [this]() { AimDriveAndShoot(); })
   );
+  // Need to convert CommandPtr to Command*
+  return theGroup.ToPtr();
 }
