@@ -4,8 +4,9 @@
 
 
 #include "RobotContainer.h"
-#include <chrono>
+#include <memory>
 #include <thread>
+#include <vector>
 #include <frc/DriverStation.h>
 #include <frc/LEDPattern.h>
 #include <frc/controller/PIDController.h>
@@ -17,6 +18,7 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/Commands.h>
 #include <frc2/command/InstantCommand.h>
+// #include <frc2/command/Sequence.h>
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/StartEndCommand.h>
 #include <frc2/command/Subsystem.h>
@@ -209,7 +211,7 @@ RobotContainer::RobotContainer() {
 }
 
 
-frc2::Command* RobotContainer::AimDriveAndShoot(){
+frc2::CommandPtr RobotContainer::AimDriveAndShoot(){
     // Set target AprilTag to hub tag
     m_vision.SetTargetID(m_hubAprilTagID);
     // Get our current location
@@ -256,13 +258,13 @@ frc2::Command* RobotContainer::AimDriveAndShoot(){
     m_drive.ResetOdometry(ourTrajectory.InitialPose());
     // Run swerveControllerCommand above to drive the trajectory, 
     // then run InstantCommand to stop
-    return new frc2::SequentialCommandGroup(
-      std::move(swerveControllerCommand),
+    return frc2::cmd::Sequence(std::vector<frc2::CommandPtr>{
+      std::move(swerveControllerCommand).ToPtr(),
       frc2::InstantCommand(
           [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false); }),
       frc2::InstantCommand(
         [this](){ m_shooter.Shoot(); }
-      )
+      )}
     );
 }
 
@@ -270,67 +272,58 @@ frc2::Command* RobotContainer::AimDriveAndShoot(){
 frc2::CommandPtr RobotContainer::ScanForAprilTagCommand(){ // CODING HERE - no matching constructor
   // Swivel in a 270 degree arc looking for the AprilTag
   // Stop when you get a tag
-  return frc2::SequentialCommandGroup(
-    frc2::cmd::Run(
-      [this] {     
-        // Turn 45 degrees
-        m_drive.Drive(units::meters_per_second_t{0},
-             units::meters_per_second_t{0}, 
-             units::radians_per_second_t{0.7853982 * 2}, // 45 degrees in 0.5 seconds
-             this->fieldRelative);
-      },
-      {&m_drive}),
-    frc2::WaitCommand(.25_s),  // Non-blocking wait for .25 seconds
-    frc2::cmd::Run(
-      [this] {     
-        // Turn 45 degrees
-        m_drive.Drive(units::meters_per_second_t{0},
-             units::meters_per_second_t{0}, 
-             units::radians_per_second_t{0.7853982 * 2}, // 45 degrees in 0.5 seconds
-             this->fieldRelative);
-      },
-      {&m_drive}),
-    frc2::WaitCommand(.25_s),  // Non-blocking wait for .25 secondsfrc2::cmd::Run(
-    frc2::cmd::Run(
-      [this] {     
-        // Turn 45 degrees
-        m_drive.Drive(units::meters_per_second_t{0},
-             units::meters_per_second_t{0}, 
-             units::radians_per_second_t{0.7853982 * 2}, // 45 degrees in 0.5 seconds
-             this->fieldRelative);
-      },
-      {&m_drive}),
-    frc2::WaitCommand(.25_s),  // Non-blocking wait for .25 secondsfrc2::cmd::Run(
-    frc2::cmd::Run(
-      [this] {     
-        // Turn 45 degrees
-        m_drive.Drive(units::meters_per_second_t{0},
-             units::meters_per_second_t{0}, 
-             units::radians_per_second_t{0.7853982 * 2}, // 45 degrees in 0.5 seconds
-             this->fieldRelative);
-      },
-      {&m_drive}),
-    frc2::WaitCommand(.25_s),  // Non-blocking wait for .25 secondsfrc2::cmd::Run(
-    frc2::cmd::Run(
-      [this] {     
-        // Turn 45 degrees
-        m_drive.Drive(units::meters_per_second_t{0},
-             units::meters_per_second_t{0}, 
-             units::radians_per_second_t{0.7853982 * 2}, // 45 degrees in 0.5 seconds
-             this->fieldRelative);
-      },
-      {&m_drive}),
-    frc2::WaitCommand(.25_s),  // Non-blocking wait for .25 secondsfrc2::cmd::Run(
-    frc2::cmd::Run(
-      [this] {     
-        // Turn 45 degrees
-        m_drive.Drive(units::meters_per_second_t{0},
-             units::meters_per_second_t{0}, 
-             units::radians_per_second_t{0.7853982 * 2}, // 45 degrees in 0.5 seconds
-             this->fieldRelative);
-      },
-      {&m_drive})
-  ).Until([this]{ return m_vision.HasTarget(); }); // Interrupt if HasTarget() == true or 270 degrees
+  return frc2::cmd::Sequence(std::vector<frc2::CommandPtr>{
+    frc2::cmd::Run([this] {
+      m_drive.Drive(units::meters_per_second_t{0},
+                    units::meters_per_second_t{0},
+                    units::radians_per_second_t{0.7853982 * 2},
+                    this->fieldRelative);
+    }, {&m_drive}).WithTimeout(0.5_s),
+    frc2::cmd::Wait(0.25_s),
+    frc2::cmd::Run([this] {
+      m_drive.Drive(units::meters_per_second_t{0},
+                    units::meters_per_second_t{0},
+                    units::radians_per_second_t{0.7853982 * 2},
+                    this->fieldRelative);
+    }, {&m_drive}).WithTimeout(0.5_s),
+    frc2::cmd::Wait(0.25_s),
+    frc2::cmd::Run([this] {
+      m_drive.Drive(units::meters_per_second_t{0},
+                    units::meters_per_second_t{0},
+                    units::radians_per_second_t{0.7853982 * 2},
+                    this->fieldRelative);
+    }, {&m_drive}).WithTimeout(0.5_s),
+    frc2::cmd::Wait(0.25_s),
+    frc2::cmd::Run([this] {
+      m_drive.Drive(units::meters_per_second_t{0},
+                    units::meters_per_second_t{0},
+                    units::radians_per_second_t{0.7853982 * 2},
+                    this->fieldRelative);
+    }, {&m_drive}).WithTimeout(0.5_s),
+    frc2::cmd::Wait(0.25_s),
+    frc2::cmd::Run([this] {
+      m_drive.Drive(units::meters_per_second_t{0},
+                    units::meters_per_second_t{0},
+                    units::radians_per_second_t{0.7853982 * 2},
+                    this->fieldRelative);
+    }, {&m_drive}).WithTimeout(0.5_s),
+    frc2::cmd::Wait(0.25_s),
+    frc2::cmd::Run([this] {
+      m_drive.Drive(units::meters_per_second_t{0},
+                    units::meters_per_second_t{0},
+                    units::radians_per_second_t{0.7853982 * 2},
+                    this->fieldRelative);
+    }, {&m_drive}).WithTimeout(0.5_s),
+    frc2::cmd::Wait(0.25_s),
+    frc2::cmd::Run([this] {
+      m_drive.Drive(units::meters_per_second_t{0},
+                    units::meters_per_second_t{0},
+                    units::radians_per_second_t{0.7853982 * 2},
+                    this->fieldRelative);
+    }, {&m_drive}).WithTimeout(0.5_s),
+    frc2::cmd::Wait(0.25_s)
+  }
+  ).Until([this]{ return m_vision.HasTarget(); });
 }
 
 void RobotContainer::ConfigureButtonBindings() {  
@@ -454,18 +447,17 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
      frc2::InstantCommand(
           [this]() { m_drive.Drive(3_mps, 3_mps, 0_rad_per_s, false); }),
   */
-  frc2::CommandPtr ScanForAprilTagCmd = ScanForAprilTagCommand();
+  //frc2::CommandPtr ScanForAprilTagCmd = ScanForAprilTagCommand();
 
   // SequentialCommandGroup takes a vector of std::uniqueptr<Command> objects
   // swerveControllerCommand is a frc2::SwerveControllerCommand<4>
   // frc2::InstantCommand returns a InstantCommand
   // We need ScanForAprilTag to return 
-  frc2::SequentialCommandGroup theGroup = frc2::SequentialCommandGroup(
-      std::move(swerveControllerCommand),
-      std::move(ScanForAprilTagCmd),  // Sweep scan for april tag
+  return new frc2::SequentialCommandGroup(
+      std::move(swerveControllerCommand).ToPtr(),  //
+      ScanForAprilTagCommand(),  // Sweep scan for april tag
       frc2::InstantCommand(
          [this]() { AimDriveAndShoot(); })
-  );
+    ).get();
   // Need to convert CommandPtr to Command*
-  return theGroup.ToPtr();
 }
