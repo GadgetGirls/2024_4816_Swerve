@@ -257,73 +257,33 @@ frc2::CommandPtr RobotContainer::AimDriveAndShoot(){
     // Reset odometry to the starting pose of the trajectory.
     m_drive.ResetOdometry(ourTrajectory.InitialPose());
     // Run swerveControllerCommand above to drive the trajectory, 
-    // then run InstantCommand to stop
-    return frc2::cmd::Sequence(std::vector<frc2::CommandPtr>{
-      std::move(swerveControllerCommand).ToPtr(),
-      frc2::InstantCommand(
-          [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false); }),
-      frc2::InstantCommand(
-        [this](){ m_shooter.Shoot(); }
-      )}
-    );
+    // then run Drive(0,0,0) to stop
+    std::vector<frc2::CommandPtr> commands;
+    commands.push_back(std::move(swerveControllerCommand).ToPtr());
+    commands.push_back(frc2::cmd::RunOnce(
+      [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false); }, {&m_drive}));
+    commands.push_back(frc2::cmd::RunOnce(
+      [this]() { m_shooter.Shoot(); }, {&m_shooter}));
+    return frc2::cmd::Sequence(std::move(commands));
 }
 
 
 frc2::CommandPtr RobotContainer::ScanForAprilTagCommand(){ // CODING HERE - no matching constructor
   // Swivel in a 270 degree arc looking for the AprilTag
   // Stop when you get a tag
-  return frc2::cmd::Sequence(std::vector<frc2::CommandPtr>{
-    frc2::cmd::Run([this] {
-      m_drive.Drive(units::meters_per_second_t{0},
-                    units::meters_per_second_t{0},
-                    units::radians_per_second_t{0.7853982 * 2},
-                    this->fieldRelative);
-    }, {&m_drive}).WithTimeout(0.5_s),
-    frc2::cmd::Wait(0.25_s),
-    frc2::cmd::Run([this] {
-      m_drive.Drive(units::meters_per_second_t{0},
-                    units::meters_per_second_t{0},
-                    units::radians_per_second_t{0.7853982 * 2},
-                    this->fieldRelative);
-    }, {&m_drive}).WithTimeout(0.5_s),
-    frc2::cmd::Wait(0.25_s),
-    frc2::cmd::Run([this] {
-      m_drive.Drive(units::meters_per_second_t{0},
-                    units::meters_per_second_t{0},
-                    units::radians_per_second_t{0.7853982 * 2},
-                    this->fieldRelative);
-    }, {&m_drive}).WithTimeout(0.5_s),
-    frc2::cmd::Wait(0.25_s),
-    frc2::cmd::Run([this] {
-      m_drive.Drive(units::meters_per_second_t{0},
-                    units::meters_per_second_t{0},
-                    units::radians_per_second_t{0.7853982 * 2},
-                    this->fieldRelative);
-    }, {&m_drive}).WithTimeout(0.5_s),
-    frc2::cmd::Wait(0.25_s),
-    frc2::cmd::Run([this] {
-      m_drive.Drive(units::meters_per_second_t{0},
-                    units::meters_per_second_t{0},
-                    units::radians_per_second_t{0.7853982 * 2},
-                    this->fieldRelative);
-    }, {&m_drive}).WithTimeout(0.5_s),
-    frc2::cmd::Wait(0.25_s),
-    frc2::cmd::Run([this] {
-      m_drive.Drive(units::meters_per_second_t{0},
-                    units::meters_per_second_t{0},
-                    units::radians_per_second_t{0.7853982 * 2},
-                    this->fieldRelative);
-    }, {&m_drive}).WithTimeout(0.5_s),
-    frc2::cmd::Wait(0.25_s),
-    frc2::cmd::Run([this] {
-      m_drive.Drive(units::meters_per_second_t{0},
-                    units::meters_per_second_t{0},
-                    units::radians_per_second_t{0.7853982 * 2},
-                    this->fieldRelative);
-    }, {&m_drive}).WithTimeout(0.5_s),
-    frc2::cmd::Wait(0.25_s)
+  std::vector<frc2::CommandPtr> commands;
+  for(int i=0; i < 6; i++){
+    commands.push_back(
+      frc2::cmd::Run([this] {
+        m_drive.Drive(units::meters_per_second_t{0},
+                      units::meters_per_second_t{0},
+                      units::radians_per_second_t{0.7853982 * 2},
+                      this->fieldRelative);
+      }, {&m_drive}).WithTimeout(0.5_s));
+    commands.push_back(
+      frc2::cmd::Wait(0.25_s));
   }
-  ).Until([this]{ return m_vision.HasTarget(); });
+  return frc2::cmd::Sequence(std::move(commands)).Until([this]{ return m_vision.HasTarget(); });
 }
 
 void RobotContainer::ConfigureButtonBindings() {  
@@ -402,7 +362,7 @@ frc::Pose2d RobotContainer::ApplyBackoff(frc::Pose2d targetPose, double distance
 }
 
 
-frc2::Command* RobotContainer::GetAutonomousCommand() {
+frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     
   // Set up config for trajectory
   frc::TrajectoryConfig config(AutoConstants::kMaxSpeed/2,
@@ -453,11 +413,9 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   // swerveControllerCommand is a frc2::SwerveControllerCommand<4>
   // frc2::InstantCommand returns a InstantCommand
   // We need ScanForAprilTag to return 
-  return new frc2::SequentialCommandGroup(
-      std::move(swerveControllerCommand).ToPtr(),  //
-      ScanForAprilTagCommand(),  // Sweep scan for april tag
-      frc2::InstantCommand(
-         [this]() { AimDriveAndShoot(); })
-    ).get();
-  // Need to convert CommandPtr to Command*
+  std::vector<frc2::CommandPtr> commands;
+  commands.push_back(std::move(swerveControllerCommand).ToPtr());  
+  commands.push_back(ScanForAprilTagCommand());  // Sweep scan for april tag
+  commands.push_back(AimDriveAndShoot());
+  return frc2::cmd::Sequence(std::move(commands));
 }

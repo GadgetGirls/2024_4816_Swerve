@@ -37,7 +37,7 @@ class RobotContainer {
  public:
   RobotContainer();
   frc::Pose2d ApplyBackoff(frc::Pose2d targetPose, double distance);
-  frc2::Command* GetAutonomousCommand();
+  frc2::CommandPtr GetAutonomousCommand();
   frc2::CommandPtr AimDriveAndShoot();
   frc2::CommandPtr ScanForAprilTagCommand();
   double ApplyDeadband(double value);
@@ -113,7 +113,7 @@ private:
   VisionSubsystem m_vision;
 
   // The chooser for the autonomous routines
-  frc::SendableChooser<frc2::Command*> m_chooser;
+  // frc::SendableChooser<frc2::Command*> m_chooser;  // Replace with something using CommandPtr
   // Timer
   frc::Timer timer0;
   
