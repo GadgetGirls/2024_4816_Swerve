@@ -13,10 +13,12 @@
 #include <frc/shuffleboard/Shuffleboard.h>
 #include <frc/trajectory/Trajectory.h>
 #include <frc/trajectory/TrajectoryGenerator.h>
+#include <frc2/command/Commands.h>
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/StartEndCommand.h>
 #include <frc2/command/SwerveControllerCommand.h>
+#include <frc2/command/WaitCommand.h>
 #include <frc2/command/button/JoystickButton.h>
 #include <frc2/command/Subsystem.h>
 #include <networktables/NetworkTable.h>
@@ -413,4 +415,29 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       // frc2::InstantCommand(
       //    [this]() { AimDriveAndShoot(); })
   );
+}
+
+frc2::CommandPtr RobotContainer::GetTestCommand(){
+  // Rotate and drive each swerve motor pair
+  // Run each motor for 1sec
+  std::vector<frc2::CommandPtr> commmands;
+  commmands.push_back(m_elevator.RunOnce([this] { m_elevator.setSpeed(0.5); }));
+  commmands.push_back(frc2::cmd::Wait(1_s));
+  commmands.push_back(m_elevator.RunOnce([this] { m_elevator.setSpeed(0.0); }));
+  commmands.push_back(m_intake.RunOnce([this] { m_intake.driveIntake(0.5); }));
+  commmands.push_back(frc2::cmd::Wait(1_s));
+  commmands.push_back(m_intake.RunOnce([this] { m_intake.driveIntake(0.0); }));
+  commmands.push_back(m_intake.RunOnce([this] { m_intake.rollIn(0.5); }));
+  commmands.push_back(frc2::cmd::Wait(1_s));
+  commmands.push_back(m_intake.RunOnce([this] { m_intake.stopRollers(); }));
+  commmands.push_back(m_intake.RunOnce([this] { m_intake.runAugers(); }));
+  commmands.push_back(frc2::cmd::Wait(1_s));
+  commmands.push_back(m_intake.RunOnce([this] { m_intake.stopAugers(); }));
+  commmands.push_back(m_shooter.RunOnce([this] { m_shooter.SetSpeed(0.5); }));
+  commmands.push_back(frc2::cmd::Wait(1_s));
+  commmands.push_back(m_shooter.RunOnce([this] { m_shooter.SetSpeed(0.0); }));
+  commmands.push_back(m_shooter.RunOnce([this] { m_shooter.SetFeederSpeed(0.5); }));
+  commmands.push_back(frc2::cmd::Wait(1_s));
+  commmands.push_back(m_shooter.RunOnce([this] { m_shooter.SetFeederSpeed(0.0); }));
+  return frc2::cmd::Sequence(std::move(commmands));
 }
