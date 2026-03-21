@@ -419,3 +419,28 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   commands.push_back(AimDriveAndShoot());
   return frc2::cmd::Sequence(std::move(commands));
 }
+
+frc2::CommandPtr RobotContainer::GetTestCommand(){
+  // Rotate and drive each swerve motor pair
+  // Run each motor for 1sec
+  std::vector<frc2::CommandPtr> commmands;
+  commmands.push_back(m_elevator.RunOnce([this] { m_elevator.setSpeed(0.5); }));
+  commmands.push_back(frc2::cmd::Wait(1_s));
+  commmands.push_back(m_elevator.RunOnce([this] { m_elevator.setSpeed(0.0); }));
+  commmands.push_back(m_intake.RunOnce([this] { m_intake.driveIntake(0.5); }));
+  commmands.push_back(frc2::cmd::Wait(1_s));
+  commmands.push_back(m_intake.RunOnce([this] { m_intake.driveIntake(0.0); }));
+  commmands.push_back(m_intake.RunOnce([this] { m_intake.rollIn(0.5); }));
+  commmands.push_back(frc2::cmd::Wait(1_s));
+  commmands.push_back(m_intake.RunOnce([this] { m_intake.stopRollers(); }));
+  commmands.push_back(m_intake.RunOnce([this] { m_intake.runAugers(); }));
+  commmands.push_back(frc2::cmd::Wait(1_s));
+  commmands.push_back(m_intake.RunOnce([this] { m_intake.stopAugers(); }));
+  commmands.push_back(m_shooter.RunOnce([this] { m_shooter.SetSpeed(0.5); }));
+  commmands.push_back(frc2::cmd::Wait(1_s));
+  commmands.push_back(m_shooter.RunOnce([this] { m_shooter.SetSpeed(0.0); }));
+  commmands.push_back(m_shooter.RunOnce([this] { m_shooter.SetFeederSpeed(0.5); }));
+  commmands.push_back(frc2::cmd::Wait(1_s));
+  commmands.push_back(m_shooter.RunOnce([this] { m_shooter.SetFeederSpeed(0.0); }));
+  return frc2::cmd::Sequence(std::move(commmands));
+}
