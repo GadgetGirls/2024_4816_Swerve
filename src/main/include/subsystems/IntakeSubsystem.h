@@ -50,7 +50,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   // void runHopperWinch();
 
   // Stop hopper side winch
-  void stopHopperWinch();
+  // void stopHopperWinch();
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be

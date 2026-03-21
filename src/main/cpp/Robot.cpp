@@ -73,6 +73,11 @@ void Robot::TeleopInit() {
  */
 void Robot::TeleopPeriodic() {}
 
+void Robot::TestInit() {
+  m_testCommand = m_container.GetTestCommand();
+  m_testCommand->Schedule();
+}
+
 /**
  * This function is called periodically during test mode.
  */
