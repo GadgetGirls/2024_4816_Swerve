@@ -38,6 +38,7 @@ class RobotContainer {
   RobotContainer();
   frc::Pose2d ApplyBackoff(frc::Pose2d targetPose, double distance);
   frc2::CommandPtr GetAutonomousCommand();
+  frc2::CommandPtr GetTestCommand();
   frc2::CommandPtr AimDriveAndShoot();
   frc2::CommandPtr ScanForAprilTagCommand();
   double ApplyDeadband(double value);

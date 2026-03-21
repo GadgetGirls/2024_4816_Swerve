@@ -6,6 +6,7 @@
 
 #include <frc/TimedRobot.h>
 #include <frc2/command/Command.h>
+#include <frc2/command/CommandPtr.h>
 #include <optional>
 
 #include <cstdio>
@@ -40,12 +41,14 @@ class Robot : public frc::TimedRobot {
   void AutonomousPeriodic() override;
   void TeleopInit() override;
   void TeleopPeriodic() override;
+  void TestInit() override;
   void TestPeriodic() override;
 
  private:
   // Have it null by default so that if testing teleop it
   // doesn't have undefined behavior and potentially crash.
   std::optional<frc2::CommandPtr> m_autonomousCommand;
+  std::optional<frc2::CommandPtr> m_testCommand;
 
 #if defined(__linux__) || defined(_WIN32)
   static void VisionThread() {
