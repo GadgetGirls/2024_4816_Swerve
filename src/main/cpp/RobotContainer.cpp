@@ -441,14 +441,3 @@ frc2::CommandPtr RobotContainer::GetTestCommand(){
   commmands.push_back(m_shooter.RunOnce([this] { m_shooter.SetFeederSpeed(0.0); }));
   return frc2::cmd::Sequence(std::move(commmands));
 }
-
-/*
-  void driveIntake(double speed);
-  void rollIn(double motorSpeed = 1.0);
-
-  // Start intake rollers in the "out" direction
-  void rollOut(double motorSpeed = 1.0);
-
-  // Stop intake rollers
-  void stopRollers();
-*/
