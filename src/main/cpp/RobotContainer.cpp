@@ -78,12 +78,13 @@ RobotContainer::RobotContainer() {
   ));
   
   // Initialize intake subsystem - could put auger duty cycle here instead of periodic
-  m_intake.SetDefaultCommand(frc2::RunCommand(
+  /* m_intake.SetDefaultCommand(frc2::RunCommand(
     [this] {
         m_intake.driveIntake(m_operatorController.GetLeftY());
     },
     {&m_intake}
   ));
+  */
 
   // Set the LEDs to run Green
   m_led.SetDefaultCommand(m_led.RunPattern(frc::LEDPattern::Solid(ColorFlip(frc::Color::kGreen))));
@@ -342,11 +343,12 @@ void RobotContainer::ConfigureButtonBindings() {
   */
   
   // Joystick Button 10 should deploy/retract the intake - should deploy/stop and retract/stop
-  m_driverButton10.OnTrue(m_intake.RunOnce(
+  /* m_driverButton10.OnTrue(m_intake.RunOnce(
     [this]{
       m_intake.toggleDeploy();
     }
   ));
+  */
 
   // Joystick button 2 is auto-aim and shoot
   m_driverButton2.OnTrue(AimDriveAndShoot());
@@ -430,9 +432,9 @@ frc2::CommandPtr RobotContainer::GetTestCommand(){
   commmands.push_back(m_elevator.RunOnce([this] { m_elevator.setSpeed(0.5); }));
   commmands.push_back(frc2::cmd::Wait(1_s));
   commmands.push_back(m_elevator.RunOnce([this] { m_elevator.setSpeed(0.0); }));
-  commmands.push_back(m_intake.RunOnce([this] { m_intake.driveIntake(0.5); }));
-  commmands.push_back(frc2::cmd::Wait(1_s));
-  commmands.push_back(m_intake.RunOnce([this] { m_intake.driveIntake(0.0); }));
+  // commmands.push_back(m_intake.RunOnce([this] { m_intake.driveIntake(0.5); }));
+  // commmands.push_back(frc2::cmd::Wait(1_s));
+  // commmands.push_back(m_intake.RunOnce([this] { m_intake.driveIntake(0.0); }));
   commmands.push_back(m_intake.RunOnce([this] { m_intake.rollIn(0.5); }));
   commmands.push_back(frc2::cmd::Wait(1_s));
   commmands.push_back(m_intake.RunOnce([this] { m_intake.stopRollers(); }));

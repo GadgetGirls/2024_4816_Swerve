@@ -29,16 +29,16 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   void stopRollers();
   
   // Manually drive intake deploy/retract
-  void driveIntake(double speed);
+  // void driveIntake(double speed);
 
   // Deploy intake assembly
-  void deployIntake();
+  // void deployIntake();
 
   // Retract intake assembly
-  void retractIntake();
+  // void retractIntake();
 
   // Deploy if retracted, retract if deployed
-  void toggleDeploy();
+  // void toggleDeploy();
 
   // Run augers to feed balls from hopper to first stage of shooter
   void runAugers();
