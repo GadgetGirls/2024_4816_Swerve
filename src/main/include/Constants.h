@@ -152,8 +152,8 @@ namespace ElevatorSubsystemConstants {
 }
 
 namespace IntakeSubsystemConstants {
-    constexpr int kIntakeDeployCANId {18};
-    constexpr int kIntakeRollerCANId {13};
+    // constexpr int kIntakeDeployCANId {18};
+    constexpr int kIntakeRollerCANId {18};
     const int kIntakeAugerCANId {19};
     // const int kIntakeHopperCANId {14};  // No hopper winch
 
