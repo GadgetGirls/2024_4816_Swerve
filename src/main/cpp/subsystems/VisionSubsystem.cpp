@@ -148,7 +148,7 @@ void VisionSubsystem::SetPriorityTagID(int tagID) {
 
 frc::Pose2d VisionSubsystem::GetTargetPose2d(){
   // Pose2d is a translation2d and a rotation2d
-  static const double targetDistance = GetDistanceToTargetMeters();
+  const double targetDistance = GetDistanceToTargetMeters();
   units::degree_t x_angle{GetTX()};
   frc::Rotation2d targetRotation{x_angle};
   frc::Translation2d	targetTranslation{units::meter_t{targetDistance}, targetRotation};

@@ -150,12 +150,9 @@ RobotContainer::RobotContainer() {
   ));
 
   // Set Vision subsystem default command
-  m_vision.SetDefaultCommand(frc2::RunCommand(
-    [this] {
-      m_vision.Periodic();
-    },
-    {&m_vision}
-  ));
+  // m_vision.SetDefaultCommand(){
+    // This is currently covered by VisionSubsystem::Periodic
+  // };
 
   // Set up default drive command
   // The left stick controls translation of the robot.
@@ -216,6 +213,11 @@ frc2::CommandPtr RobotContainer::AimDriveAndShoot(){
     m_vision.SetTargetID(m_hubAprilTagID);
     // Get our current location
     frc::Pose2d currentPose2D = m_drive.GetPose();
+    // If we don't have a target, abort
+    if (!m_vision.HasTarget()){
+      frc2::CommandPtr doNothingCommand = frc2::cmd::Run([] {});
+      return doNothingCommand;
+    }
     // Get the target location
     frc::Pose2d targetPose2D = m_vision.GetTargetPose2d();
     // Backoff the target location far enough to shoot
@@ -417,6 +419,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   commands.push_back(std::move(swerveControllerCommand).ToPtr());  
   commands.push_back(ScanForAprilTagCommand());  // Sweep scan for april tag
   commands.push_back(AimDriveAndShoot());
+  
   return frc2::cmd::Sequence(std::move(commands));
 }
 
