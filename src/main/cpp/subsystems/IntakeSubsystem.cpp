@@ -60,17 +60,17 @@ void IntakeSubsystem::stopRollers(){
 }
 
 // Manually drive intake deploy/retract
-void IntakeSubsystem::driveIntake(double speed){
+/* void IntakeSubsystem::driveIntake(double speed){
   m_intakeDeployMotor.Set(speed);
   if(speed > 0){ 
     m_safeToRunAugers = true; 
   } else { 
     m_safeToRunAugers = false; 
   }
-}
+} */
 
 // Deploy intake
-void IntakeSubsystem::deployIntake(){
+/* void IntakeSubsystem::deployIntake(){
   // Limit switches return false when closed/triggered.
   // if (m_intakeDeployLimitSwitch.Get() == false){
   //    m_intakeDeployMotor.Set(0.0);
@@ -78,26 +78,26 @@ void IntakeSubsystem::deployIntake(){
       m_intakeDeployMotor.Set(IntakeSubsystemConstants::kIntakeDeploySpeed);
       m_safeToRunAugers = true;
   // }
-}
+} */
 
 // Retract intake
-void IntakeSubsystem::retractIntake(){
+/* void IntakeSubsystem::retractIntake(){
   // Limit switches return false when closed/triggered.
   // if (m_intakeRetractLimitSwitch.Get() == false){
   //    m_intakeDeployMotor.Set(0.0);
   // } else {
       m_intakeDeployMotor.Set(IntakeSubsystemConstants::kIntakeRetractSpeed);
       m_safeToRunAugers = false;
-  }
+  } */
 
 // Deploy if the intake is retracted, retract if the intake is deployed
-void IntakeSubsystem::toggleDeploy(){
+/* void IntakeSubsystem::toggleDeploy(){
   if (m_isDeployed){
     retractIntake();
   } else {
     deployIntake();
   }
-}
+} */
 
 // Run augers to feed balls from hopper to first stage of shooter
 void IntakeSubsystem::runAugers(){
