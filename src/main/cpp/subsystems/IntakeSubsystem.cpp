@@ -21,7 +21,7 @@ IntakeSubsystem::IntakeSubsystem(){};
 - Intake rollers (1 motor) - DONE
 */
 
-void IntakeSubsystem::rollIn(double motorSpeed){
+void IntakeSubsystem::toggleRollIn(double motorSpeed){
   // Start / stop intake rollers in the "in" direction
   //
   // If left bumper is pressed once, activate intake "in" direction
@@ -39,7 +39,7 @@ void IntakeSubsystem::rollIn(double motorSpeed){
 
 
 // Start intake rollers in the "out" direction
-void IntakeSubsystem::rollOut(double motorSpeed){
+void IntakeSubsystem::toggleRollOut(double motorSpeed){
   // If right bumper is pressed once, activate intake "out" direction
   // If right bumper is pressed once, stop intake "out" direction
   // REMEMBER: m_rollerMotorDirection : -1 = IN, 1 = OUT, 0 = STOP
@@ -101,9 +101,7 @@ void IntakeSubsystem::stopRollers(){
 
 // Run augers to feed balls from hopper to first stage of shooter
 void IntakeSubsystem::runAugers(){
-  if (m_safeToRunAugers){
     m_intakeAugerMotor.Set(IntakeSubsystemConstants::kIntakeAugerSpeed);
-  }
 }
 
 // Stop augers from spinning
@@ -134,7 +132,8 @@ void IntakeSubsystem::Periodic(){
   m_augerTimer.Start();
   if (m_augerTimer.HasElapsed(units::time::second_t{3})){
     stopAugers();
-  } else if (m_augerTimer.HasElapsed(units::time::second_t{6})){
-    m_augerTimer.Restart();
+    if (m_augerTimer.HasElapsed(units::time::second_t{6})){
+      m_augerTimer.Restart();
+    }
   }
 }

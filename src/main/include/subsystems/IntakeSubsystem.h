@@ -20,10 +20,10 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   void Periodic() override;
 
   // Start intake rollers in the "in" direction
-  void rollIn(double motorSpeed = 1.0);
+  void toggleRollIn(double motorSpeed = 1.0);
 
   // Start intake rollers in the "out" direction
-  void rollOut(double motorSpeed = 1.0);
+  void toggleRollOut(double motorSpeed = 1.0);
 
   // Stop intake rollers
   void stopRollers();
@@ -82,7 +82,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
 
   bool m_rollerMotorOn = false;
   int m_rollerMotorDirection = -1; // -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)
-  bool m_safeToRunAugers = false;
+  // bool m_safeToRunAugers = false;  // Intake deployment is no longer by motor
 
   frc::Timer m_augerTimer;
 };

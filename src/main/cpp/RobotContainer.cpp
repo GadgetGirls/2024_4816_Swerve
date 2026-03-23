@@ -47,7 +47,7 @@ RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
 
   // Determine alliance - used to determine which AprilTags are our hub
-  // m_alliance = frc::DriverStation::GetAlliance();
+  m_alliance = frc::DriverStation::GetAlliance();
   if (m_alliance.has_value() && m_alliance.value() == frc::DriverStation::Alliance::kRed) {
       frc::SmartDashboard::PutString("Our Alliance is ", "Red");
       m_hubAprilTagID = 10;  // or 9
@@ -292,15 +292,16 @@ frc2::CommandPtr RobotContainer::ScanForAprilTagCommand(){ // CODING HERE - no m
 void RobotContainer::ConfigureButtonBindings() {  
   // Start / stop intake rollers in the "in" direction
   // OnTrue args should be Command - convert m_intake.rollIn() to command created by RunOnce()
+  // Control modes: 'j' for josephine toggle bumpers, 'a' for avi hold bumpers
   m_operatorController.LeftBumper().OnTrue(m_intake.RunOnce(
     [this] {
-        m_intake.rollIn(1.0);
+        m_intake.toggleRollIn(1.0);
     }
   ));
   if(controllerMode == 'a'){
     m_operatorController.LeftBumper().OnFalse(m_intake.RunOnce(
       [this] {
-        m_intake.rollIn(1.0);
+        m_intake.toggleRollIn(1.0);
       }
     ));
   }
@@ -308,13 +309,13 @@ void RobotContainer::ConfigureButtonBindings() {
   // Start / stop intake rollers in the "out" direction
   m_operatorController.RightBumper().OnTrue(m_intake.RunOnce(
     [this] {
-        m_intake.rollOut(1.0);
+        m_intake.toggleRollOut(1.0);
     }
   ));
   if(controllerMode == 'a'){
     m_operatorController.RightBumper().OnFalse(m_intake.RunOnce(
         [this] {
-            m_intake.rollOut(0);
+            m_intake.toggleRollOut(0);
         }
     ));
   }
@@ -322,25 +323,6 @@ void RobotContainer::ConfigureButtonBindings() {
   // Operator controller left stick moves intake deploy/retract
 
   // Operator controller right stick moves elevator in manual mode
-
-  // Joystick Trigger should run shooter in manual mode -- replaced by GetTrigger() in default command
-  /* m_joystickTrigger.OnTrue(m_shooter.RunOnce(
-    [this] {
-      // Start augers and feeder
-      m_intake.runAugers();
-      m_shooter.SetFeederSpeed(0.5); // CHANGEME
-      // m_shooter.SetSpeed(0.5);  // Shooter motor runs constantly
-    }
-  ));
-    m_joystickTrigger.OnFalse(m_shooter.RunOnce(
-    [this] {
-      // Stop augers and feeder
-      m_intake.stopAugers();
-      m_shooter.SetFeederSpeed(0.0);
-      // m_shooter.SetSpeed(0.0);  // Shooter motor runs constantly
-    }
-  ));
-  */
   
   // Joystick Button 10 should deploy/retract the intake - should deploy/stop and retract/stop
   /* m_driverButton10.OnTrue(m_intake.RunOnce(
@@ -435,7 +417,7 @@ frc2::CommandPtr RobotContainer::GetTestCommand(){
   // commmands.push_back(m_intake.RunOnce([this] { m_intake.driveIntake(0.5); }));
   // commmands.push_back(frc2::cmd::Wait(1_s));
   // commmands.push_back(m_intake.RunOnce([this] { m_intake.driveIntake(0.0); }));
-  commmands.push_back(m_intake.RunOnce([this] { m_intake.rollIn(0.5); }));
+  commmands.push_back(m_intake.RunOnce([this] { m_intake.toggleRollIn(0.5); }));
   commmands.push_back(frc2::cmd::Wait(1_s));
   commmands.push_back(m_intake.RunOnce([this] { m_intake.stopRollers(); }));
   commmands.push_back(m_intake.RunOnce([this] { m_intake.runAugers(); }));
