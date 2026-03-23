@@ -11,6 +11,7 @@
 #include <frc/LEDPattern.h>
 #include <frc/controller/PIDController.h>
 #include <frc/geometry/Translation2d.h>
+#include <frc/RobotController.h>
 #include <frc/shuffleboard/Shuffleboard.h>
 #include <frc/trajectory/Trajectory.h>
 #include <frc/trajectory/TrajectoryGenerator.h>
@@ -37,8 +38,7 @@
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/LEDSubsystem.h"
-#include <frc/RobotController.h>
-#include "LimelightHelpers.h"
+
 
 using namespace DriveConstants;
 using namespace frc;
@@ -410,24 +410,24 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 frc2::CommandPtr RobotContainer::GetTestCommand(){
   // Rotate and drive each swerve motor pair
   // Run each motor for 1sec
-  std::vector<frc2::CommandPtr> commmands;
-  commmands.push_back(m_elevator.RunOnce([this] { m_elevator.setSpeed(0.5); }));
-  commmands.push_back(frc2::cmd::Wait(1_s));
-  commmands.push_back(m_elevator.RunOnce([this] { m_elevator.setSpeed(0.0); }));
+  std::vector<frc2::CommandPtr> commands;
+  commands.push_back(m_elevator.RunOnce([this] { m_elevator.setSpeed(0.5); }));
+  commands.push_back(frc2::cmd::Wait(1_s));
+  commands.push_back(m_elevator.RunOnce([this] { m_elevator.setSpeed(0.0); }));
   // commmands.push_back(m_intake.RunOnce([this] { m_intake.driveIntake(0.5); }));
   // commmands.push_back(frc2::cmd::Wait(1_s));
   // commmands.push_back(m_intake.RunOnce([this] { m_intake.driveIntake(0.0); }));
-  commmands.push_back(m_intake.RunOnce([this] { m_intake.toggleRollIn(0.5); }));
-  commmands.push_back(frc2::cmd::Wait(1_s));
-  commmands.push_back(m_intake.RunOnce([this] { m_intake.stopRollers(); }));
-  commmands.push_back(m_intake.RunOnce([this] { m_intake.runAugers(); }));
-  commmands.push_back(frc2::cmd::Wait(1_s));
-  commmands.push_back(m_intake.RunOnce([this] { m_intake.stopAugers(); }));
-  commmands.push_back(m_shooter.RunOnce([this] { m_shooter.SetSpeed(0.5); }));
-  commmands.push_back(frc2::cmd::Wait(1_s));
-  commmands.push_back(m_shooter.RunOnce([this] { m_shooter.SetSpeed(0.0); }));
-  commmands.push_back(m_shooter.RunOnce([this] { m_shooter.SetFeederSpeed(0.5); }));
-  commmands.push_back(frc2::cmd::Wait(1_s));
-  commmands.push_back(m_shooter.RunOnce([this] { m_shooter.SetFeederSpeed(0.0); }));
-  return frc2::cmd::Sequence(std::move(commmands));
+  commands.push_back(m_intake.RunOnce([this] { m_intake.toggleRollIn(0.5); }));
+  commands.push_back(frc2::cmd::Wait(1_s));
+  commands.push_back(m_intake.RunOnce([this] { m_intake.stopRollers(); }));
+  commands.push_back(m_intake.RunOnce([this] { m_intake.runAugers(); }));
+  commands.push_back(frc2::cmd::Wait(1_s));
+  commands.push_back(m_intake.RunOnce([this] { m_intake.stopAugers(); }));
+  commands.push_back(m_shooter.RunOnce([this] { m_shooter.SetSpeed(0.5); }));
+  commands.push_back(frc2::cmd::Wait(1_s));
+  commands.push_back(m_shooter.RunOnce([this] { m_shooter.SetSpeed(0.0); }));
+  commands.push_back(m_shooter.RunOnce([this] { m_shooter.SetFeederSpeed(0.5); }));
+  commands.push_back(frc2::cmd::Wait(1_s));
+  commands.push_back(m_shooter.RunOnce([this] { m_shooter.SetFeederSpeed(0.0); }));
+  return frc2::cmd::Sequence(std::move(commands));
 }

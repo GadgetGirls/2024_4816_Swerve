@@ -128,8 +128,11 @@ void IntakeSubsystem::runHopperWinch(){
 
 void IntakeSubsystem::Periodic(){
   // Run augers for x seconds
-  runAugers();
-  m_augerTimer.Start();
+  if(!m_augersAreStarted){
+    runAugers();
+    m_augersAreStarted = true;
+    m_augerTimer.Start();
+  }
   if (m_augerTimer.HasElapsed(units::time::second_t{3})){
     stopAugers();
     if (m_augerTimer.HasElapsed(units::time::second_t{6})){

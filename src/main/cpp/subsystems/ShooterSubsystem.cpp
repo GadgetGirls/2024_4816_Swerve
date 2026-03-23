@@ -9,9 +9,6 @@ ShooterSubsystem::ShooterSubsystem() {
   
   // You might want to set current limits for safety:
   // m_shooterMotor.SetSmartCurrentLimit(40);  // 40 amp limit
-
-  // Start shooter motor
-  SetSpeed(ShooterSubsystemConstants::kShooterSpeed); 
 }
 
 void ShooterSubsystem::Periodic() {

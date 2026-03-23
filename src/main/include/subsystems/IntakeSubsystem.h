@@ -85,4 +85,5 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   // bool m_safeToRunAugers = false;  // Intake deployment is no longer by motor
 
   frc::Timer m_augerTimer;
+  bool m_augersAreStarted = false;
 };
