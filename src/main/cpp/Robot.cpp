@@ -75,7 +75,7 @@ void Robot::TeleopPeriodic() {}
 
 void Robot::TestInit() {
   m_testCommand = m_container.GetTestCommand();
-  m_testCommand->Schedule();
+  CommandScheduler::GetInstance().Schedule() // previously m_testCommand->Schedule();
 }
 
 /**
