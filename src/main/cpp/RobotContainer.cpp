@@ -77,8 +77,8 @@ RobotContainer::RobotContainer() {
     {&m_elevator}
   ));
   
-  // Initialize intake subsystem - could put auger duty cycle here instead of periodic
-  /* m_intake.SetDefaultCommand(frc2::RunCommand(
+  //Initialize intake subsystem - could put auger duty cycle here instead of periodic
+ /* m_intake.SetDefaultCommand(frc2::RunCommand(
     [this] {
         m_intake.driveIntake(m_operatorController.GetLeftY());
     },
