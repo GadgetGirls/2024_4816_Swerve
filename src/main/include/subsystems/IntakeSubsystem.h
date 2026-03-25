@@ -17,7 +17,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   IntakeSubsystem();
 
   // This method is called periodically by the CommandScheduler
-  void Periodic() override;
+ // void Periodic() override;
 
   // Start intake rollers in the "in" direction
   void toggleRollIn(double motorSpeed = 1.0);
