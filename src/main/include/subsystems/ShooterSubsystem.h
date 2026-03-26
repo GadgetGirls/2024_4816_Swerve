@@ -42,7 +42,10 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   // Shooter motor
   rev::spark::SparkMax m_shooterMotor{ShooterSubsystemConstants::kShooterCANId, 
                                     rev::spark::SparkLowLevel::MotorType::kBrushless};
-  // Feeder motor
+  // Lower Feeder motor
   rev::spark::SparkMax m_feederMotor{ShooterSubsystemConstants::kFeederCANId, 
                                     rev::spark::SparkLowLevel::MotorType::kBrushless};
+    // Upper Feeder motor
+    rev::spark::SparkFlex m_upperFeederMotor{ShooterSubsystemConstants::kUpperFeederCANId,
+                                            rev::spark::SparkLowLevel::MotorType::kBrushless};
 };

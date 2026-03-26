@@ -77,8 +77,8 @@ RobotContainer::RobotContainer() {
     {&m_elevator}
   ));
   
-  //Initialize intake subsystem - could put auger duty cycle here instead of periodic
- /* m_intake.SetDefaultCommand(frc2::RunCommand(
+  // Initialize intake subsystem - could put auger duty cycle here instead of periodic
+  /* m_intake.SetDefaultCommand(frc2::RunCommand(
     [this] {
         m_intake.driveIntake(m_operatorController.GetLeftY());
     },
@@ -271,6 +271,14 @@ frc2::CommandPtr RobotContainer::AimDriveAndShoot(){
 }
 
 
+// Convert a robot-relative Pose2d to a field-relative Pose2d
+/* frc::Pose2d RobotContainer::ConvertPose2dFromRobotToFieldRelative(frc::Pose2d robotPose2d){
+  // Get current field Pose
+  // TO-DO
+  frc::Pose2d fieldRelativePose = robotPose2d.RelativeTo(currentFieldPose);
+}
+*/
+
 frc2::CommandPtr RobotContainer::ScanForAprilTagCommand(){ // CODING HERE - no matching constructor
   // Swivel in a 270 degree arc looking for the AprilTag
   // Stop when you get a tag
@@ -426,7 +434,7 @@ frc2::CommandPtr RobotContainer::GetTestCommand(){
   commands.push_back(m_shooter.RunOnce([this] { m_shooter.SetSpeed(0.5); }));
   commands.push_back(frc2::cmd::Wait(1_s));
   commands.push_back(m_shooter.RunOnce([this] { m_shooter.SetSpeed(0.0); }));
-  commands.push_back(m_shooter.RunOnce([this] { m_shooter.SetFeederSpeed(-0.75); }));
+  commands.push_back(m_shooter.RunOnce([this] { m_shooter.SetFeederSpeed(0.5); }));
   commands.push_back(frc2::cmd::Wait(1_s));
   commands.push_back(m_shooter.RunOnce([this] { m_shooter.SetFeederSpeed(0.0); }));
   return frc2::cmd::Sequence(std::move(commands));
