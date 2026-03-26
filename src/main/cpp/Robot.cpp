@@ -50,7 +50,8 @@ void Robot::AutonomousInit() {
   m_autonomousCommand = std::move(m_container.GetAutonomousCommand());  
   
   if (m_autonomousCommand.has_value()) {
-    m_autonomousCommand->Schedule();
+    // m_autonomousCommand->Schedule();
+    frc2::CommandScheduler::GetInstance().Schedule(m_autonomousCommand.value());
   }
 }
 
@@ -75,7 +76,9 @@ void Robot::TeleopPeriodic() {}
 
 void Robot::TestInit() {
   m_testCommand = m_container.GetTestCommand();
-  m_testCommand->Schedule();
+  if (m_testCommand.has_value()) {
+    frc2::CommandScheduler::GetInstance().Schedule(m_testCommand.value()); // previously m_testCommand->Schedule();
+  }
 }
 
 /**

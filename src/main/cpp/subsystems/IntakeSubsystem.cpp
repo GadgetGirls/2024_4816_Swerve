@@ -126,7 +126,7 @@ void IntakeSubsystem::runHopperWinch(){
   m_intakeHopperMotor.Set(0.0);
 }*/
 
-void IntakeSubsystem::Periodic(){
+/*void IntakeSubsystem::Periodic(){
   // Run augers for x seconds
   if(!m_augersAreStarted){
     runAugers();
@@ -139,4 +139,4 @@ void IntakeSubsystem::Periodic(){
       m_augerTimer.Restart();
     }
   }
-}
+}*/

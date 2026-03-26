@@ -109,10 +109,17 @@ double VisionSubsystem::GetDistanceToTargetMeters() {
   //   distance = (targetHeight - cameraHeight) / tan(cameraAngle + ty)
   //
   // Where:
-  //   - targetHeight: Height of AprilTag center from floor
+  //   - targetHeight: Height of AprilTag center from floor (need both 44.25 and 21.75)
   //   - cameraHeight: Height of camera lens from floor
   //   - cameraAngle: Camera mount angle from horizontal
-  //   - ty: Vertical angle to target (from Limelight)
+  //   - ty: Vertical angle to target (from Limelight) (in degrees)
+  /* 
+  
+  double targetHeightInches
+  double cameraHeightInches = 19 inches
+  double cameraAngleDegrees = 35 degrees
+     
+  */
   
   double ty = GetTY();
   double angleToTargetRadians = (VisionSubsystemConstants::kLimelightMountAngleDegrees + ty) * (std::numbers::pi / 180.0);

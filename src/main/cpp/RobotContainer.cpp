@@ -77,8 +77,8 @@ RobotContainer::RobotContainer() {
     {&m_elevator}
   ));
   
-  // Initialize intake subsystem - could put auger duty cycle here instead of periodic
-  /* m_intake.SetDefaultCommand(frc2::RunCommand(
+  //Initialize intake subsystem - could put auger duty cycle here instead of periodic
+ /* m_intake.SetDefaultCommand(frc2::RunCommand(
     [this] {
         m_intake.driveIntake(m_operatorController.GetLeftY());
     },
@@ -426,7 +426,7 @@ frc2::CommandPtr RobotContainer::GetTestCommand(){
   commands.push_back(m_shooter.RunOnce([this] { m_shooter.SetSpeed(0.5); }));
   commands.push_back(frc2::cmd::Wait(1_s));
   commands.push_back(m_shooter.RunOnce([this] { m_shooter.SetSpeed(0.0); }));
-  commands.push_back(m_shooter.RunOnce([this] { m_shooter.SetFeederSpeed(0.5); }));
+  commands.push_back(m_shooter.RunOnce([this] { m_shooter.SetFeederSpeed(-0.75); }));
   commands.push_back(frc2::cmd::Wait(1_s));
   commands.push_back(m_shooter.RunOnce([this] { m_shooter.SetFeederSpeed(0.0); }));
   return frc2::cmd::Sequence(std::move(commands));
