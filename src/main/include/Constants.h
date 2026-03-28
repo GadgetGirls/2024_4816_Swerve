@@ -161,7 +161,7 @@ namespace IntakeSubsystemConstants {
     // const int kIntakeRetractLimitSwitchChannel {2}; // CHANGEME
     // const int kIntakeHopperLimitSwitchChannel {3}; // No sensor here
   
-    const double kIntakeAugerSpeed = 0.1; // CHANGEME
+    const double kIntakeAugerSpeed = 0.3; // CHANGEME
     const double kIntakeDeploySpeed = 0.25; // CHANGEME
     const double kIntakeRetractSpeed = -0.25; // CHANGEME
     const double kIntakeHopperSpeed = 0.5; // CHANGEME
@@ -172,7 +172,7 @@ namespace ShooterSubsystemConstants {
     constexpr int kShooterCANId {14};
     constexpr int kFeederCANId {11};
     constexpr int kUpperFeederCANId {20};
-    constexpr double kFeederSpeed {-0.75};
+    constexpr double kFeederSpeed {-1};
     constexpr double kShooterSpeed {1.0};
 }
 
