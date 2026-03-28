@@ -370,7 +370,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       frc::Pose2d{0_m, 0_m, 0_deg},
       // waypoint 
       {},  // No internal waypoints (empty vector)
-      frc::Pose2d{0_m, 2_m, 0_deg},
+      frc::Pose2d{2_m, 0_m, 0_deg},
       config);
       // Might be able to go to frc::Pose2d{0_m, 2_m, 180_deg} and use {} waypoints
 
@@ -393,6 +393,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       [this](auto moduleStates) { m_drive.SetModuleStates(moduleStates); },
       {&m_drive});
   // Reset odometry to the starting pose of the trajectory.
+  m_drive.ZeroHeading(); // Reset the gyro
   m_drive.ResetOdometry(exampleTrajectory.InitialPose());
   /* Run swerveControllerCommand above to drive the trajectory, 
      then run InstantCommand to stop
@@ -401,12 +402,10 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
      frc2::InstantCommand(
           [this]() { m_drive.Drive(3_mps, 3_mps, 0_rad_per_s, false); }),
   */
-  //frc2::CommandPtr ScanForAprilTagCmd = ScanForAprilTagCommand();
 
   // SequentialCommandGroup takes a vector of std::uniqueptr<Command> objects
   // swerveControllerCommand is a frc2::SwerveControllerCommand<4>
   // frc2::InstantCommand returns a InstantCommand
-  // We need ScanForAprilTag to return 
   std::vector<frc2::CommandPtr> commands;
   commands.push_back(std::move(swerveControllerCommand).ToPtr());  
   commands.push_back(ScanForAprilTagCommand());  // Sweep scan for april tag
