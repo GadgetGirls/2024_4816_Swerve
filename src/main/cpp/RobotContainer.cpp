@@ -359,7 +359,7 @@ frc::Pose2d RobotContainer::ApplyBackoff(frc::Pose2d targetPose, double distance
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     
   // Set up config for trajectory
-  frc::TrajectoryConfig config(AutoConstants::kMaxSpeed/2,
+  frc::TrajectoryConfig config(AutoConstants::kMaxSpeed/4,
                                AutoConstants::kMaxAcceleration/2);
   // Add kinematics to ensure max speed is actually obeyed
   config.SetKinematics(m_drive.kDriveKinematics);
@@ -370,7 +370,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       frc::Pose2d{0_m, 0_m, 0_deg},
       // waypoint 
       {},  // No internal waypoints (empty vector)
-      frc::Pose2d{1_m, 0_m, 0_deg},
+      frc::Pose2d{0.5_m, 0_m, 0_deg},
       config);
       // Might be able to go to frc::Pose2d{0_m, 2_m, 180_deg} and use {} waypoints
 
