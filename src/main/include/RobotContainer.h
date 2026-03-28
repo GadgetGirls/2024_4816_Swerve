@@ -40,6 +40,7 @@ class RobotContainer {
   frc2::CommandPtr GetAutonomousCommand();
   frc2::CommandPtr GetTestCommand();
   frc2::CommandPtr AimDriveAndShoot();
+  frc::Pose2d ConvertPose2dFromRobotToFieldRelative(frc::Pose2d robotPose2d);
   frc2::CommandPtr ScanForAprilTagCommand();
   double ApplyDeadband(double value);
   

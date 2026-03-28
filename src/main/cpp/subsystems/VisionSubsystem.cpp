@@ -153,6 +153,7 @@ void VisionSubsystem::SetPriorityTagID(int tagID) {
   LimelightHelpers::setPriorityTagID(m_limelightName, tagID);
 }
 
+// This returns a robot-relative pose that must be converted to field-relative
 frc::Pose2d VisionSubsystem::GetTargetPose2d(){
   // Pose2d is a translation2d and a rotation2d
   const double targetDistance = GetDistanceToTargetMeters();
