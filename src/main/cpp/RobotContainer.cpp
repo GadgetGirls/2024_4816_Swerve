@@ -370,7 +370,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       frc::Pose2d{0_m, 0_m, 0_deg},
       // waypoint 
       {},  // No internal waypoints (empty vector)
-      frc::Pose2d{2_m, 0_m, 0_deg},
+      frc::Pose2d{1_m, 0_m, 0_deg},
       config);
       // Might be able to go to frc::Pose2d{0_m, 2_m, 180_deg} and use {} waypoints
 
