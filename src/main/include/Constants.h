@@ -171,7 +171,7 @@ namespace IntakeSubsystemConstants {
 namespace ShooterSubsystemConstants {
     constexpr int kShooterCANId {14};
     constexpr int kFeederCANId {11};
-    constexpr double kFeederSpeed {-0.75};
+    constexpr double kFeederSpeed {-1};
     constexpr double kShooterSpeed {1.0};
 }
 
