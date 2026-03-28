@@ -4,6 +4,7 @@
 
 #include "Robot.h"
 
+#include <cameraserver/CameraServer.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
 
@@ -17,6 +18,9 @@ void Robot::RobotInit() {
     std::fputs("Vision only available on Linux or Windows.\n", stderr);
     std::fflush(stderr);
 #endif
+
+  // Enable the USB CameraServer
+  frc::CameraServer::StartAutomaticCapture();
 }
 
 /**
