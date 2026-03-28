@@ -12,8 +12,10 @@ ShooterSubsystem::ShooterSubsystem() {
   rev::spark::SparkBaseConfig followerConfig; 
   followerConfig.Follow(20, false); // CANid to follow, follow inverter true/false
   rev::REVLibError status = m_upperFeederMotor.ConfigureAsync(followerConfig,  rev::ResetMode::kNoResetSafeParameters, rev::PersistMode::kPersistParameters);
-  
-  // You might want to set current limits for safety:
+    if (status != rev::kOK) {
+      cout << "error configuring UpperFeederMotor\n";
+    }
+        // You might want to set current limits for safety:
   // m_shooterMotor.SetSmartCurrentLimit(40);  // 40 amp limit
 }
 
