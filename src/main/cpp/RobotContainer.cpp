@@ -393,7 +393,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       [this](auto moduleStates) { m_drive.SetModuleStates(moduleStates); },
       {&m_drive});
   // Reset odometry to the starting pose of the trajectory.
-  m_drive.ZeroHeading(); // Reset the gyro
+  // m_drive.ZeroHeading(); // Reset the gyro
   m_drive.ResetOdometry(exampleTrajectory.InitialPose());
   /* Run swerveControllerCommand above to drive the trajectory, 
      then run InstantCommand to stop
