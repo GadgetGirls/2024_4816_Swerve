@@ -179,6 +179,6 @@ namespace ShooterSubsystemConstants {
 // VisionSubsystem constants
 namespace VisionSubsystemConstants {
     const double kTargetHeightMeters {1.12};
-    const double kLimelightHeightMeters {0.46}; 
-    const double kLimelightMountAngleDegrees {45.0};
+    const double kLimelightHeightMeters {0.535}; 
+    const double kLimelightMountAngleDegrees {35.0};
 }
