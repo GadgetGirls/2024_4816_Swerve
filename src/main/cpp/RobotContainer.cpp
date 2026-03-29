@@ -186,10 +186,10 @@ RobotContainer::RobotContainer() {
         
         // Pushing buttons 7 and 8 resets the Z axis heading.  This could
         // be useful if the gyro drifts a lot
-        // Pushing buttons 11 & 12 turns fieldRelative on or off <<< DISABLED ELSEWHERE
         if (m_driverController.GetRawButtonPressed(7) && m_driverController.GetRawButtonPressed(8))
             { m_drive.ZeroHeading();}
         /*
+        // Pushing buttons 11 & 12 turns fieldRelative on or off <<< DISABLED ELSEWHERE
         if (m_driverController.GetRawButtonPressed(11) && m_driverController.GetRawButtonPressed(12))
             { fieldRelative=!fieldRelative;}
         */
