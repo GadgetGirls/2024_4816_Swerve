@@ -203,7 +203,7 @@ RobotContainer::RobotContainer() {
                 m_driverController.GetX() * throttle_percentage , OIConstants::kDriveDeadband)},    
             -units::radians_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetTwist() * throttle_percentage, OIConstants::kDriveDeadband)},
-            fieldRelative);
+            this->fieldRelative);
       },
       {&m_drive}));
 }
