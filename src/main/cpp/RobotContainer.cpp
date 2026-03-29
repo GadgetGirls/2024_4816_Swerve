@@ -187,10 +187,10 @@ RobotContainer::RobotContainer() {
         
         // Pushing buttons 7 and 8 resets the Z axis heading.  This could
         // be useful if the gyro drifts a lot
-        // Pushing buttons 11 & 12 turns fieldRelative on or off <<< DISABLED ELSEWHERE
         if (m_driverController.GetRawButtonPressed(7) && m_driverController.GetRawButtonPressed(8))
             { m_drive.ZeroHeading();}
         /*
+        // Pushing buttons 11 & 12 turns fieldRelative on or off <<< DISABLED ELSEWHERE
         if (m_driverController.GetRawButtonPressed(11) && m_driverController.GetRawButtonPressed(12))
             { fieldRelative=!fieldRelative;}
         */
@@ -203,7 +203,7 @@ RobotContainer::RobotContainer() {
                 m_driverController.GetX() * throttle_percentage , OIConstants::kDriveDeadband)},    
             -units::radians_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetTwist() * throttle_percentage, OIConstants::kDriveDeadband)},
-            fieldRelative);
+            this->fieldRelative);
       },
       {&m_drive}));
 }
@@ -264,7 +264,7 @@ frc2::CommandPtr RobotContainer::AimDriveAndShoot(){
     std::vector<frc2::CommandPtr> commands;
     commands.push_back(std::move(swerveControllerCommand).ToPtr());
     commands.push_back(frc2::cmd::RunOnce(
-      [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false); }, {&m_drive}));
+      [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, this->fieldRelative); }, {&m_drive}));
     commands.push_back(frc2::cmd::RunOnce(
       [this]() { m_shooter.Shoot(); }, {&m_shooter}));
     return frc2::cmd::Sequence(std::move(commands));
@@ -311,20 +311,6 @@ void RobotContainer::ConfigureButtonBindings() {
       [this] {
         m_intake.toggleRollIn(1.0);
       }
-    ));
-  }
-
-  // Start / stop intake rollers in the "out" direction
-  m_operatorController.RightBumper().OnTrue(m_intake.RunOnce(
-    [this] {
-        m_intake.toggleRollOut(1.0);
-    }
-  ));
-  if(controllerMode == 'a'){
-    m_operatorController.RightBumper().OnFalse(m_intake.RunOnce(
-        [this] {
-            m_intake.toggleRollOut(0);
-        }
     ));
   }
 
