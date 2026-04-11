@@ -1,17 +1,24 @@
 #include "subsystems/ShooterSubsystem.h"
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <rev/REVLibError.h>
+#include <rev/SparkFlex.h>
+#include <rev/SparkMax.h>
+#include <stdio.h>
+#include <iostream>
+
 
 ShooterSubsystem::ShooterSubsystem() {
   SetName("Shooter");
   
   // Configure motor settings as needed
-  // m_shooterMotor.SetInverted(false);
-  
-  // You might want to set current limits for safety:
+  rev::spark::SparkBaseConfig followerConfig; 
+  followerConfig.Follow(20, false); // CANid to follow, follow inverter true/false
+  rev::REVLibError status = m_upperFeederMotor.ConfigureAsync(followerConfig,  rev::ResetMode::kNoResetSafeParameters, rev::PersistMode::kPersistParameters);
+    if (status != rev::REVLibError::kOk) {
+      std::cout << "error configuring UpperFeederMotor\n";
+    }
+        // You might want to set current limits for safety:
   // m_shooterMotor.SetSmartCurrentLimit(40);  // 40 amp limit
-
-  // Start shooter motor
-  SetSpeed(ShooterSubsystemConstants::kShooterSpeed); 
 }
 
 void ShooterSubsystem::Periodic() {

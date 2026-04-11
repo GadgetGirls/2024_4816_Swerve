@@ -17,28 +17,28 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   IntakeSubsystem();
 
   // This method is called periodically by the CommandScheduler
-  void Periodic() override;
+ // void Periodic() override;
 
   // Start intake rollers in the "in" direction
-  void rollIn(double motorSpeed = 1.0);
+  void toggleRollIn(double motorSpeed = 1.0);
 
   // Start intake rollers in the "out" direction
-  void rollOut(double motorSpeed = 1.0);
+  void toggleRollOut(double motorSpeed = 1.0);
 
   // Stop intake rollers
   void stopRollers();
   
   // Manually drive intake deploy/retract
-  void driveIntake(double speed);
+  // void driveIntake(double speed);
 
   // Deploy intake assembly
-  void deployIntake();
+  // void deployIntake();
 
   // Retract intake assembly
-  void retractIntake();
+  // void retractIntake();
 
   // Deploy if retracted, retract if deployed
-  void toggleDeploy();
+  // void toggleDeploy();
 
   // Run augers to feed balls from hopper to first stage of shooter
   void runAugers();
@@ -61,8 +61,8 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   rev::spark::SparkMax m_intakeRollerMotor{IntakeSubsystemConstants::kIntakeRollerCANId,
                                              rev::spark::SparkLowLevel::MotorType::kBrushless};
   // Intake deploy/retract motor
-  rev::spark::SparkFlex m_intakeDeployMotor{IntakeSubsystemConstants::kIntakeDeployCANId,
-                                             rev::spark::SparkLowLevel::MotorType::kBrushless};
+  // rev::spark::SparkFlex m_intakeDeployMotor{IntakeSubsystemConstants::kIntakeDeployCANId,
+                                            // rev::spark::SparkLowLevel::MotorType::kBrushless};
   // Hopper auger motor
   rev::spark::SparkFlex m_intakeAugerMotor{IntakeSubsystemConstants::kIntakeAugerCANId,
                                              rev::spark::SparkLowLevel::MotorType::kBrushless};
@@ -82,7 +82,8 @@ class IntakeSubsystem : public frc2::SubsystemBase {
 
   bool m_rollerMotorOn = false;
   int m_rollerMotorDirection = -1; // -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)
-  bool m_safeToRunAugers = false;
+  // bool m_safeToRunAugers = false;  // Intake deployment is no longer by motor
 
   frc::Timer m_augerTimer;
+  bool m_augersAreStarted = false;
 };

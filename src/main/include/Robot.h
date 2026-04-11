@@ -22,6 +22,7 @@
 #include <frc/apriltag/AprilTagPoseEstimator.h>
 #include <frc/geometry/Transform3d.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc2/command/CommandPtr.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/types.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -46,7 +47,7 @@ class Robot : public frc::TimedRobot {
  private:
   // Have it null by default so that if testing teleop it
   // doesn't have undefined behavior and potentially crash.
-  frc2::Command* m_autonomousCommand = nullptr;
+  std::optional<frc2::CommandPtr> m_autonomousCommand;
   std::optional<frc2::CommandPtr> m_testCommand;
 
 #if defined(__linux__) || defined(_WIN32)

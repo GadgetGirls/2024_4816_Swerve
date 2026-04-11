@@ -11,12 +11,13 @@
 #include <frc/Timer.h>
 #include <frc/geometry/Pose2d.h>
 #include <frc2/command/button/CommandXboxController.h>
+#include <frc2/command/button/JoystickButton.h>
 #include <frc2/command/Command.h>
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/PIDCommand.h>
 #include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/RunCommand.h>
-#include <frc2/command/button/JoystickButton.h>
+#include <frc2/command/SequentialCommandGroup.h>
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/ElevatorSubsystem.h"
@@ -36,10 +37,11 @@ class RobotContainer {
  public:
   RobotContainer();
   frc::Pose2d ApplyBackoff(frc::Pose2d targetPose, double distance);
-  frc2::Command* GetAutonomousCommand();
+  frc2::CommandPtr GetAutonomousCommand();
   frc2::CommandPtr GetTestCommand();
-  // frc2::Command* AimDriveAndShoot();
-  void ScanForAprilTag(int tagNumber);
+  frc2::CommandPtr AimDriveAndShoot();
+  frc::Pose2d ConvertPose2dFromRobotToFieldRelative(frc::Pose2d robotPose2d);
+  frc2::CommandPtr ScanForAprilTagCommand();
   double ApplyDeadband(double value);
   
 private:
@@ -110,10 +112,10 @@ private:
   IntakeSubsystem m_intake;
   LEDSubsystem m_led;
   ShooterSubsystem m_shooter;
-  // VisionSubsystem m_vision;
+  VisionSubsystem m_vision;
 
   // The chooser for the autonomous routines
-  frc::SendableChooser<frc2::Command*> m_chooser;
+  // frc::SendableChooser<frc2::Command*> m_chooser;  // Replace with something using CommandPtr
   // Timer
   frc::Timer timer0;
   

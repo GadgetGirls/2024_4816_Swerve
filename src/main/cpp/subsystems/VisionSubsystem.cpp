@@ -75,7 +75,6 @@ std::optional<frc::Pose2d> VisionSubsystem::GetBotPose() {
     return std::nullopt;
   }
   */
-
   LimelightHelpers::PoseEstimate poseData = LimelightHelpers::getBotPoseEstimate_wpiBlue(m_limelightName);	
 
   // return LimelightHelpers::toPose2D(poseData);
@@ -110,10 +109,17 @@ double VisionSubsystem::GetDistanceToTargetMeters() {
   //   distance = (targetHeight - cameraHeight) / tan(cameraAngle + ty)
   //
   // Where:
-  //   - targetHeight: Height of AprilTag center from floor
+  //   - targetHeight: Height of AprilTag center from floor (need both 44.25 and 21.75)
   //   - cameraHeight: Height of camera lens from floor
   //   - cameraAngle: Camera mount angle from horizontal
-  //   - ty: Vertical angle to target (from Limelight)
+  //   - ty: Vertical angle to target (from Limelight) (in degrees)
+  /* 
+  
+  double targetHeightInches
+  double cameraHeightInches = 19 inches
+  double cameraAngleDegrees = 35 degrees
+     
+  */
   
   double ty = GetTY();
   double angleToTargetRadians = (VisionSubsystemConstants::kLimelightMountAngleDegrees + ty) * (std::numbers::pi / 180.0);
@@ -147,9 +153,10 @@ void VisionSubsystem::SetPriorityTagID(int tagID) {
   LimelightHelpers::setPriorityTagID(m_limelightName, tagID);
 }
 
+// This returns a robot-relative pose that must be converted to field-relative
 frc::Pose2d VisionSubsystem::GetTargetPose2d(){
   // Pose2d is a translation2d and a rotation2d
-  static const double targetDistance = GetDistanceToTargetMeters();
+  const double targetDistance = GetDistanceToTargetMeters();
   units::degree_t x_angle{GetTX()};
   frc::Rotation2d targetRotation{x_angle};
   frc::Translation2d	targetTranslation{units::meter_t{targetDistance}, targetRotation};

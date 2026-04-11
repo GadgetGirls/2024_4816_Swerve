@@ -4,6 +4,7 @@
 
 #include "Robot.h"
 
+#include <cameraserver/CameraServer.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
 
@@ -17,6 +18,9 @@ void Robot::RobotInit() {
     std::fputs("Vision only available on Linux or Windows.\n", stderr);
     std::fflush(stderr);
 #endif
+
+  // Enable the USB CameraServer
+  frc::CameraServer::StartAutomaticCapture();
 }
 
 /**
@@ -47,10 +51,11 @@ void Robot::AutonomousInit() {
   //m_chooser.AddOption(kAutoNameDefault, kAutoNameDefault);
   //m_chooser.SetDefaultOption(kAutoNameCenter, kAutoNameCenter);
   //frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
-  m_autonomousCommand = m_container.GetAutonomousCommand();
-
-  if (m_autonomousCommand != nullptr) {
-    frc2::CommandScheduler::GetInstance().Schedule(m_autonomousCommand);
+  m_autonomousCommand = std::move(m_container.GetAutonomousCommand());  
+  
+  if (m_autonomousCommand.has_value()) {
+    // m_autonomousCommand->Schedule();
+    frc2::CommandScheduler::GetInstance().Schedule(m_autonomousCommand.value());
   }
 }
 
@@ -62,9 +67,9 @@ void Robot::TeleopInit() {
   // teleop starts running. If you want the autonomous to
   // continue until interrupted by another command, remove
   // this line or comment it out.
-  if (m_autonomousCommand != nullptr) {
+  if (m_autonomousCommand.has_value()) {
     m_autonomousCommand->Cancel();
-    m_autonomousCommand = nullptr;
+    m_autonomousCommand.reset();
   }
 }
 
@@ -75,7 +80,9 @@ void Robot::TeleopPeriodic() {}
 
 void Robot::TestInit() {
   m_testCommand = m_container.GetTestCommand();
-  m_testCommand->Schedule();
+  if (m_testCommand.has_value()) {
+    frc2::CommandScheduler::GetInstance().Schedule(m_testCommand.value()); // previously m_testCommand->Schedule();
+  }
 }
 
 /**

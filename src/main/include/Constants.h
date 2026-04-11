@@ -143,7 +143,7 @@ namespace OIConstants {
     constexpr int kDriverControllerPort = 0;
     constexpr int kOperatorControllerPort = 1;
     constexpr double kDriveDeadband = 0.10; //og = 0.07
-    constexpr int kTurboThrottlePercentage = 0.5; // Not an interface constant, probably belongs in different namespace
+    constexpr double kTurboThrottlePercentage = 0.5; // Not an interface constant, probably belongs in different namespace
 }  // namespace OIConstants
 
 namespace ElevatorSubsystemConstants {
@@ -152,8 +152,8 @@ namespace ElevatorSubsystemConstants {
 }
 
 namespace IntakeSubsystemConstants {
-    constexpr int kIntakeDeployCANId {18};
-    constexpr int kIntakeRollerCANId {13};
+    // constexpr int kIntakeDeployCANId {18};
+    constexpr int kIntakeRollerCANId {18};
     const int kIntakeAugerCANId {19};
     // const int kIntakeHopperCANId {14};  // No hopper winch
 
@@ -161,7 +161,7 @@ namespace IntakeSubsystemConstants {
     // const int kIntakeRetractLimitSwitchChannel {2}; // CHANGEME
     // const int kIntakeHopperLimitSwitchChannel {3}; // No sensor here
   
-    const double kIntakeAugerSpeed = 0.1; // CHANGEME
+    const double kIntakeAugerSpeed = 0.3; // CHANGEME
     const double kIntakeDeploySpeed = 0.25; // CHANGEME
     const double kIntakeRetractSpeed = -0.25; // CHANGEME
     const double kIntakeHopperSpeed = 0.5; // CHANGEME
@@ -171,13 +171,14 @@ namespace IntakeSubsystemConstants {
 namespace ShooterSubsystemConstants {
     constexpr int kShooterCANId {14};
     constexpr int kFeederCANId {11};
-    constexpr double kFeederSpeed {0.5};
+    constexpr int kUpperFeederCANId {20};
+    constexpr double kFeederSpeed {-1};
     constexpr double kShooterSpeed {1.0};
 }
 
 // VisionSubsystem constants
 namespace VisionSubsystemConstants {
     const double kTargetHeightMeters {1.12};
-    const double kLimelightHeightMeters {0.46}; 
-    const double kLimelightMountAngleDegrees {45.0};
+    const double kLimelightHeightMeters {0.535}; 
+    const double kLimelightMountAngleDegrees {35.0};
 }
