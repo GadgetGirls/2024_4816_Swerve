@@ -98,7 +98,6 @@ void ShooterSubsystem::Shoot() {
   SetFeederSpeed(ShooterSubsystemConstants::kFeederSpeed);
   SetSpeed(ShooterSubsystemConstants::kShooterSpeed);
 }
-
 frc2::CommandPtr ShooterSubsystem::ShootCommand() {
   // Returns a command that sets the shooter to a specific speed
   return this->RunOnce([this] { Shoot(); });
