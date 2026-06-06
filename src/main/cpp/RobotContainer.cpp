@@ -174,12 +174,12 @@ RobotContainer::RobotContainer() {
         button3_result--;
         button3_result *= -1;
         // frc::SmartDashboard::PutNumber("Adjusted Throttle", button3_result);
-        throttle_percentage = button3_result * 0.25;
+        throttle_percentage = button3_result * 0.1; //changed from .5 to slow speed for demos, can increase for comp if needed
         SmartDashboard::PutNumber("Throttle2",throttle_percentage);
 
         // Below a certain percentage the robot won't move at all.  Don't
         // let the throttle below this value.
-        if (throttle_percentage < 0.15) {throttle_percentage = 0.15;}
+        if (throttle_percentage < 0.11) {throttle_percentage = 0.11;}
         // Robot is uncontrollable at full throttle so max at 90 percent
         else if (throttle_percentage > 0.9) {throttle_percentage = 0.9;}
         frc::SmartDashboard::PutNumber("Throttle percentage", throttle_percentage);
