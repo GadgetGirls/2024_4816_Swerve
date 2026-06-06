@@ -174,7 +174,7 @@ RobotContainer::RobotContainer() {
         button3_result--;
         button3_result *= -1;
         // frc::SmartDashboard::PutNumber("Adjusted Throttle", button3_result);
-        throttle_percentage = button3_result * 0.5;
+        throttle_percentage = button3_result * 0.25;
         SmartDashboard::PutNumber("Throttle2",throttle_percentage);
 
         // Below a certain percentage the robot won't move at all.  Don't
