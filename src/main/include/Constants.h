@@ -42,7 +42,7 @@ constexpr units::meter_t kWheelBase =
     0.6096_m;  // Distance between centers of front and back wheels on robot
 
 // Angular offsets of the modules relative to the chassis in pi
-/* 
+/*
 constexpr double kFrontLeftChassisAngularOffset = -std::numbers::pi / 2;
 constexpr double kFrontRightChassisAngularOffset = 0;
 constexpr double kRearLeftChassisAngularOffset = std::numbers::pi;
@@ -55,11 +55,11 @@ constexpr double kRearRightChassisAngularOffset = std::numbers::pi / 2;
 
 // SPARK MAX CAN IDs
 constexpr int kFrontLeftDrivingCanId = 1;
-constexpr int kRearLeftDrivingCanId = 6; 
-constexpr int kFrontRightDrivingCanId = 3; 
-constexpr int kRearRightDrivingCanId = 7; 
+constexpr int kRearLeftDrivingCanId = 6;
+constexpr int kFrontRightDrivingCanId = 3;
+constexpr int kRearRightDrivingCanId = 7;
 
-constexpr int kFrontLeftTurningCanId = 2; 
+constexpr int kFrontLeftTurningCanId = 2;
 constexpr int kRearLeftTurningCanId = 5;
 constexpr int kFrontRightTurningCanId = 4;
 constexpr int kRearRightTurningCanId = 8;
@@ -126,8 +126,8 @@ constexpr units::ampere_t kTurningMotorCurrentLimit = 20_A;
 }  // namespace ModuleConstants
 
 namespace AutoConstants {
-constexpr auto kMaxSpeed = 3_mps;
-constexpr auto kMaxAcceleration = 3_mps_sq;
+constexpr auto kMaxSpeed = 1.5_mps;
+constexpr auto kMaxAcceleration = 1.5_mps_sq;
 constexpr auto kMaxAngularSpeed = 3.142_rad_per_s;
 constexpr auto kMaxAngularAcceleration = 3.142_rad_per_s_sq;
 
