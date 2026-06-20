@@ -27,7 +27,7 @@
 namespace DriveConstants {
 // Driving Parameters - Note that these are not the maximum capable speeds of
 // the robot, rather the allowed maximum speeds
-constexpr units::meters_per_second_t kMaxSpeed = 4.8_mps;
+constexpr units::meters_per_second_t kMaxSpeed = 2.4_mps;
 constexpr units::radians_per_second_t kMaxAngularSpeed{2 * std::numbers::pi};
 
 constexpr double kDirectionSlewRate = 1.2;   // radians per second
@@ -154,7 +154,7 @@ namespace ElevatorSubsystemConstants {
 namespace IntakeSubsystemConstants {
     // constexpr int kIntakeDeployCANId {18};
     constexpr int kIntakeRollerCANId {18};
-    const int kIntakeAugerCANId {19};
+    const int kIntakeAugerCANId {20};
     // const int kIntakeHopperCANId {14};  // No hopper winch
 
     // const int kIntakeDeployLimitSwitchChannel {1}; // CHANGEME
@@ -171,7 +171,7 @@ namespace IntakeSubsystemConstants {
 namespace ShooterSubsystemConstants {
     constexpr int kShooterCANId {14};
     constexpr int kFeederCANId {11};
-    constexpr int kUpperFeederCANId {20};
+    constexpr int kUpperFeederCANId {19};
     constexpr double kFeederSpeed {-1};
     constexpr double kShooterSpeed {1.0};
 }

@@ -12,7 +12,7 @@ ShooterSubsystem::ShooterSubsystem() {
   
   // Configure motor settings as needed
   rev::spark::SparkBaseConfig followerConfig; 
-  followerConfig.Follow(20, false); // CANid to follow, follow inverter true/false
+  followerConfig.Follow(11, false); // CANid to follow, follow inverter true/false
   rev::REVLibError status = m_upperFeederMotor.ConfigureAsync(followerConfig,  rev::ResetMode::kNoResetSafeParameters, rev::PersistMode::kPersistParameters);
     if (status != rev::REVLibError::kOk) {
       std::cout << "error configuring UpperFeederMotor\n";
