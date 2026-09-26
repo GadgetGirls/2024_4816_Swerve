@@ -51,7 +51,7 @@ class LEDSubsystem : public frc2::SubsystemBase {
 
     private:
         static constexpr int kPort = 9;
-        static constexpr int kLength = 300;
+        static constexpr int kLength = 100;
         frc::AddressableLED m_led{kPort};
         std::array<frc::AddressableLED::LEDData, kLength> m_ledBuffer;
 };

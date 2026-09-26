@@ -1,3 +1,7 @@
+#include <thread>
+#include <chrono>
+
+#include <rev/SparkFlex.h>
 #include <rev/SparkMax.h>
 #include <rev/SparkLowLevel.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -8,12 +12,21 @@
 
 IntakeSubsystem::IntakeSubsystem(){};
 
-void IntakeSubsystem::rollOut(double motorSpeed){
-  // Start / stop intake rollers in the "out" direction
+/*
+2026 Intake subsystem includes:
+- Intake arm to deploy and retract the intake (1 motor)
+- Winch to bring hopper wall back during climbing (1 motor)
+- Intake Augers (1 motor)
+    - Run on a duty cycle or during shooting
+- Intake rollers (1 motor) - DONE
+*/
+
+void IntakeSubsystem::toggleRollIn(double motorSpeed){
+  // Start / stop intake rollers in the "in" direction
   //
   // If left bumper is pressed once, activate intake "in" direction
   // If left bumper is pressed again, stop intake "in" direction
-  // REMEMBER: m_rollerMotorDirection : -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)
+  // REMEMBER: m_rollerMotorDirection : -1 = IN, 1 = OUT, 0 = STOP
   // If we're reversing direction, we need to slow down, stop, and speed up in reverse
   if (m_rollerMotorOn == false) {
     m_rollerMotorDirection = -1;
@@ -25,11 +38,11 @@ void IntakeSubsystem::rollOut(double motorSpeed){
 }
 
 
-// Start intake rollers in the "in" direction
-void IntakeSubsystem::rollIn(double motorSpeed){
+// Start intake rollers in the "out" direction
+void IntakeSubsystem::toggleRollOut(double motorSpeed){
   // If right bumper is pressed once, activate intake "out" direction
   // If right bumper is pressed once, stop intake "out" direction
-  // REMEMBER: m_rollerMotorDirection : -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)
+  // REMEMBER: m_rollerMotorDirection : -1 = IN, 1 = OUT, 0 = STOP
   // If we're reversing direction, we need to slow down, stop, and speed up in reverse
   if (m_rollerMotorOn == false) {
     m_rollerMotorDirection = 1;
@@ -42,8 +55,88 @@ void IntakeSubsystem::rollIn(double motorSpeed){
 
 // Stop intake rollers
 void IntakeSubsystem::stopRollers(){
-  m_intakeRollerMotor.StopMotor();
+ m_intakeRollerMotor.StopMotor();
   m_rollerMotorOn = false;
 }
 
-void IntakeSubsystem::Periodic(){}
+// Manually drive intake deploy/retract
+/* void IntakeSubsystem::driveIntake(double speed){
+  m_intakeDeployMotor.Set(speed);
+  if(speed > 0){ 
+    m_safeToRunAugers = true; 
+  } else { 
+    m_safeToRunAugers = false; 
+  }
+} */
+
+// Deploy intake
+/* void IntakeSubsystem::deployIntake(){
+  // Limit switches return false when closed/triggered.
+  // if (m_intakeDeployLimitSwitch.Get() == false){
+  //    m_intakeDeployMotor.Set(0.0);
+  // } else {
+      m_intakeDeployMotor.Set(IntakeSubsystemConstants::kIntakeDeploySpeed);
+      m_safeToRunAugers = true;
+  // }
+} */
+
+// Retract intake
+/* void IntakeSubsystem::retractIntake(){
+  // Limit switches return false when closed/triggered.
+  // if (m_intakeRetractLimitSwitch.Get() == false){
+  //    m_intakeDeployMotor.Set(0.0);
+  // } else {
+      m_intakeDeployMotor.Set(IntakeSubsystemConstants::kIntakeRetractSpeed);
+      m_safeToRunAugers = false;
+  } */
+
+// Deploy if the intake is retracted, retract if the intake is deployed
+/* void IntakeSubsystem::toggleDeploy(){
+  if (m_isDeployed){
+    retractIntake();
+  } else {
+    deployIntake();
+  }
+} */
+
+// Run augers to feed balls from hopper to first stage of shooter
+void IntakeSubsystem::runAugers(){
+    m_intakeAugerMotor.Set(IntakeSubsystemConstants::kIntakeAugerSpeed);
+}
+
+// Stop augers from spinning
+void IntakeSubsystem::stopAugers(){
+  m_intakeAugerMotor.Set(0.0);
+}
+
+/*
+// Run hopper side winch until limit switch hits
+void IntakeSubsystem::runHopperWinch(){
+  // Limit switches return false when closed/triggered.
+  if (m_intakeHopperLimitSwitch.Get() == false){
+      m_intakeHopperMotor.Set(0.0);
+  } else {
+      m_intakeHopperMotor.Set(IntakeSubsystemConstants::kIntakeHopperSpeed);
+  }
+}
+*/
+
+// Stop hopper side winch
+/*void IntakeSubsystem::stopHopperWinch(){
+  m_intakeHopperMotor.Set(0.0);
+}*/
+
+/*void IntakeSubsystem::Periodic(){
+  // Run augers for x seconds
+  if(!m_augersAreStarted){
+    runAugers();
+    m_augersAreStarted = true;
+    m_augerTimer.Start();
+  }
+  if (m_augerTimer.HasElapsed(units::time::second_t{3})){
+    stopAugers();
+    if (m_augerTimer.HasElapsed(units::time::second_t{6})){
+      m_augerTimer.Restart();
+    }
+  }
+}*/

@@ -27,7 +27,7 @@
 namespace DriveConstants {
 // Driving Parameters - Note that these are not the maximum capable speeds of
 // the robot, rather the allowed maximum speeds
-constexpr units::meters_per_second_t kMaxSpeed = 4.8_mps;
+constexpr units::meters_per_second_t kMaxSpeed = 2.4_mps;
 constexpr units::radians_per_second_t kMaxAngularSpeed{2 * std::numbers::pi};
 
 constexpr double kDirectionSlewRate = 1.2;   // radians per second
@@ -35,27 +35,34 @@ constexpr double kMagnitudeSlewRate = 1.8;   // percent per second (1 = 100%)
 constexpr double kRotationalSlewRate = 2.0;  // percent per second (1 = 100%)
 
 // Chassis configuration
-constexpr units::meter_t kTrackWidth =
-    0.629_m;  // Distance between centers of right and left wheels on robot
+// 2025 Robot, kTrackWidth = 0.629_m, kWheelBase = 0.629_m
+constexpr units::meter_t kTrackWidth = 
+    0.635_m;  // Distance between centers of right and left wheels on robot
 constexpr units::meter_t kWheelBase =
-    0.629_m;  // Distance between centers of front and back wheels on robot
+    0.6096_m;  // Distance between centers of front and back wheels on robot
 
 // Angular offsets of the modules relative to the chassis in pi
+/*
 constexpr double kFrontLeftChassisAngularOffset = -std::numbers::pi / 2;
 constexpr double kFrontRightChassisAngularOffset = 0;
 constexpr double kRearLeftChassisAngularOffset = std::numbers::pi;
 constexpr double kRearRightChassisAngularOffset = std::numbers::pi / 2;
+*/
+constexpr double kFrontLeftChassisAngularOffset = -std::numbers::pi / 2;
+constexpr double kFrontRightChassisAngularOffset = 0;
+constexpr double kRearLeftChassisAngularOffset = std::numbers::pi;  // 136.1 degrees, was pi * 0.756
+constexpr double kRearRightChassisAngularOffset = std::numbers::pi / 2;
 
 // SPARK MAX CAN IDs
-constexpr int kFrontLeftDrivingCanId = 7;
-constexpr int kRearLeftDrivingCanId = 3; 
-constexpr int kFrontRightDrivingCanId = 6; 
-constexpr int kRearRightDrivingCanId = 1; 
+constexpr int kFrontLeftDrivingCanId = 1;
+constexpr int kRearLeftDrivingCanId = 6;
+constexpr int kFrontRightDrivingCanId = 3;
+constexpr int kRearRightDrivingCanId = 7;
 
-constexpr int kFrontLeftTurningCanId = 8; 
-constexpr int kRearLeftTurningCanId = 4;
-constexpr int kFrontRightTurningCanId = 5;
-constexpr int kRearRightTurningCanId = 2;
+constexpr int kFrontLeftTurningCanId = 2;
+constexpr int kRearLeftTurningCanId = 5;
+constexpr int kFrontRightTurningCanId = 4;
+constexpr int kRearRightTurningCanId = 8;
 
 }  // namespace DriveConstants
 
@@ -119,8 +126,8 @@ constexpr units::ampere_t kTurningMotorCurrentLimit = 20_A;
 }  // namespace ModuleConstants
 
 namespace AutoConstants {
-constexpr auto kMaxSpeed = 3_mps;
-constexpr auto kMaxAcceleration = 3_mps_sq;
+constexpr auto kMaxSpeed = 1.5_mps;
+constexpr auto kMaxAcceleration = 1.5_mps_sq;
 constexpr auto kMaxAngularSpeed = 3.142_rad_per_s;
 constexpr auto kMaxAngularAcceleration = 3.142_rad_per_s_sq;
 
@@ -134,8 +141,44 @@ extern const frc::TrapezoidProfile<units::radians>::Constraints
 
 namespace OIConstants {
     constexpr int kDriverControllerPort = 0;
-    // Was named kShooterControllerPort, but this controller also controls intake
     constexpr int kOperatorControllerPort = 1;
-    constexpr double kDriveDeadband = 0.09; //og = 0.07
-    constexpr int kTurboThrottlePercentage = 0.5; // Not an interface constant, probably belongs in different namespace
+    constexpr double kDriveDeadband = 0.10; //og = 0.07
+    constexpr double kTurboThrottlePercentage = 0.5; // Not an interface constant, probably belongs in different namespace
 }  // namespace OIConstants
+
+namespace ElevatorSubsystemConstants {
+    const int kElevatorLeftMotorCANId {9};
+    const int kElevatorRightMotorCANId {10}; // Can't see in REV
+}
+
+namespace IntakeSubsystemConstants {
+    // constexpr int kIntakeDeployCANId {18};
+    constexpr int kIntakeRollerCANId {18};
+    const int kIntakeAugerCANId {20};
+    // const int kIntakeHopperCANId {14};  // No hopper winch
+
+    // const int kIntakeDeployLimitSwitchChannel {1}; // CHANGEME
+    // const int kIntakeRetractLimitSwitchChannel {2}; // CHANGEME
+    // const int kIntakeHopperLimitSwitchChannel {3}; // No sensor here
+  
+    const double kIntakeAugerSpeed = 0.3; // CHANGEME
+    const double kIntakeDeploySpeed = 0.25; // CHANGEME
+    const double kIntakeRetractSpeed = -0.25; // CHANGEME
+    const double kIntakeHopperSpeed = 0.5; // CHANGEME
+    const double kRollerMotorSpeed = 0.5;
+}
+
+namespace ShooterSubsystemConstants {
+    constexpr int kShooterCANId {14};
+    constexpr int kFeederCANId {11};
+    constexpr int kUpperFeederCANId {19};
+    constexpr double kFeederSpeed {-1};
+    constexpr double kShooterSpeed {1.0};
+}
+
+// VisionSubsystem constants
+namespace VisionSubsystemConstants {
+    const double kTargetHeightMeters {1.12};
+    const double kLimelightHeightMeters {0.535}; 
+    const double kLimelightMountAngleDegrees {35.0};
+}
