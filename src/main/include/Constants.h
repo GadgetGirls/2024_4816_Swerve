@@ -164,7 +164,7 @@ namespace IntakeSubsystemConstants {
     const double kIntakeAugerSpeed = 0.3; // CHANGEME
     const double kIntakeDeploySpeed = 0.25; // CHANGEME
     const double kIntakeRetractSpeed = -0.25; // CHANGEME
-    const double kIntakeHopperSpeed = 0.5; // CHANGEME
+    const double kIntakeHopperSpeed = 0.5; // CHANGEME problem??
     const double kRollerMotorSpeed = 0.5;
 }
 
