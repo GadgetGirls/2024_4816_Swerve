@@ -8,6 +8,9 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
 
+#include "frc/DataLogManager.h"
+
+
 void Robot::RobotInit() {
     // We need to run our vision program in a separate thread. If not, our robot
     // program will not run.
@@ -21,6 +24,10 @@ void Robot::RobotInit() {
 
   // Enable the USB CameraServer
   frc::CameraServer::StartAutomaticCapture();
+
+  // Starts recording to data log
+  frc::DataLogManager::Start();
+
 }
 
 /**
