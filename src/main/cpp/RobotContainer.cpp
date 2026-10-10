@@ -166,7 +166,7 @@ RobotContainer::RobotContainer() {
 
         // GetThrottle returns an analog value from -1 to 1. We need to transform that to a percentage
         button3_result = m_driverController.GetThrottle();
-        // frc::SmartDashboard::PutNumber("Throttle", button3_result);
+        // frc::SmartDashboard::PutNumber("Raw Throttle", button3_result);
         // When the throttle is all the way towards the top the result is -1
         // The kids want this to be 100%.  So subtract one to get a value between
         // 0 and -2.  Then multiply by -1 to get rid of the negative and divide 

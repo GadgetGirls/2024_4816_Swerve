@@ -9,16 +9,6 @@
 
 ShooterSubsystem::ShooterSubsystem() {
   SetName("Shooter");
-  
-  // Configure motor settings as needed
-  rev::spark::SparkBaseConfig followerConfig; 
-  followerConfig.Follow(11, false); // CANid to follow, follow inverter true/false
-  rev::REVLibError status = m_upperFeederMotor.ConfigureAsync(followerConfig,  rev::ResetMode::kNoResetSafeParameters, rev::PersistMode::kPersistParameters);
-    if (status != rev::REVLibError::kOk) {
-      std::cout << "error configuring UpperFeederMotor\n";
-    }
-        // You might want to set current limits for safety:
-  // m_shooterMotor.SetSmartCurrentLimit(40);  // 40 amp limit
 }
 
 void ShooterSubsystem::Periodic() {
@@ -28,11 +18,13 @@ void ShooterSubsystem::Periodic() {
 
 void ShooterSubsystem::SetSpeed(double speed) {
   m_shooterMotor.Set(speed);
+  m_secondShooterMotor.Set(-speed);  // 2nd motor follows first motor, inverted
 }
 
 void ShooterSubsystem::Stop() {
   StopFeeder();
   m_shooterMotor.Set(0.0);
+  m_secondShooterMotor.Set(0.0);
 }
 
 double ShooterSubsystem::GetSpeed() {
@@ -98,6 +90,7 @@ void ShooterSubsystem::Shoot() {
   SetFeederSpeed(ShooterSubsystemConstants::kFeederSpeed);
   SetSpeed(ShooterSubsystemConstants::kShooterSpeed);
 }
+
 frc2::CommandPtr ShooterSubsystem::ShootCommand() {
   // Returns a command that sets the shooter to a specific speed
   return this->RunOnce([this] { Shoot(); });

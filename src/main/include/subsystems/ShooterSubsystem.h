@@ -40,10 +40,12 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   // double m_operatorController.GetLeftY(	)
 
   // Shooter motor
-  rev::spark::SparkMax m_shooterMotor{ShooterSubsystemConstants::kShooterCANId, 
+  rev::spark::SparkFlex m_shooterMotor{ShooterSubsystemConstants::kShooterCANId, 
                                     rev::spark::SparkLowLevel::MotorType::kBrushless};
-  // Lower Feeder motor
-  rev::spark::SparkMax m_feederMotor{ShooterSubsystemConstants::kFeederCANId, 
+  rev::spark::SparkFlex m_secondShooterMotor{ShooterSubsystemConstants::kSecondShooterCANId,
+                                    rev::spark::SparkLowLevel::MotorType::kBrushless};
+    // Lower Feeder motor
+    rev::spark::SparkMax m_feederMotor{ShooterSubsystemConstants::kFeederCANId, 
                                     rev::spark::SparkLowLevel::MotorType::kBrushless};
     // Upper Feeder motor
     rev::spark::SparkFlex m_upperFeederMotor{ShooterSubsystemConstants::kUpperFeederCANId,
