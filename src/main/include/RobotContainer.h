@@ -20,7 +20,6 @@
 #include <frc2/command/SequentialCommandGroup.h>
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
-#include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LEDSubsystem.h"
 #include "subsystems/ShooterSubsystem.h"
@@ -71,7 +70,6 @@ private:
 
   // Pushing buttons 11 & 12 turns fieldRelative on or off <<< DISABLED ELSEWHERE
 
-
   // The operator's controller:
   // Available XboxController buttons
   // A button
@@ -108,7 +106,6 @@ private:
 
   // The robot's subsystems
   DriveSubsystem m_drive;
-  ElevatorSubsystem m_elevator;
   IntakeSubsystem m_intake;
   LEDSubsystem m_led;
   ShooterSubsystem m_shooter;

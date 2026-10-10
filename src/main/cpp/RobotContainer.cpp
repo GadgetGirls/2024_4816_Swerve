@@ -36,7 +36,6 @@
 #include "Constants.h"
 #include "LimelightHelpers.h"
 #include "subsystems/DriveSubsystem.h"
-#include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/LEDSubsystem.h"
 
 
@@ -66,16 +65,6 @@ RobotContainer::RobotContainer() {
   // A few control variables
   fieldRelative=true;
   controllerMode='a'; // 'j' for josephine toggle bumpers, 'a' for avi hold bumpers
-
-  // Initialize elevator and set to be controlled by Operator XBoxController Right stick
-  m_elevator.SetDefaultCommand(frc2::RunCommand(
-    [this] {
-        double opctlr_right_y = -m_operatorController.GetRightY() * 0.25;
-        frc::SmartDashboard::PutNumber("OperatorCtlr RightY", opctlr_right_y);
-        m_elevator.setSpeed(opctlr_right_y);
-    },
-    {&m_elevator}
-  ));
   
   // Initialize intake subsystem - could put auger duty cycle here instead of periodic
   /* m_intake.SetDefaultCommand(frc2::RunCommand(
@@ -403,9 +392,6 @@ frc2::CommandPtr RobotContainer::GetTestCommand(){
   // Rotate and drive each swerve motor pair
   // Run each motor for 1sec
   std::vector<frc2::CommandPtr> commands;
-  commands.push_back(m_elevator.RunOnce([this] { m_elevator.setSpeed(0.5); }));
-  commands.push_back(frc2::cmd::Wait(1_s));
-  commands.push_back(m_elevator.RunOnce([this] { m_elevator.setSpeed(0.0); }));
   // commmands.push_back(m_intake.RunOnce([this] { m_intake.driveIntake(0.5); }));
   // commmands.push_back(frc2::cmd::Wait(1_s));
   // commmands.push_back(m_intake.RunOnce([this] { m_intake.driveIntake(0.0); }));
