@@ -126,6 +126,14 @@ RobotContainer::RobotContainer() {
     */   
 
   // Set Shooter subsystem default command
+  /* std::vector<frc2::CommandPtr> commands;
+  commands.push_back(std::move(swerveControllerCommand).ToPtr());  
+  commands.push_back(ScanForAprilTagCommand());*/
+  // Build command
+  std::vector<frc2::CommandPtr> shooter_commands;
+  // How to sleep between runAugers and Shoot? Create sequence?
+  //shooter_commands.push_back(std::move());
+  // return frc2::cmd::Sequence(std::move(commands));
   m_shooter.SetDefaultCommand(frc2::RunCommand(
     [this] {
       if (m_driverController.GetTrigger()){
@@ -291,13 +299,13 @@ void RobotContainer::ConfigureButtonBindings() {
   // Control modes: 'j' for josephine toggle bumpers, 'a' for avi hold bumpers
   m_operatorController.LeftBumper().OnTrue(m_intake.RunOnce(
     [this] {
-        m_intake.toggleRollIn(1.0);
+        m_intake.toggleRollIn(0.5);
     }
   ));
   if(controllerMode == 'a'){
     m_operatorController.LeftBumper().OnFalse(m_intake.RunOnce(
       [this] {
-        m_intake.toggleRollIn(1.0);
+        m_intake.toggleRollIn(0.5);
       }
     ));
   }

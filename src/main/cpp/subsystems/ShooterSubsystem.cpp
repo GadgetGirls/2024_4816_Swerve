@@ -88,6 +88,7 @@ void ShooterSubsystem::StopFeeder(){
 
 void ShooterSubsystem::Shoot() {
   SetFeederSpeed(ShooterSubsystemConstants::kFeederSpeed);
+  // Make it sleep 1 second here
   SetSpeed(ShooterSubsystemConstants::kShooterSpeed);
 }
 
