@@ -415,7 +415,7 @@ frc2::CommandPtr RobotContainer::GetTestCommand(){
   commands.push_back(m_intake.RunOnce([this] { m_intake.runAugers(); }));
   commands.push_back(frc2::cmd::Wait(1_s));
   commands.push_back(m_intake.RunOnce([this] { m_intake.stopAugers(); }));
-  commands.push_back(m_shooter.RunOnce([this] { m_shooter.SetSpeed(0.5); }));
+  commands.push_back(m_shooter.RunOnce([this] { m_shooter.SetSpeed(1); })); //was 0.5
   commands.push_back(frc2::cmd::Wait(1_s));
   commands.push_back(m_shooter.RunOnce([this] { m_shooter.SetSpeed(0.0); }));
   commands.push_back(m_shooter.RunOnce([this] { m_shooter.SetFeederSpeed(-1); }));
