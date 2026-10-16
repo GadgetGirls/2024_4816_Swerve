@@ -4,6 +4,7 @@
 
 #include "Robot.h"
 
+#include "RobotContainer.h"
 #include <cameraserver/CameraServer.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
@@ -51,6 +52,22 @@ void Robot::AutonomousInit() {
   //m_chooser.AddOption(kAutoNameDefault, kAutoNameDefault);
   //m_chooser.SetDefaultOption(kAutoNameCenter, kAutoNameCenter);
   //frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+
+  // Determine alliance - used to determine which AprilTags are our hub
+  m_container.m_alliance = frc::DriverStation::GetAlliance();
+  if (m_container.m_alliance.has_value() && m_container.m_alliance.value() == frc::DriverStation::Alliance::kRed) {
+      frc::SmartDashboard::PutString("Our Alliance is ", "Red");
+      m_container.m_hubAprilTagID = 10;  // or 9
+      m_container.m_towerAprilTagID = 15;  // or 16
+  } else {
+        frc::SmartDashboard::PutString("Our Alliance is ", "Blue");    
+        m_container.m_hubAprilTagID = 26;  // or 25
+        m_container.m_towerAprilTagID = 31;  // or 32
+    }
+  // AprilTagFieldLayout.loadField(AprilTagFields.FRC_2026)
+  m_container.m_vision.SetTargetID(m_container.m_hubAprilTagID);  // Start by looking for the hub
+
+
   m_autonomousCommand = std::move(m_container.GetAutonomousCommand());  
   
   if (m_autonomousCommand.has_value()) {
@@ -71,6 +88,20 @@ void Robot::TeleopInit() {
     m_autonomousCommand->Cancel();
     m_autonomousCommand.reset();
   }
+
+  // Determine alliance - used to determine which AprilTags are our hub
+  m_container.m_alliance = frc::DriverStation::GetAlliance();
+  if (m_container.m_alliance.has_value() && m_container.m_alliance.value() == frc::DriverStation::Alliance::kRed) {
+      frc::SmartDashboard::PutString("Our Alliance is ", "Red");
+      m_container.m_hubAprilTagID = 10;  // or 9
+      m_container.m_towerAprilTagID = 15;  // or 16
+  } else {
+        frc::SmartDashboard::PutString("Our Alliance is ", "Blue");    
+        m_container.m_hubAprilTagID = 26;  // or 25
+        m_container.m_towerAprilTagID = 31;  // or 32
+    }
+  // AprilTagFieldLayout.loadField(AprilTagFields.FRC_2026)
+  m_container.m_vision.SetTargetID(m_container.m_hubAprilTagID);  // Start by looking for the hub
 }
 
 /**

@@ -42,12 +42,13 @@ class RobotContainer {
   frc::Pose2d ConvertPose2dFromRobotToFieldRelative(frc::Pose2d robotPose2d);
   frc2::CommandPtr ScanForAprilTagCommand();
   double ApplyDeadband(double value);
-  
-private:
- 
   // Which alliance are we on?
   std::optional<frc::DriverStation::Alliance> m_alliance;
+  int m_hubAprilTagID;
+  int m_towerAprilTagID;
+  VisionSubsystem m_vision;
 
+private:
   // The driver's controller
   frc::Joystick m_driverController{OIConstants::kDriverControllerPort};
 
@@ -101,15 +102,12 @@ private:
 
   bool fieldRelative;
   char controllerMode; // control whether bumpers toggle intake or are held to run intake
-  int m_hubAprilTagID;
-  int m_towerAprilTagID;
-
+  
   // The robot's subsystems
   DriveSubsystem m_drive;
   IntakeSubsystem m_intake;
   LEDSubsystem m_led;
   ShooterSubsystem m_shooter;
-  VisionSubsystem m_vision;
 
   // The chooser for the autonomous routines
   // frc::SendableChooser<frc2::Command*> m_chooser;  // Replace with something using CommandPtr

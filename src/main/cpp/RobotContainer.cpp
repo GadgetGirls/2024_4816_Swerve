@@ -45,26 +45,14 @@ using namespace frc;
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
 
-  // Determine alliance - used to determine which AprilTags are our hub
-  m_alliance = frc::DriverStation::GetAlliance();
-  if (m_alliance.has_value() && m_alliance.value() == frc::DriverStation::Alliance::kRed) {
-      frc::SmartDashboard::PutString("Our Alliance is ", "Red");
-      m_hubAprilTagID = 10;  // or 9
-      m_towerAprilTagID = 15;  // or 16
-  } else {
-        frc::SmartDashboard::PutString("Our Alliance is ", "Blue");    
-        m_hubAprilTagID = 26;  // or 25
-        m_towerAprilTagID = 31;  // or 32
-    }
-  // AprilTagFieldLayout.loadField(AprilTagFields.FRC_2026)
-  m_vision.SetTargetID(m_hubAprilTagID);  // Start by looking for the hub
+  // A few control variables
+  fieldRelative=true;
+  controllerMode='a'; // 'j' for josephine toggle bumpers, 'a' for avi hold bumpers
 
   // Configure the button bindings
   ConfigureButtonBindings();
   timer0.Reset();
-  // A few control variables
-  fieldRelative=true;
-  controllerMode='a'; // 'j' for josephine toggle bumpers, 'a' for avi hold bumpers
+
   
   // Initialize intake subsystem - could put auger duty cycle here instead of periodic
   /* m_intake.SetDefaultCommand(frc2::RunCommand(
@@ -123,18 +111,12 @@ RobotContainer::RobotContainer() {
             m_led.ApplyPattern(gradient);
         },
         {&m_led}));    
-    */   
+    */ 
 
-  // Set Shooter subsystem default command
-  /* std::vector<frc2::CommandPtr> commands;
-  commands.push_back(std::move(swerveControllerCommand).ToPtr());  
-  commands.push_back(ScanForAprilTagCommand());*/
-  // Build command
-  std::vector<frc2::CommandPtr> shooter_commands;
-  // How to sleep between runAugers and Shoot? Create sequence?
-  //shooter_commands.push_back(std::move());
-  // return frc2::cmd::Sequence(std::move(commands));
-  m_shooter.SetDefaultCommand(frc2::RunCommand(
+    
+  // Set Shooter subsystem default command - now in ConfigureButtonBindings
+  /* 
+    m_shooter.SetDefaultCommand(frc2::RunCommand(
     [this] {
       if (m_driverController.GetTrigger()){
         m_intake.runAugers();
@@ -145,7 +127,8 @@ RobotContainer::RobotContainer() {
       }
     },
     {&m_shooter, &m_intake}
-  ));
+  )); 
+  */
 
   // Set Vision subsystem default command
   // m_vision.SetDefaultCommand(){
@@ -183,22 +166,20 @@ RobotContainer::RobotContainer() {
         
         // Pushing buttons 7 and 8 resets the Z axis heading.  This could
         // be useful if the gyro drifts a lot
-        if (m_driverController.GetRawButtonPressed(7) && m_driverController.GetRawButtonPressed(8))
+        if (m_driverController.GetRawButton(7) && m_driverController.GetRawButton(8))
             { m_drive.ZeroHeading();}
         /*
         // Pushing buttons 11 & 12 turns fieldRelative on or off <<< DISABLED ELSEWHERE
         if (m_driverController.GetRawButtonPressed(11) && m_driverController.GetRawButtonPressed(12))
             { fieldRelative=!fieldRelative;}
         */
-
         frc::SmartDashboard::PutNumber("Field Relative", fieldRelative);
+    
+        // Remember, apply deadband to raw Joystick reading, then scale
         m_drive.Drive(
-            -units::meters_per_second_t{frc::ApplyDeadband(
-                m_driverController.GetY()  * throttle_percentage, OIConstants::kDriveDeadband)},
-            -units::meters_per_second_t{frc::ApplyDeadband(
-                m_driverController.GetX() * throttle_percentage , OIConstants::kDriveDeadband)},    
-            -units::radians_per_second_t{frc::ApplyDeadband(
-                m_driverController.GetTwist() * throttle_percentage, OIConstants::kDriveDeadband)},
+            -units::meters_per_second_t{frc::ApplyDeadband(m_driverController.GetY(), OIConstants::kDriveDeadband) * throttle_percentage},
+            -units::meters_per_second_t{frc::ApplyDeadband(m_driverController.GetX(), OIConstants::kDriveDeadband) * throttle_percentage},
+            -units::radians_per_second_t{frc::ApplyDeadband(m_driverController.GetTwist(), OIConstants::kDriveDeadband)},
             this->fieldRelative);
       },
       {&m_drive}));
@@ -212,13 +193,18 @@ frc2::CommandPtr RobotContainer::AimDriveAndShoot(){
     frc::Pose2d currentPose2D = m_drive.GetPose();
     // If we don't have a target, abort
     if (!m_vision.HasTarget()){
-      frc2::CommandPtr doNothingCommand = frc2::cmd::Run([] {});
-      return doNothingCommand;
+      return frc2::cmd::None();
     }
+
     // Get the target location
-    frc::Pose2d targetPose2D = m_vision.GetTargetPose2d();
+    frc::Pose2d targetRelative = m_vision.GetTargetPose2d();
+    // Translate robot relative targetPose2D to field relative (negate tx due to Limelight and FRC having opposite sign conventions)
+    frc::Pose2d targetRelativeFixed{targetRelative.X(), -targetRelative.Y(), -targetRelative.Rotation()};
+    frc::Pose2d targetPose2D = currentPose2D.TransformBy(
+      frc::Transform2d{targetRelativeFixed.Translation(), targetRelativeFixed.Rotation()});
     // Backoff the target location far enough to shoot
     targetPose2D = ApplyBackoff(targetPose2D, kTargetBackoffDistance);
+    // currentPose2D.TransformBy(frc::Transform2d{targetTranslation, targetRotation});
     // Set up config for trajectory
     frc::TrajectoryConfig config(AutoConstants::kMaxSpeed/2,
                                   AutoConstants::kMaxAcceleration/2);
@@ -233,7 +219,7 @@ frc2::CommandPtr RobotContainer::AimDriveAndShoot(){
       {},  // No internal waypoints (empty vector)
       targetPose2D,
       config);
-
+      
     // Call drive subsystem to get there
     frc::ProfiledPIDController<units::radians> thetaController{
       AutoConstants::kPThetaController, 0, 0,
@@ -254,7 +240,7 @@ frc2::CommandPtr RobotContainer::AimDriveAndShoot(){
       {&m_drive});
 
     // Reset odometry to the starting pose of the trajectory.
-    m_drive.ResetOdometry(ourTrajectory.InitialPose());
+    // m_drive.ResetOdometry(ourTrajectory.InitialPose());
     // Run swerveControllerCommand above to drive the trajectory, 
     // then run Drive(0,0,0) to stop
     std::vector<frc2::CommandPtr> commands;
@@ -284,7 +270,7 @@ frc2::CommandPtr RobotContainer::ScanForAprilTagCommand(){ // CODING HERE - no m
       frc2::cmd::Run([this] {
         m_drive.Drive(units::meters_per_second_t{0},
                       units::meters_per_second_t{0},
-                      units::radians_per_second_t{0.7853982 * 2},
+                      units::radians_per_second_t{0.25},  // 2π × 0.25 × 3 s ≈ 270°
                       this->fieldRelative);
       }, {&m_drive}).WithTimeout(0.5_s));
     commands.push_back(
@@ -314,6 +300,20 @@ void RobotContainer::ConfigureButtonBindings() {
 
   // Operator controller right stick moves elevator in manual mode
   
+  // Joystick trigger shoots
+  frc2::JoystickButton(&m_driverController, 1).WhileTrue(
+    frc2::cmd::Sequence(
+      m_shooter.RunOnce([this] { m_shooter.Shoot(); }),
+      frc2::cmd::Wait(2_s),
+      m_shooter.StartFeederCommand(),
+      frc2::cmd::Idle()
+    ).FinallyDo([this] {
+      m_shooter.StopFeeder();
+      m_shooter.Stop();
+      }
+    )
+  );
+
   // Joystick Button 10 should deploy/retract the intake - should deploy/stop and retract/stop
   /* m_driverButton10.OnTrue(m_intake.RunOnce(
     [this]{
@@ -323,18 +323,22 @@ void RobotContainer::ConfigureButtonBindings() {
   */
 
   // Joystick button 2 is auto-aim and shoot
-  m_driverButton2.OnTrue(AimDriveAndShoot());
+  m_driverButton2.OnTrue(frc2::cmd::Defer([this] { return AimDriveAndShoot(); }, {&m_drive, &m_shooter}));
+
 
 }
 
 
 // Calculate a new target pose with backoff distance
 frc::Pose2d RobotContainer::ApplyBackoff(frc::Pose2d targetPose, double distance){
+  /*
   const Rotation2d& rotation = targetPose.Rotation();
   double x = rotation.Cos() * distance;
   double y = rotation.Sin() * distance;
   frc::Transform2d backoff = Transform2d(units::meter_t{x}, units::meter_t{y}, rotation);
   return targetPose + backoff;
+  */
+ return targetPose.TransformBy(frc::Transform2d{units::meter_t{-distance}, 0_m, 0_deg});
 }
 
 
@@ -391,7 +395,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   std::vector<frc2::CommandPtr> commands;
   commands.push_back(std::move(swerveControllerCommand).ToPtr());  
   commands.push_back(ScanForAprilTagCommand());  // Sweep scan for april tag
-  commands.push_back(AimDriveAndShoot());
+  commands.push_back(frc2::cmd::Defer([this] { return AimDriveAndShoot(); }, {&m_drive, &m_shooter}));
   
   return frc2::cmd::Sequence(std::move(commands));
 }

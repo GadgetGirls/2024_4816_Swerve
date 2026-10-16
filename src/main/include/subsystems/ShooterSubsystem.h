@@ -2,6 +2,7 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <frc2/command/CommandPtr.h>
+#include <frc2/command/Commands.h>
 #include <rev/SparkFlex.h>
 #include <rev/SparkMax.h>
 #include "Constants.h"
@@ -23,11 +24,16 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   void StopFeeder();
 
   void Shoot();
-  
+
+  bool isShooting();
+
   frc2::CommandPtr ShootCommand();
+
+  frc2::CommandPtr StartFeederCommand();
 
   frc2::CommandPtr StopCommand();
 
+  frc2::CommandPtr StartSequence();
 
   // This method is called periodically by the CommandScheduler
   void Periodic() override;
@@ -38,6 +44,8 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   
   // Left stick controls shooter "out" (forward Y) and "in" (backward Y)
   // double m_operatorController.GetLeftY(	)
+
+    bool m_isShooting{false};
 
   // Shooter motor
   rev::spark::SparkFlex m_shooterMotor{ShooterSubsystemConstants::kShooterCANId, 

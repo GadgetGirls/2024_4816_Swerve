@@ -22,13 +22,17 @@ void ShooterSubsystem::SetSpeed(double speed) {
 }
 
 void ShooterSubsystem::Stop() {
-  StopFeeder();
   m_shooterMotor.Set(0.0);
   m_secondShooterMotor.Set(0.0);
+  m_isShooting = false;
 }
 
 double ShooterSubsystem::GetSpeed() {
   return m_shooterMotor.Get();
+}
+
+bool ShooterSubsystem::isShooting(){
+  return m_isShooting;
 }
 
 void ShooterSubsystem::SetSpeedForDistance(double distanceMeters) {
@@ -87,9 +91,18 @@ void ShooterSubsystem::StopFeeder(){
 }
 
 void ShooterSubsystem::Shoot() {
-  SetFeederSpeed(ShooterSubsystemConstants::kFeederSpeed);
-  // Make it sleep 1 second here
   SetSpeed(ShooterSubsystemConstants::kShooterSpeed);
+  m_isShooting = true;
+  // Make it sleep 1 second here
+  // SetFeederSpeed(ShooterSubsystemConstants::kFeederSpeed);
+}
+
+frc2::CommandPtr ShooterSubsystem::StartFeederCommand() {
+  return this->RunOnce(
+    [this] { 
+      ShooterSubsystem::SetFeederSpeed(ShooterSubsystemConstants::kFeederSpeed);
+    }
+  );
 }
 
 frc2::CommandPtr ShooterSubsystem::ShootCommand() {
@@ -98,6 +111,16 @@ frc2::CommandPtr ShooterSubsystem::ShootCommand() {
 }
 
 frc2::CommandPtr ShooterSubsystem::StopCommand() {
-  // Returns a command that stops the shooter
+  // Returns a command that stops the shooter and feeder
   return this->RunOnce([this] { Stop(); });
+}
+
+frc2::CommandPtr ShooterSubsystem::StartSequence() {
+  // If we are shooting, keep shooting and don't wait
+  // If we are not shooting, start the shooter and wait for it to spin up
+  // Finally, start the feeder
+  return frc2::cmd::Sequence(
+    frc2::cmd::Either(frc2::cmd::None(), frc2::cmd::Sequence(ShootCommand(), frc2::cmd::Wait(2_s)),
+                    [this] { return isShooting(); }),
+    StartFeederCommand());
 }
